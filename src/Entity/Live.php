@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Filter\WeekFilter;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
@@ -19,6 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
     itemOperations: [Request::METHOD_GET, Request::METHOD_PUT, Request::METHOD_DELETE],
     attributes: ['pagination_enabled' => false]
 )]
+#[ApiFilter(WeekFilter::class, properties: ['startedAt'])]
 class Live
 {
     #[Id]
