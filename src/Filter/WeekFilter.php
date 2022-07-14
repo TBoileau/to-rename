@@ -28,6 +28,7 @@ final class WeekFilter extends AbstractContextAwareFilter
         $predicate = match ($property) {
             'week' => 'WEEK(o.startedAt)',
             'year' => 'YEAR(o.startedAt)',
+            default => ''
         };
 
         $queryBuilder
@@ -35,6 +36,9 @@ final class WeekFilter extends AbstractContextAwareFilter
             ->setParameter($parameterName, $value);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getDescription(string $resourceClass): array
     {
         return [
@@ -52,7 +56,7 @@ final class WeekFilter extends AbstractContextAwareFilter
                 'type' => Type::BUILTIN_TYPE_INT,
                 'required' => true,
                 'swagger' => [
-                    'name' => 'Week of the year',
+                    'name' => 'Year',
                     'type' => 'Integer',
                 ],
             ],
