@@ -20,12 +20,12 @@ final class WeekFilter extends AbstractContextAwareFilter
         string $resourceClass,
         string $operationName = null
     ): void {
-        if ($resourceClass !== Live::class) {
+        if (Live::class !== $resourceClass) {
             return;
         }
         $parameterName = $queryNameGenerator->generateParameterName($property);
 
-        $predicate = match($property) {
+        $predicate = match ($property) {
             'week' => 'WEEK(o.startedAt)',
             'year' => 'YEAR(o.startedAt)',
         };
