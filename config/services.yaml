@@ -4,13 +4,19 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-
+    planning_image: '%kernel.project_dir%/public/images/planning.png'
+    fonts.title: '%kernel.project_dir%/public/fonts/Thunder-BoldLC.ttf'
+    fonts.time: '%kernel.project_dir%/public/fonts/MonumentExtended-Regular.otf'
+    intervention.driver: imagick
 services:
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-
+        bind:
+            string $planningImage: '%planning_image%'
+            string $fontTitle: '%fonts.title%'
+            string $fontTime: '%fonts.time%'
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
@@ -20,5 +26,6 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    Intervention\Image\ImageManager:
+        factory: [App\Factory\ImageManagerFactory, 'create']
+        arguments: ['%intervention.driver%']
