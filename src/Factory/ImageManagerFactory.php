@@ -8,7 +8,7 @@ use Intervention\Image\ImageManager;
 
 final class ImageManagerFactory implements ImageManagerFactoryInterface
 {
-    public function create(string $driver): ImageManager
+    public static function create(string $driver): ImageManager
     {
         return new ImageManager(['driver' => $driver]);
     }

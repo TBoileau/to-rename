@@ -8,5 +8,5 @@ use Intervention\Image\ImageManager;
 
 interface ImageManagerFactoryInterface
 {
-    public function create(string $driver): ImageManager;
+    public static function create(string $driver): ImageManager;
 }

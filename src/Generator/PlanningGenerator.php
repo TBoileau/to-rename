@@ -19,7 +19,8 @@ final class PlanningGenerator implements PlanningGeneratorInterface
         private ImageManager $imageManager,
         private string $planningImage,
         private string $fontTitle,
-        private string $fontTime
+        private string $fontTime,
+        private string $uploadDir
     ) {
     }
 
@@ -38,19 +39,49 @@ final class PlanningGenerator implements PlanningGeneratorInterface
         $xTitle = 64;
         $xTime = 64;
 
-        foreach ($week->lives as $live) {
-            $this->createLiveDescription($live, $image, $xTitle);
-            $this->createLiveTime($live, $image, $xTime);
+        foreach ($week->getLives() as $live) {
+            if (null !== $live) {
+                $this->createLiveDay($live, $image, $xTitle, $xTime);
+            } else {
+                $this->createNoLiveDay($image, $xTitle, $xTime);
+            }
             $xTitle += 366;
             $xTime += 364;
         }
 
-        $image->save($filename);
+        $image->save(sprintf('%s/%s', $this->uploadDir, $filename));
     }
 
-    private function createLiveTime(Live $live, Image $image, int $x): void
+    private function createNoLiveDay(Image $image, int $xTitle, int $xTime): void
     {
-        $font = (new Font($live->getStartedAt()->format('H\Hi')))
+        $this->createLiveDescription('OFFLINE', $image, $xTitle, '#b3b3b3');
+        $this->fillTime($image, $xTime);
+    }
+
+    private function createLiveDay(Live $live, Image $image, int $xTitle, int $xTime): void
+    {
+        $this->createLiveDescription($live->getDescription(), $image, $xTitle);
+        $this->createLiveTime($live->getStartedAt()->format('H\Hi'), $image, $xTime);
+    }
+
+    private function fillTime(Image $image, int $x): void
+    {
+        $x = ($x + 95);
+        $y = 751;
+        $image->rectangle(
+            $x,
+            $y,
+            $x + 160,
+            $y + 42,
+            function ($draw) {
+                $draw->background('#ffffff');
+            }
+        );
+    }
+
+    private function createLiveTime(string $time, Image $image, int $x): void
+    {
+        $font = (new Font($time))
             ->file($this->fontTime)
             ->size(26)
             ->color('#FFFFFF')
@@ -66,12 +97,12 @@ final class PlanningGenerator implements PlanningGeneratorInterface
         );
     }
 
-    private function createLiveDescription(Live $live, Image $image, int $x): void
+    private function createLiveDescription(string $description, Image $image, int $x, string $color = '#00153f'): void
     {
-        $font = (new Font(u($live->getDescription())->upper()->toString()))
+        $font = (new Font(u($description)->wordwrap(15, "\n")->upper()->toString()))
             ->file($this->fontTitle)
             ->size(52)
-            ->color('#00153f')
+            ->color($color)
             ->align('center')
             ->valign('center');
 
