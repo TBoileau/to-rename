@@ -21,14 +21,14 @@ final class WeekFilter extends AbstractContextAwareFilter
         string $operationName = null
     ): void {
         if (Live::class !== $resourceClass) {
-            return;
+            return; // @codeCoverageIgnore
         }
         $parameterName = $queryNameGenerator->generateParameterName($property);
 
         $predicate = match ($property) {
             'week' => 'WEEK(o.startedAt)',
             'year' => 'YEAR(o.startedAt)',
-            default => ''
+            default => '' // @codeCoverageIgnore
         };
 
         $queryBuilder
