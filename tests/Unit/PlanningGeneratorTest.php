@@ -46,7 +46,7 @@ final class PlanningGeneratorTest extends TestCase
         $live = new Live();
         $live->setStartedAt(new DateTimeImmutable($startedAt));
         $live->setDescription(<<<EOL
-PROJET 
+PROJET123456789
 SUR ANGULAR
 SYMFONY
 EOL

@@ -15,6 +15,11 @@ use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Symfony\Component\HttpFoundation\Request;
 
+use function Symfony\Component\String\u;
+
+use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+
 #[Entity]
 #[ApiResource(
     collectionOperations: [Request::METHOD_POST, Request::METHOD_GET],
@@ -58,5 +63,15 @@ class Live
     public function setDescription(string $description): void
     {
         $this->description = $description;
+    }
+
+    #[Callback]
+    public function checkDescription(ExecutionContextInterface $context): void
+    {
+        if (u(u($this->description)->wordwrap(15, "\n", false)->toString())->width() > 15) {
+            $context->buildViolation('Chaque ligne doit faire 15 caractères maximum')
+                ->atPath('description')
+                ->addViolation();
+        }
     }
 }

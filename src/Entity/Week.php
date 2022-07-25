@@ -30,7 +30,7 @@ final class Week implements Stringable
         $this->endDay = (int) $this->lives[count($this->lives) - 1]->getStartedAt()->format('j');
 
         $this->month = IntlDateFormatter::formatObject(
-            /** @phpstan-ignore-next-line  */
+            /* @phpstan-ignore-next-line */
             $this->lives[0]->getStartedAt(),
             'MMMM',
             'fr_FR'
