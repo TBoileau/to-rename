@@ -7,6 +7,7 @@ namespace App\Controller\Admin;
 use App\Entity\Live;
 use App\Entity\Logo;
 use App\Entity\Planning;
+use App\Entity\User;
 use App\Entity\Video;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -16,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class DashboardController extends AbstractDashboardController
 {
-    #[Route('/admin', name: 'admin')]
+    #[Route('/', name: 'admin')]
     public function index(): Response
     {
         return $this->render('admin/index.html.twig');
@@ -31,6 +32,7 @@ final class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+        yield MenuItem::linkToCrud('Utilisateurs', 'fa fa-user', User::class);
         yield MenuItem::linkToCrud('Videos', 'fab fa-youtube', Video::class);
         yield MenuItem::linkToCrud('Logos', 'fa fa-image', Logo::class);
         yield MenuItem::linkToCrud('Planning', 'fa fa-calendar', Planning::class);

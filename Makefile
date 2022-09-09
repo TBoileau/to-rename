@@ -25,6 +25,7 @@ database:
 
 prepare:
 	make database env=$(env)
+	make fixtures env=$(env)
 
 tests:
 	php bin/phpunit --testdox
