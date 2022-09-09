@@ -2,7 +2,7 @@
     "name": "tboileau/twitch",
     "description": "Gestionnaire de la chaîne twitch",
     "type": "project",
-    "license": "proprietary",
+    "license": "MIT",
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
