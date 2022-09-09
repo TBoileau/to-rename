@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\ManyToOne;
 use Symfony\Component\Validator\Constraints\GreaterThan;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Url;
@@ -47,6 +48,9 @@ class Video
     #[NotBlank]
     #[Column(type: Types::STRING)]
     private string $link;
+
+    #[ManyToOne(targetEntity: Live::class)]
+    private ?Live $live;
 
     public function getId(): ?int
     {
@@ -111,5 +115,15 @@ class Video
     public function setLogo(string $logo): void
     {
         $this->logo = $logo;
+    }
+
+    public function getLive(): ?Live
+    {
+        return $this->live;
+    }
+
+    public function setLive(?Live $live): void
+    {
+        $this->live = $live;
     }
 }

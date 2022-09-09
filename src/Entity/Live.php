@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
+use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 use function Symfony\Component\String\u;
@@ -24,14 +25,14 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
     message: 'Ce live existe déjà.',
     repositoryMethod: 'findByStartedAt'
 )]
-class Live
+class Live implements Stringable
 {
     #[Id]
     #[GeneratedValue]
     #[Column(type: Types::INTEGER)]
     private ?int $id = null;
 
-    #[Column(type: Types::DATETIME_IMMUTABLE)]
+    #[Column(type: Types::DATE_IMMUTABLE)]
     private DateTimeInterface $startedAt;
 
     #[Column(type: Types::TEXT)]
@@ -60,6 +61,14 @@ class Live
     public function setDescription(string $description): void
     {
         $this->description = $description;
+    }
+
+    public function __toString(): string
+    {
+        return sprintf(
+            'Live du %s',
+            $this->startedAt->format('d/m/Y')
+        );
     }
 
     #[Callback]
