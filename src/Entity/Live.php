@@ -11,6 +11,8 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\ManyToOne;
 use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -37,6 +39,10 @@ class Live implements Stringable
 
     #[Column(type: Types::TEXT)]
     private string $description;
+
+    #[ManyToOne(targetEntity: Planning::class, inversedBy: 'lives')]
+    #[JoinColumn(nullable: false)]
+    private Planning $planning;
 
     public function getId(): ?int
     {
@@ -69,6 +75,16 @@ class Live implements Stringable
             'Live du %s',
             $this->startedAt->format('d/m/Y')
         );
+    }
+
+    public function getPlanning(): Planning
+    {
+        return $this->planning;
+    }
+
+    public function setPlanning(Planning $planning): void
+    {
+        $this->planning = $planning;
     }
 
     #[Callback]
