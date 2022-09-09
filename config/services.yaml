@@ -7,8 +7,8 @@ parameters:
     planning_image: '%kernel.project_dir%/public/images/planning.png'
     thumbnail_image: '%kernel.project_dir%/public/images/thumbnail.png'
     upload_dir: '%kernel.project_dir%/public/uploads'
-    fonts.title: '%kernel.project_dir%/public/fonts/Thunder-BoldLC.ttf'
-    fonts.time: '%kernel.project_dir%/public/fonts/MonumentExtended-Regular.otf'
+    fonts.thunder: '%kernel.project_dir%/public/fonts/Thunder-BoldLC.ttf'
+    fonts.monument: '%kernel.project_dir%/public/fonts/MonumentExtended-Regular.otf'
     intervention.driver: imagick
 services:
     # default configuration for services in *this* file
@@ -16,13 +16,11 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         bind:
-            string $planningImage: '%planning_image%'
             string $thumbnailImage: '%thumbnail_image%'
-            string $fontTitle: '%fonts.title%'
-            string $fontTime: '%fonts.time%'
+            array $fonts:
+                thunder: '%fonts.thunder%'
+                monument: '%fonts.monument%'
             string $uploadDir: '%upload_dir%'
-    # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/'
         exclude:
@@ -33,9 +31,3 @@ services:
     Intervention\Image\ImageManager:
         factory: [App\Factory\ImageManagerFactory, 'create']
         arguments: ['%intervention.driver%']
-
-    App\EntityLister\LiveListener:
-        tags:
-            - { name: doctrine.orm.entity_listener, event: preRemove, entity: App\Entity\Live, method: onRemove }
-            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: App\Entity\Live, method: generatePlanning }
-            - { name: doctrine.orm.entity_listener, event: postPersist, entity: App\Entity\Live, method: generatePlanning }

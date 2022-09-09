@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Filter\WeekFilter;
 use App\Repository\LiveRepository;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
@@ -15,7 +12,6 @@ use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\HttpFoundation\Request;
 
 use function Symfony\Component\String\u;
 
