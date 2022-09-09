@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
+use App\Entity\Live;
 use App\Entity\Logo;
+use App\Entity\Planning;
 use App\Entity\Video;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -31,5 +33,7 @@ final class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Videos', 'fab fa-youtube', Video::class);
         yield MenuItem::linkToCrud('Logos', 'fa fa-image', Logo::class);
+        yield MenuItem::linkToCrud('Planning', 'fa fa-calendar', Planning::class);
+        yield MenuItem::linkToCrud('Lives', 'fa fa-video-camera', Live::class);
     }
 }

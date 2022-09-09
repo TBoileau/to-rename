@@ -39,7 +39,7 @@ class Video
     private int $episode;
 
     #[ManyToOne(targetEntity: Logo::class)]
-    #[JoinColumn(nullable: false)]
+    #[JoinColumn(nullable: false, onDelete: 'RESTRICT')]
     private Logo $logo;
 
     #[Column(type: Types::STRING)]
@@ -51,6 +51,7 @@ class Video
     private string $link;
 
     #[ManyToOne(targetEntity: Live::class)]
+    #[JoinColumn(onDelete: 'SET NULL')]
     private ?Live $live;
 
     public function getId(): ?int

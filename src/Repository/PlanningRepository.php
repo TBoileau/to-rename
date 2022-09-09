@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Entity\Live;
+use App\Entity\Planning;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @template-extends ServiceEntityRepository<Live>
+ * @template-extends ServiceEntityRepository<Planning>
  */
-final class LiveRepository extends ServiceEntityRepository
+final class PlanningRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Live::class);
+        parent::__construct($registry, Planning::class);
     }
 }
