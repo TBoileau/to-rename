@@ -111,7 +111,7 @@ class Planning implements Stringable
     public function getLiveByDate(DateTimeImmutable $date): ?Live
     {
         foreach ($this->lives as $live) {
-            if ($live->getStartedAt()->format('Y-m-d') === $date->format('Y-m-d')) {
+            if ($live->getLivedAt()->format('Y-m-d') === $date->format('Y-m-d')) {
                 return $live;
             }
         }

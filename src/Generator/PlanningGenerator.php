@@ -73,7 +73,7 @@ final class PlanningGenerator implements PlanningGeneratorInterface
     private function createLiveDay(Live $live, Image $image, int $xTitle, int $xTime): void
     {
         $this->createLiveDescription($live->getDescription(), $image, $xTitle);
-        $this->createLiveTime($live->getStartedAt()->format('H\Hi'), $image, $xTime);
+        $this->createLiveTime($live->getLivedAt()->format('H\Hi'), $image, $xTime);
     }
 
     private function fillTime(Image $image, int $x): void

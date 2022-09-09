@@ -23,9 +23,8 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[Entity(repositoryClass: LiveRepository::class)]
 #[UniqueEntity(
-    fields: 'startedAt',
-    message: 'Ce live existe déjà.',
-    repositoryMethod: 'findByStartedAt'
+    fields: 'livedAt',
+    message: 'Ce live existe déjà.'
 )]
 class Live implements Stringable
 {
@@ -35,13 +34,13 @@ class Live implements Stringable
     private ?int $id = null;
 
     #[Column(type: Types::DATE_IMMUTABLE)]
-    private DateTimeInterface $startedAt;
+    private DateTimeInterface $livedAt;
 
     #[Column(type: Types::TEXT)]
     private string $description;
 
     #[ManyToOne(targetEntity: Planning::class, inversedBy: 'lives')]
-    #[JoinColumn(nullable: false)]
+    #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private Planning $planning;
 
     public function getId(): ?int
@@ -49,14 +48,14 @@ class Live implements Stringable
         return $this->id;
     }
 
-    public function getStartedAt(): DateTimeInterface
+    public function getLivedAt(): DateTimeInterface
     {
-        return $this->startedAt;
+        return $this->livedAt;
     }
 
-    public function setStartedAt(DateTimeInterface $startedAt): void
+    public function setLivedAt(DateTimeInterface $livedAt): void
     {
-        $this->startedAt = $startedAt;
+        $this->livedAt = $livedAt;
     }
 
     public function getDescription(): string
@@ -73,7 +72,7 @@ class Live implements Stringable
     {
         return sprintf(
             'Live du %s',
-            $this->startedAt->format('d/m/Y')
+            $this->livedAt->format('d/m/Y')
         );
     }
 
@@ -85,6 +84,7 @@ class Live implements Stringable
     public function setPlanning(Planning $planning): void
     {
         $this->planning = $planning;
+        $this->planning->getLives()->add($this);
     }
 
     #[Callback]
@@ -93,6 +93,16 @@ class Live implements Stringable
         if (u(u($this->description)->wordwrap(15, "\n", false)->toString())->width() > 15) {
             $context->buildViolation('Chaque ligne doit faire 15 caractères maximum')
                 ->atPath('description')
+                ->addViolation();
+        }
+    }
+
+    #[Callback]
+    public function checkIfDate(ExecutionContextInterface $context): void
+    {
+        if ($this->livedAt < $this->planning->getStartedAt() || $this->livedAt > $this->planning->getEndedAt()) {
+            $context->buildViolation('La date du live doit être comprise entre le début et la fin du planning')
+                ->atPath('livedAt')
                 ->addViolation();
         }
     }
