@@ -23,12 +23,6 @@ use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[Entity(repositoryClass: LiveRepository::class)]
-#[ApiResource(
-    collectionOperations: [Request::METHOD_POST, Request::METHOD_GET],
-    itemOperations: [Request::METHOD_GET, Request::METHOD_PUT, Request::METHOD_DELETE],
-    attributes: ['pagination_enabled' => false]
-)]
-#[ApiFilter(WeekFilter::class, properties: ['startedAt'])]
 #[UniqueEntity(
     fields: 'startedAt',
     message: 'Ce live existe déjà.',

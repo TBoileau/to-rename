@@ -16,11 +16,31 @@ final class PlanningGeneratorTest extends TestCase
     public function testShouldHydrateWeek(): void
     {
         $week = new Week([
-            self::createLive('2022-01-03 05:00:00'),
-            self::createLive('2022-01-04 12:30:00'),
-            self::createLive('2022-01-05 12:30:00'),
-            self::createLive('2022-01-06 01:00:00'),
-            self::createLive('2022-01-07 11:11:11'),
+            self::createLive('2022-09-05 20:00:00', <<<EOL
+PROJET
+IL ETAIT UNE FOIS UN DEV
+EOL
+        ),
+            self::createLive('2022-09-06 17:00:00', <<<EOL
+GETTING STARTED
+TWIG COMPONENT
+EOL
+            ),
+            self::createLive('2022-09-07 17:00:00', <<<EOL
+CAPSULE PHP
+PROXY PATTERN
+EOL
+            ),
+            self::createLive('2022-09-08 19:00:00', <<<EOL
+PROJET
+IL ETAIT UNE FOIS UN DEV
+EOL
+            ),
+            self::createLive('2022-09-09 20:00:00', <<<EOL
+JUST CHATTING
+SUJET LIBRE
+EOL
+            ),
         ]);
 
         $generator = new PlanningGenerator(
@@ -42,16 +62,11 @@ final class PlanningGeneratorTest extends TestCase
         self::assertFileExists($filename);
     }
 
-    private static function createLive(string $startedAt): Live
+    private static function createLive(string $startedAt, string $description): Live
     {
         $live = new Live();
         $live->setStartedAt(new DateTimeImmutable($startedAt));
-        $live->setDescription(<<<EOL
-PROJET123456789
-SUR ANGULAR
-SYMFONY
-EOL
-        );
+        $live->setDescription($description);
 
         return $live;
     }
