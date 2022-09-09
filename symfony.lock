@@ -1,18 +1,4 @@
 {
-    "api-platform/core": {
-        "version": "2.6",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "2.5",
-            "ref": "05b57782a78c21a664a42055dc11cf1954ca36bb"
-        },
-        "files": [
-            "config/packages/api_platform.yaml",
-            "config/routes/api_platform.yaml",
-            "src/Entity/.gitignore"
-        ]
-    },
     "dama/doctrine-test-bundle": {
         "version": "7.1",
         "recipe": {
@@ -72,6 +58,15 @@
             "config/packages/doctrine_migrations.yaml",
             "migrations/.gitignore"
         ]
+    },
+    "easycorp/easyadmin-bundle": {
+        "version": "4.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "3.0",
+            "ref": "b131e6cbfe1b898a508987851963fff485986285"
+        }
     },
     "friendsofphp/php-cs-fixer": {
         "version": "3.9",
@@ -192,6 +187,19 @@
         },
         "files": [
             "config/packages/security.yaml"
+        ]
+    },
+    "symfony/translation": {
+        "version": "6.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "5.3",
+            "ref": "da64f5a2b6d96f5dc24914517c0350a5f91dee43"
+        },
+        "files": [
+            "config/packages/translation.yaml",
+            "translations/.gitignore"
         ]
     },
     "symfony/twig-bundle": {

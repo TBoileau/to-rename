@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Filter\WeekFilter;
 use App\Repository\LiveRepository;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
@@ -14,8 +11,8 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
+use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\HttpFoundation\Request;
 
 use function Symfony\Component\String\u;
 
@@ -23,25 +20,19 @@ use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[Entity(repositoryClass: LiveRepository::class)]
-#[ApiResource(
-    collectionOperations: [Request::METHOD_POST, Request::METHOD_GET],
-    itemOperations: [Request::METHOD_GET, Request::METHOD_PUT, Request::METHOD_DELETE],
-    attributes: ['pagination_enabled' => false]
-)]
-#[ApiFilter(WeekFilter::class, properties: ['startedAt'])]
 #[UniqueEntity(
     fields: 'startedAt',
     message: 'Ce live existe déjà.',
     repositoryMethod: 'findByStartedAt'
 )]
-class Live
+class Live implements Stringable
 {
     #[Id]
     #[GeneratedValue]
     #[Column(type: Types::INTEGER)]
     private ?int $id = null;
 
-    #[Column(type: Types::DATETIME_IMMUTABLE)]
+    #[Column(type: Types::DATE_IMMUTABLE)]
     private DateTimeInterface $startedAt;
 
     #[Column(type: Types::TEXT)]
@@ -70,6 +61,14 @@ class Live
     public function setDescription(string $description): void
     {
         $this->description = $description;
+    }
+
+    public function __toString(): string
+    {
+        return sprintf(
+            'Live du %s',
+            $this->startedAt->format('d/m/Y')
+        );
     }
 
     #[Callback]
