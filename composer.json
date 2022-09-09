@@ -17,6 +17,7 @@
         "doctrine/doctrine-bundle": "^2.7",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.12",
+        "easycorp/easyadmin-bundle": "^4.3",
         "intervention/image": "^2.7",
         "nelmio/cors-bundle": "^2.2",
         "phpdocumentor/reflection-docblock": "^5.3",

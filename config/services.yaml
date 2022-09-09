@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     planning_image: '%kernel.project_dir%/public/images/planning.png'
+    thumbnail_image: '%kernel.project_dir%/public/images/thumbnail.png'
     upload_dir: '%kernel.project_dir%/public/uploads'
     fonts.title: '%kernel.project_dir%/public/fonts/Thunder-BoldLC.ttf'
     fonts.time: '%kernel.project_dir%/public/fonts/MonumentExtended-Regular.otf'
@@ -16,6 +17,7 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         bind:
             string $planningImage: '%planning_image%'
+            string $thumbnailImage: '%thumbnail_image%'
             string $fontTitle: '%fonts.title%'
             string $fontTime: '%fonts.time%'
             string $uploadDir: '%upload_dir%'
