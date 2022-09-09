@@ -22,10 +22,7 @@ use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[Entity(repositoryClass: LiveRepository::class)]
-#[UniqueEntity(
-    fields: 'livedAt',
-    message: 'Ce live existe déjà.'
-)]
+#[UniqueEntity(fields: 'livedAt', message: 'Ce live existe déjà.')]
 class Live implements Stringable
 {
     #[Id]

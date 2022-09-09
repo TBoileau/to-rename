@@ -23,10 +23,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[Entity(repositoryClass: PlanningRepository::class)]
-#[UniqueEntity(
-    fields: 'startedAt',
-    message: 'Ce planning existe déjà.',
-)]
+#[UniqueEntity(fields: 'startedAt', message: 'Ce planning existe déjà.', )]
 class Planning implements Stringable
 {
     #[Id]
