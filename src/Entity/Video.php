@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Symfony\Component\Validator\Constraints\GreaterThan;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -37,9 +38,9 @@ class Video
     #[Column(type: Types::INTEGER)]
     private int $episode;
 
-    #[NotBlank]
-    #[Column(type: Types::STRING)]
-    private string $logo;
+    #[ManyToOne(targetEntity: Logo::class)]
+    #[JoinColumn(nullable: false)]
+    private Logo $logo;
 
     #[Column(type: Types::STRING)]
     private string $thumbnail;
@@ -107,16 +108,6 @@ class Video
         $this->link = $link;
     }
 
-    public function getLogo(): string
-    {
-        return $this->logo;
-    }
-
-    public function setLogo(string $logo): void
-    {
-        $this->logo = $logo;
-    }
-
     public function getLive(): ?Live
     {
         return $this->live;
@@ -125,5 +116,15 @@ class Video
     public function setLive(?Live $live): void
     {
         $this->live = $live;
+    }
+
+    public function getLogo(): Logo
+    {
+        return $this->logo;
+    }
+
+    public function setLogo(Logo $logo): void
+    {
+        $this->logo = $logo;
     }
 }

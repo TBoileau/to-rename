@@ -29,9 +29,6 @@ final class VideoCrudController extends AbstractCrudController
         yield TextField::new('title', 'Titre');
         yield UrlField::new('link', 'Vidéo Youtube');
         yield AssociationField::new('live', 'Live');
-        yield ImageField::new('logo', 'Logo')
-            ->hideOnIndex()
-            ->setBasePath('uploads/')
-            ->setUploadDir('public/uploads/');
+        yield AssociationField::new('logo', 'Logo');
     }
 }
