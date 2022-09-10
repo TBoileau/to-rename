@@ -30,5 +30,13 @@ services:
             - '../src/Kernel.php'
 
     Intervention\Image\ImageManager:
-        factory: [App\Factory\ImageManagerFactory, 'create']
+        factory: [App\ImageManager\ImageManagerFactory, 'create']
         arguments: ['%intervention.driver%']
+
+    App\Google\Youtube\InMemoryVideoHandler:
+        arguments:
+            $googleFixturesSearchList: '%kernel.project_dir%/fixtures/search_list.php'
+            $googleFixturesVideosList: '%kernel.project_dir%/fixtures/videos_list.php'
+
+    App\Google\Youtube\VideoHandlerInterface: '@App\Google\Youtube\InMemoryVideoHandler'
+    App\Google\Youtube\VideoSynchronizerInterface: '@App\Google\Youtube\InMemoryVideoHandler'
