@@ -18,6 +18,7 @@ services:
         bind:
             string $planningImage: '%images.planning%'
             string $thumbnailImage: '%images.thumbnail%'
+
             array $fonts:
                 thunder: '%fonts.thunder%'
                 monument: '%fonts.monument%'
@@ -32,3 +33,10 @@ services:
     Intervention\Image\ImageManager:
         factory: [App\ImageManager\ImageManagerFactory, 'create']
         arguments: ['%intervention.driver%']
+
+    App\Google\Youtube\InMemoryVideoHandler:
+        arguments:
+            $googleFixturesSearchList: '%kernel.project_dir%/fixtures/search_list.php'
+            $googleFixturesVideosList: '%kernel.project_dir%/fixtures/videos_list.php'
+
+    App\Google\Youtube\VideoHandlerInterface: '@App\Google\Youtube\InMemoryVideoHandler'

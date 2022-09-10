@@ -14,8 +14,6 @@ use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Symfony\Component\Validator\Constraints\GreaterThan;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\NotNull;
-use Symfony\Component\Validator\Constraints\Url;
 
 #[Entity(repositoryClass: VideoRepository::class)]
 class Video
@@ -30,27 +28,40 @@ class Video
     private string $title;
 
     #[NotBlank]
-    #[GreaterThan(0)]
     #[Column(type: Types::INTEGER)]
-    private int $season;
+    private int $season = 0;
 
     #[NotBlank]
     #[GreaterThan(0)]
     #[Column(type: Types::INTEGER)]
-    private int $episode;
+    private int $episode = 0;
 
-    #[NotNull]
+    #[NotBlank]
+    #[Column(type: Types::TEXT)]
+    private string $description;
+
     #[ManyToOne(targetEntity: Logo::class)]
-    #[JoinColumn(nullable: false, onDelete: 'RESTRICT')]
-    private Logo $logo;
+    #[JoinColumn(onDelete: 'SET NULL')]
+    private ?Logo $logo = null;
 
-    #[Column(type: Types::STRING)]
-    private string $thumbnail;
+    #[Column(type: Types::STRING, nullable: true)]
+    private ?string $thumbnail = null;
 
-    #[Url]
+    /**
+     * @var array<string, string>
+     */
+    #[Column(type: Types::JSON)]
+    private array $thumbnails = [];
+
     #[NotBlank]
     #[Column(type: Types::STRING)]
-    private string $link;
+    private string $youtubeId;
+
+    /**
+     * @var array<array-key, string>
+     */
+    #[Column(type: Types::JSON)]
+    private array $tags = [];
 
     #[ManyToOne(targetEntity: Live::class)]
     #[JoinColumn(onDelete: 'SET NULL')]
@@ -71,6 +82,88 @@ class Video
         $this->title = $title;
     }
 
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): void
+    {
+        $this->description = $description;
+    }
+
+    public function getThumbnail(): ?string
+    {
+        return $this->thumbnail;
+    }
+
+    public function setThumbnail(string $thumbnail): void
+    {
+        $this->thumbnail = $thumbnail;
+    }
+
+    public function getYoutubeId(): string
+    {
+        return $this->youtubeId;
+    }
+
+    public function setYoutubeId(string $youtubeId): void
+    {
+        $this->youtubeId = $youtubeId;
+    }
+
+    public function getLive(): ?Live
+    {
+        return $this->live;
+    }
+
+    public function setLive(?Live $live): void
+    {
+        $this->live = $live;
+    }
+
+    public function getLogo(): ?Logo
+    {
+        return $this->logo;
+    }
+
+    public function setLogo(Logo $logo): void
+    {
+        $this->logo = $logo;
+    }
+
+    /**
+     * @return array<array-key, string>
+     */
+    public function getTags(): array
+    {
+        return $this->tags;
+    }
+
+    /**
+     * @param array<array-key, string> $tags
+     */
+    public function setTags(array $tags): void
+    {
+        $this->tags = $tags;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function getThumbnails(): array
+    {
+        return $this->thumbnails;
+    }
+
+    /**
+     * @param array<string, string> $thumbnails
+     */
+    public function setThumbnails(array $thumbnails): void
+    {
+        $this->thumbnails = $thumbnails;
+    }
+
     public function getSeason(): int
     {
         return $this->season;
@@ -89,45 +182,5 @@ class Video
     public function setEpisode(int $episode): void
     {
         $this->episode = $episode;
-    }
-
-    public function getThumbnail(): string
-    {
-        return $this->thumbnail;
-    }
-
-    public function setThumbnail(string $thumbnail): void
-    {
-        $this->thumbnail = $thumbnail;
-    }
-
-    public function getLink(): string
-    {
-        return $this->link;
-    }
-
-    public function setLink(string $link): void
-    {
-        $this->link = $link;
-    }
-
-    public function getLive(): ?Live
-    {
-        return $this->live;
-    }
-
-    public function setLive(?Live $live): void
-    {
-        $this->live = $live;
-    }
-
-    public function getLogo(): Logo
-    {
-        return $this->logo;
-    }
-
-    public function setLogo(Logo $logo): void
-    {
-        $this->logo = $logo;
     }
 }
