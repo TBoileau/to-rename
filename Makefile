@@ -11,6 +11,9 @@ install-env:
 	sed -i -e 's/DATABASE_PASSWORD/$(db_password)/' .env.$(env).local
 	sed -i -e 's/DATABASE_HOST/$(db_host)/' .env.$(env).local
 	sed -i -e 's/DATABASE_NAME/$(db_name)/' .env.$(env).local
+	sed -i -e 's/GOOGLE_API_KEY_ENV/$(google_api_key)/' .env.$(env).local
+	sed -i -e 's/GOOGLE_CLIENT_ID_ENV/$(google_client_id)/' .env.$(env).local
+	sed -i -e 's/GOOGLE_CLIENT_SECRET_ENV/$(google_client_secret)/' .env.$(env).local
 	sed -i -e 's/ENV/$(env)/' .env.$(env).local
 	make prepare env=$(env)
 

@@ -9,7 +9,7 @@ Pré-requis :
 
 Installation:
 ```
-make install db_user=root db_password=password db_name=twitch db_host=127.0.0.1
+make install db_user=root db_password=password db_name=twitch db_host=127.0.0.1 google_api_key=API_KEY google_client_id=CLIENT_ID google_client_secret=CLIENT_SECRET
 ```
 
 Base de données

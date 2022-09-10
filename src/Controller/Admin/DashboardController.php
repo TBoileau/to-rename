@@ -9,6 +9,7 @@ use App\Entity\Logo;
 use App\Entity\Planning;
 use App\Entity\User;
 use App\Entity\Video;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -25,8 +26,12 @@ final class DashboardController extends AbstractDashboardController
 
     public function configureDashboard(): Dashboard
     {
-        return Dashboard::new()
-            ->setTitle('Twitch');
+        return Dashboard::new()->setTitle('Twitch')->disableDarkMode();
+    }
+
+    public function configureAssets(): Assets
+    {
+        return Assets::new()->addCssFile('css/admin.css');
     }
 
     public function configureMenuItems(): iterable
