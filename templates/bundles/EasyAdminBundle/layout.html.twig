@@ -3,11 +3,11 @@
 {% block header_custom_menu %}
     <div class="d-flex align-items-stretch">
         {% if googleToken.authenticated %}
-            <span class="border border-light rounded px-1 d-flex align-items-center">
+            <span class="border rounded px-1 d-flex align-items-center">
                 <i class="fas fa-circle text-success me-1"></i> Google
             </span>
         {% else %}
-            <a class="border border-light text-light rounded px-1 d-flex align-items-center" href="{{ path('google_auth') }}">
+            <a class="border rounded px-1 d-flex align-items-center" href="{{ path('google_auth') }}">
                 <i class="fas fa-circle text-danger me-1"></i> Google
             </a>
         {% endif %}

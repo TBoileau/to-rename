@@ -14,6 +14,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
@@ -23,7 +24,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class VideoCrudController extends AbstractCrudController
 {
-    public function __construct(private TokenInterface $googleToken)
+    public function __construct(private TokenInterface $googleToken, private string $uploadDir)
     {
     }
 
@@ -38,14 +39,21 @@ final class VideoCrudController extends AbstractCrudController
             $actions->disable(Action::EDIT);
         }
 
-        $synchronize = Action::new('synchronize', 'Synchroniser')
+        $syncAll = Action::new('syncAll', 'Synchroniser toutes les vidéos')
             ->createAsGlobalAction()
-            ->linkToRoute('admin_video_synchronize');
+            ->displayIf(fn () => $this->googleToken->isAuthenticated())
+            ->linkToRoute('admin_video_sync_all');
+
+        $syncOne = Action::new('syncOne', 'Synchroniser')
+            ->displayIf(fn () => $this->googleToken->isAuthenticated())
+            ->linkToRoute('admin_video_sync_one', static fn (Video $video): array => ['id' => $video->getId()]);
 
         return $actions
             ->disable(Action::NEW)
+            ->add(Crud::PAGE_INDEX, $syncOne)
+            ->add(Crud::PAGE_DETAIL, $syncOne)
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
-            ->add(Crud::PAGE_INDEX, $synchronize);
+            ->add(Crud::PAGE_INDEX, $syncAll);
     }
 
     public function configureFields(string $pageName): iterable
@@ -56,7 +64,13 @@ final class VideoCrudController extends AbstractCrudController
         yield TextField::new('youtubeId', 'Youtube ID')
             ->hideOnIndex()
             ->hideOnForm();
-        yield ImageField::new('thumbnails[high]', 'Thumbnail')->hideOnForm();
+        yield ImageField::new('thumbnails[high]', 'Thumbnail Youtube')->hideOnForm();
+        yield ImageField::new('thumbnail', 'Thumbnail')
+            ->setBasePath('uploads/')
+            ->setUploadDir($this->uploadDir)
+            ->hideOnForm();
+        yield IntegerField::new('season', 'Saison N°');
+        yield IntegerField::new('episode', 'Episode N°');
         yield TextField::new('title', 'Titre');
         yield TextareaField::new('description', 'Description')->hideOnIndex();
         yield CollectionField::new('tags', 'Tags')
@@ -66,15 +80,29 @@ final class VideoCrudController extends AbstractCrudController
         yield AssociationField::new('logo', 'Logo');
     }
 
-    #[Route('/admin/videos/synchronize', name: 'admin_video_synchronize')]
-    public function synchronize(VideoSynchronizerInterface $videoSynchronizer, AdminUrlGenerator $adminUrlGenerator): RedirectResponse
+    #[Route('/admin/videos/sync', name: 'admin_video_sync_all')]
+    public function syncAll(VideoSynchronizerInterface $videoSynchronizer, AdminUrlGenerator $adminUrlGenerator): RedirectResponse
     {
-        $videoSynchronizer->synchronize();
+        $videoSynchronizer->syncAll();
 
         return new RedirectResponse(
             $adminUrlGenerator
                 ->setController(self::class)
                 ->setAction(Action::INDEX)
+                ->generateUrl()
+        );
+    }
+
+    #[Route('/admin/videos/{id}/sync', name: 'admin_video_sync_one')]
+    public function syncOne(Video $video, VideoSynchronizerInterface $videoSynchronizer, AdminUrlGenerator $adminUrlGenerator): RedirectResponse
+    {
+        $videoSynchronizer->syncOne($video);
+
+        return new RedirectResponse(
+            $adminUrlGenerator
+                ->setController(self::class)
+                ->setAction(Action::DETAIL)
+                ->setEntityId($video->getId())
                 ->generateUrl()
         );
     }

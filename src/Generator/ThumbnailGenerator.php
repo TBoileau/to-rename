@@ -50,7 +50,7 @@ final class ThumbnailGenerator implements ThumbnailGeneratorInterface
                     ->valign('top')
             );
 
-        if ($video->getLogo() !== null) {
+        if (null !== $video->getLogo()) {
             $logoImageFile = sprintf('%s/%s', $this->uploadDir, $video->getLogo()->getImage());
 
             /** @var array<int, int> $imageInfo */

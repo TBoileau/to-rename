@@ -18,7 +18,6 @@ services:
         bind:
             string $planningImage: '%images.planning%'
             string $thumbnailImage: '%images.thumbnail%'
-
             array $fonts:
                 thunder: '%fonts.thunder%'
                 monument: '%fonts.monument%'
@@ -40,3 +39,4 @@ services:
             $googleFixturesVideosList: '%kernel.project_dir%/fixtures/videos_list.php'
 
     App\Google\Youtube\VideoHandlerInterface: '@App\Google\Youtube\InMemoryVideoHandler'
+    App\Google\Youtube\VideoSynchronizerInterface: '@App\Google\Youtube\InMemoryVideoHandler'
