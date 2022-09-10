@@ -14,6 +14,7 @@ use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Symfony\Component\Validator\Constraints\GreaterThan;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\Url;
 
 #[Entity(repositoryClass: VideoRepository::class)]
@@ -38,6 +39,7 @@ class Video
     #[Column(type: Types::INTEGER)]
     private int $episode;
 
+    #[NotNull]
     #[ManyToOne(targetEntity: Logo::class)]
     #[JoinColumn(nullable: false, onDelete: 'RESTRICT')]
     private Logo $logo;

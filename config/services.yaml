@@ -30,5 +30,5 @@ services:
             - '../src/Kernel.php'
 
     Intervention\Image\ImageManager:
-        factory: [App\Factory\ImageManagerFactory, 'create']
+        factory: [App\ImageManager\ImageManagerFactory, 'create']
         arguments: ['%intervention.driver%']

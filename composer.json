@@ -17,6 +17,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.12",
         "easycorp/easyadmin-bundle": "^4.3",
+        "google/apiclient": "^2.12.1",
         "intervention/image": "^2.7",
         "nelmio/cors-bundle": "^2.2",
         "phpdocumentor/reflection-docblock": "^5.3",
@@ -70,6 +71,7 @@
         "symfony/polyfill-php81": "*"
     },
     "scripts": {
+        "pre-autoload-dump": "Google\\Task\\Composer::cleanup",
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
@@ -88,7 +90,10 @@
         "symfony": {
             "allow-contrib": false,
             "require": "6.1.*"
-        }
+        },
+        "google/apiclient-services": [
+            "YouTube"
+        ]
     },
     "require-dev": {
         "dama/doctrine-test-bundle": "^7.1",

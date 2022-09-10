@@ -25,8 +25,7 @@ final class DashboardController extends AbstractDashboardController
 
     public function configureDashboard(): Dashboard
     {
-        return Dashboard::new()
-            ->setTitle('Twitch');
+        return Dashboard::new()->setTitle('Twitch');
     }
 
     public function configureMenuItems(): iterable
