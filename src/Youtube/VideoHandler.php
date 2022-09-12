@@ -130,8 +130,6 @@ class VideoHandler implements VideoHandlerInterface, VideoSynchronizerInterface
         $videos = $this->get([$video->getYoutubeId()]);
 
         $this->handleVideo($videos[0]);
-
-        $this->entityManager->flush();
     }
 
     public function syncAll(): void
@@ -168,7 +166,7 @@ class VideoHandler implements VideoHandlerInterface, VideoSynchronizerInterface
         }
 
         $video->setDescription($youtubeVideo->getSnippet()->getDescription());
-        $video->setTags($youtubeVideo->getSnippet()->getTags());
+        $video->setTags($youtubeVideo->getSnippet()->getTags() ?? []); /** @phpstan-ignore-line */
 
         /** @var array<string, string> $thumbnails */
         $thumbnails = [];
@@ -176,11 +174,16 @@ class VideoHandler implements VideoHandlerInterface, VideoSynchronizerInterface
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
         foreach (['default', 'medium', 'high', 'standard', 'maxres'] as $type) {
-            /** @var Thumbnail $thumbnail */
+            /** @var ?Thumbnail $thumbnail */
             $thumbnail = $propertyAccessor->getValue($youtubeVideo->getSnippet()->getThumbnails(), $type);
-            $thumbnails[$type] = $thumbnail->getUrl();
+
+            if (null !== $thumbnail) {
+                $thumbnails[$type] = $thumbnail->getUrl();
+            }
         }
 
         $video->setThumbnails($thumbnails);
+
+        $this->entityManager->flush();
     }
 }

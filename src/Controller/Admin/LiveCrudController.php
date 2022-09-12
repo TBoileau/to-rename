@@ -7,7 +7,7 @@ namespace App\Controller\Admin;
 use App\Entity\Live;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 
 final class LiveCrudController extends AbstractCrudController
@@ -21,7 +21,7 @@ final class LiveCrudController extends AbstractCrudController
     {
         yield TextareaField::new('description', 'Description');
         yield AssociationField::new('planning', 'Planning');
-        yield DateField::new('livedAt', 'Date')
-            ->setFormat('dd/MM/yyyy');
+        yield DateTimeField::new('livedAt', 'Date')
+            ->setFormat('dd/MM/yyyy HH:mm');
     }
 }

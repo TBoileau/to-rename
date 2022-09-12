@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Entity\Video;
+use App\OAuth\Api\Twitter\TwitterClient;
 use App\OAuth\Security\Token\OAuthToken;
 use App\OAuth\Security\Token\TokenStorageInterface;
 use App\Youtube\VideoSynchronizerInterface;
@@ -122,8 +123,17 @@ final class VideoCrudController extends AbstractCrudController
     }
 
     #[Route('/admin/videos/{id}/tweet', name: 'admin_video_tweet')]
-    public function tweet(Video $video, AdminUrlGenerator $adminUrlGenerator): RedirectResponse
+    public function tweet(Video $video, AdminUrlGenerator $adminUrlGenerator, TwitterClient $twitterClient): RedirectResponse
     {
+        $twitterClient->tweet(<<<EOF
+Nouvelle vidéo disponible sur la chaîne Youtube ! 
+
+{$video->getTitle()}
+
+https://www.youtube.com/watch?v={$video->getYoutubeId()}
+EOF
+        );
+
         return new RedirectResponse(
             $adminUrlGenerator
                 ->setController(self::class)
