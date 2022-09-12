@@ -22,6 +22,14 @@ services:
                 thunder: '%fonts.thunder%'
                 monument: '%fonts.monument%'
             string $uploadDir: '%upload_dir%'
+
+    _instanceof:
+        App\OAuth\ClientInterface:
+            tags: ['app.oauth.client']
+
+        App\OAuth\Security\Guard\AuthenticatorInterface:
+            tags: ['app.oauth.authenticator']
+
     App\:
         resource: '../src/'
         exclude:
@@ -33,10 +41,29 @@ services:
         factory: [App\ImageManager\ImageManagerFactory, 'create']
         arguments: ['%intervention.driver%']
 
-    App\Google\Youtube\InMemoryVideoHandler:
+    App\Youtube\InMemoryVideoHandler:
         arguments:
             $googleFixturesSearchList: '%kernel.project_dir%/fixtures/search_list.php'
             $googleFixturesVideosList: '%kernel.project_dir%/fixtures/videos_list.php'
 
-    App\Google\Youtube\VideoHandlerInterface: '@App\Google\Youtube\InMemoryVideoHandler'
-    App\Google\Youtube\VideoSynchronizerInterface: '@App\Google\Youtube\InMemoryVideoHandler'
+    App\Youtube\VideoHandlerInterface: '@App\Youtube\VideoHandler'
+    App\Youtube\VideoSynchronizerInterface: '@App\Youtube\VideoHandler'
+
+    App\OAuth\Security\Token\OAuthTokenStorage:
+        arguments: [!tagged_iterator { tag: 'app.oauth.client', default_index_method: 'getName' }]
+
+    App\OAuth\EventSubscriber\RequestListener:
+        arguments: [!tagged_iterator { tag: 'app.oauth.authenticator', default_index_method: 'getName' }]
+
+    App\OAuth\Api\Google\GoogleClient:
+        calls:
+            - [setDeveloperKey, ['%env(GOOGLE_API_KEY)%']]
+            - [setClientId, ['%env(GOOGLE_CLIENT_ID)%']]
+            - [setClientSecret, ['%env(GOOGLE_CLIENT_SECRET)%']]
+            - [setScopes, ['https://www.googleapis.com/auth/youtube']]
+
+    App\OAuth\Api\Twitter\TwitterClient:
+        calls:
+            - [setClientId, ['%env(TWITTER_CLIENT_ID)%']]
+            - [setClientSecret, ['%env(TWITTER_CLIENT_SECRET)%']]
+            - [setScopes, [['tweet.read', 'tweet.write', 'users.read']]]

@@ -10,13 +10,13 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/google', name: 'google_')]
-final class GoogleController extends AbstractController
+#[Route('/twitter', name: 'twitter_')]
+final class TwitterController extends AbstractController
 {
     #[Route('/check', name: 'check')]
-    public function check(Request $request, AuthenticatorInterface $googleAuthenticator): RedirectResponse
+    public function check(Request $request, AuthenticatorInterface $twitterAuthenticator): RedirectResponse
     {
-        $googleAuthenticator->authenticate($request);
+        $twitterAuthenticator->authenticate($request);
 
         if ($request->getSession()->has('referer')) {
             /** @var string $redirectUri */
@@ -30,10 +30,10 @@ final class GoogleController extends AbstractController
     }
 
     #[Route('/auth', name: 'auth')]
-    public function auth(Request $request, AuthenticatorInterface $googleAuthenticator): RedirectResponse
+    public function auth(Request $request, AuthenticatorInterface $twitterAuthenticator): RedirectResponse
     {
         $request->getSession()->set('referer', $request->headers->get('referer'));
 
-        return $googleAuthenticator->authorize();
+        return $twitterAuthenticator->authorize();
     }
 }

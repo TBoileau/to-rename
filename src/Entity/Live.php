@@ -30,7 +30,7 @@ class Live implements Stringable
     #[Column(type: Types::INTEGER)]
     private ?int $id = null;
 
-    #[Column(type: Types::DATE_IMMUTABLE)]
+    #[Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeInterface $livedAt;
 
     #[Column(type: Types::TEXT)]

@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Google\Youtube;
+namespace App\Youtube;
 
 use App\Entity\Video;
+use App\OAuth\Api\Google\GoogleClient;
 use App\Repository\VideoRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Google_Client;
 
 final class InMemoryVideoHandler extends VideoHandler implements VideoHandlerInterface
 {
     public function __construct(
-        Google_Client $googleClient,
+        GoogleClient $googleClient,
         EntityManagerInterface $entityManager,
         VideoRepository $videoRepository,
         private string $googleFixturesSearchList,

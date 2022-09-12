@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Google\Security\Token;
+namespace App\OAuth\Security\Token;
 
 interface TokenInterface
 {
