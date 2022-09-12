@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Twitch - toham</title>
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site" content="@boileau_thomas">
+        <meta name="twitter:title" content="Twitch @toham">
+        <meta name="twitter:description" content="Planning {{ planning }}">
+        <meta name="twitter:image" content="{{ absolute_url(asset('uploads/' ~ planning.image)) }}">
+        <meta name="twitter:creator" content="@boileau_thomas">
+    </head>
+    <body>
+        <div id="twitch-embed"></div>
+        <script src="https://embed.twitch.tv/embed/v1.js"></script>
+            <script type="text/javascript">
+              new Twitch.Embed("twitch-embed", {
+                width: window.innerWidth,
+                height: window.innerHeight,
+                channel: "toham"
+              });
+            </script>
+        </body>
+</html>
