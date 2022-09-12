@@ -12,9 +12,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractOAuthAuthenticator implements AuthenticatorInterface
 {
-    private ProviderInterface $provider;
+    protected ProviderInterface $provider;
 
-    private TokenInterface $token;
+    protected TokenInterface $token;
 
     public function __construct(private ClientInterface $client)
     {
