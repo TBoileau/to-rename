@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Google\Security\Provider;
+namespace App\OAuth\Security\Provider;
 
 use Symfony\Component\HttpFoundation\Request;
 

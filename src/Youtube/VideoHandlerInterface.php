@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Google\Youtube;
+namespace App\Youtube;
 
 use App\Entity\Video;
 use Google\Service\YouTube\Video as YoutubeVideo;

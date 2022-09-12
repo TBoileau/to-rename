@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Google\Youtube;
+namespace App\Youtube;
 
 use App\Entity\Video;
+use App\OAuth\Api\Google\GoogleClient;
 use App\Repository\VideoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Google\Service\YouTube\Thumbnail;
 use Google\Service\YouTube\Video as YoutubeVideo;
-use Google_Client;
 use Google_Http_MediaFileUpload;
 use Google_Service_YouTube;
 use GuzzleHttp\Psr7\Request;
@@ -23,7 +23,7 @@ class VideoHandler implements VideoHandlerInterface, VideoSynchronizerInterface
     protected Google_Service_YouTube $youtube;
 
     public function __construct(
-        Google_Client $googleClient,
+        GoogleClient $googleClient,
         private string $uploadDir,
         private EntityManagerInterface $entityManager,
         private VideoRepository $videoRepository
@@ -130,8 +130,6 @@ class VideoHandler implements VideoHandlerInterface, VideoSynchronizerInterface
         $videos = $this->get([$video->getYoutubeId()]);
 
         $this->handleVideo($videos[0]);
-
-        $this->entityManager->flush();
     }
 
     public function syncAll(): void
@@ -155,18 +153,20 @@ class VideoHandler implements VideoHandlerInterface, VideoSynchronizerInterface
 
         $video->setTitle($youtubeVideo->getSnippet()->getTitle());
 
-        if (preg_match('/(S(\d{2})E(\d{2}))/', $video->getTitle(), $matches) !== false) {
-            [, $info, $season, $episode] = $matches;
-            $video->setTitle(u($video->getTitle())->replace($info, '')->trim()->trimStart('-')->toString());
-            $video->setSeason((int) $season);
-            $video->setEpisode((int) $episode);
+        if (false !== preg_match('/(S(\d{2})E(\d{2}))/', $video->getTitle(), $matches)) {
+            if (isset($matches[1])) {
+                [, $info, $season, $episode] = $matches;
+                $video->setTitle(u($video->getTitle())->replace($info, '')->trim()->trimStart('-')->toString());
+                $video->setSeason((int) $season);
+                $video->setEpisode((int) $episode);
+            }
         } else {
             $video->setSeason(0);
             $video->setEpisode(0);
         }
 
         $video->setDescription($youtubeVideo->getSnippet()->getDescription());
-        $video->setTags($youtubeVideo->getSnippet()->getTags());
+        $video->setTags($youtubeVideo->getSnippet()->getTags() ?? []); /** @phpstan-ignore-line */
 
         /** @var array<string, string> $thumbnails */
         $thumbnails = [];
@@ -174,11 +174,16 @@ class VideoHandler implements VideoHandlerInterface, VideoSynchronizerInterface
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
         foreach (['default', 'medium', 'high', 'standard', 'maxres'] as $type) {
-            /** @var Thumbnail $thumbnail */
+            /** @var ?Thumbnail $thumbnail */
             $thumbnail = $propertyAccessor->getValue($youtubeVideo->getSnippet()->getThumbnails(), $type);
-            $thumbnails[$type] = $thumbnail->getUrl();
+
+            if (null !== $thumbnail) {
+                $thumbnails[$type] = $thumbnail->getUrl();
+            }
         }
 
         $video->setThumbnails($thumbnails);
+
+        $this->entityManager->flush();
     }
 }
