@@ -6,7 +6,7 @@ namespace App\EventSubscriber;
 
 use App\Entity\Video;
 use App\Generator\ThumbnailGeneratorInterface;
-use App\Google\Youtube\VideoHandlerInterface;
+use App\Youtube\VideoHandlerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityUpdatedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityUpdatedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

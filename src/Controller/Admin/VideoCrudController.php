@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Entity\Video;
-use App\Google\Security\Token\TokenInterface;
-use App\Google\Youtube\VideoSynchronizerInterface;
+use App\OAuth\Security\Token\OAuthToken;
+use App\OAuth\Security\Token\TokenStorageInterface;
+use App\Youtube\VideoSynchronizerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -24,7 +25,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class VideoCrudController extends AbstractCrudController
 {
-    public function __construct(private TokenInterface $googleToken, private string $uploadDir)
+    public function __construct(private TokenStorageInterface $tokenStorage, private string $uploadDir)
     {
     }
 
@@ -35,23 +36,36 @@ final class VideoCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-        if (!$this->googleToken->isAuthenticated()) {
-            $actions->disable(Action::EDIT);
+        /** @var OAuthToken $googleToken */
+        $googleToken = $this->tokenStorage['google'];
+
+        if (!$googleToken->isAuthenticated()) {
+            $actions->disable(Action::EDIT, 'syncAll', 'syncOne');
+        }
+
+        /** @var OAuthToken $twitterToken */
+        $twitterToken = $this->tokenStorage['twitter'];
+
+        if (!$twitterToken->isAuthenticated()) {
+            $actions->disable('tweet');
         }
 
         $syncAll = Action::new('syncAll', 'Synchroniser toutes les vidéos')
             ->createAsGlobalAction()
-            ->displayIf(fn () => $this->googleToken->isAuthenticated())
             ->linkToRoute('admin_video_sync_all');
 
         $syncOne = Action::new('syncOne', 'Synchroniser')
-            ->displayIf(fn () => $this->googleToken->isAuthenticated())
             ->linkToRoute('admin_video_sync_one', static fn (Video $video): array => ['id' => $video->getId()]);
+
+        $tweet = Action::new('tweet', 'Tweet')
+            ->linkToRoute('admin_video_tweet', static fn (Video $video): array => ['id' => $video->getId()]);
 
         return $actions
             ->disable(Action::NEW)
             ->add(Crud::PAGE_INDEX, $syncOne)
             ->add(Crud::PAGE_DETAIL, $syncOne)
+            ->add(Crud::PAGE_INDEX, $tweet)
+            ->add(Crud::PAGE_DETAIL, $tweet)
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
             ->add(Crud::PAGE_INDEX, $syncAll);
     }
@@ -98,6 +112,18 @@ final class VideoCrudController extends AbstractCrudController
     {
         $videoSynchronizer->syncOne($video);
 
+        return new RedirectResponse(
+            $adminUrlGenerator
+                ->setController(self::class)
+                ->setAction(Action::DETAIL)
+                ->setEntityId($video->getId())
+                ->generateUrl()
+        );
+    }
+
+    #[Route('/admin/videos/{id}/tweet', name: 'admin_video_tweet')]
+    public function tweet(Video $video, AdminUrlGenerator $adminUrlGenerator): RedirectResponse
+    {
         return new RedirectResponse(
             $adminUrlGenerator
                 ->setController(self::class)
