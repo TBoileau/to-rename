@@ -137,7 +137,7 @@ final class TwitterClient implements ClientInterface
     {
         $this->httpClient->request(Request::METHOD_POST, 'https://api.twitter.com/2/tweets', [
             'headers' => [
-                'Authorization' => sprintf('Bearer %s', $this->accessToken['access_token']), /** @phpstan-ignore-line */
+                'Authorization' => sprintf('Bearer %s', $this->accessToken['access_token']), /* @phpstan-ignore-line */
             ],
             'json' => [
                 'text' => $message,
