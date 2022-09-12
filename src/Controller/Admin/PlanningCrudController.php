@@ -42,7 +42,6 @@ final class PlanningCrudController extends AbstractCrudController
             ->linkToRoute('admin_planning_tweet', static fn (Planning $planning): array => ['id' => $planning->getId()]);
 
         return $actions
-            ->disable(Action::NEW)
             ->add(Crud::PAGE_INDEX, $tweet)
             ->add(Crud::PAGE_DETAIL, $tweet)
             ->add(Crud::PAGE_INDEX, Action::DETAIL);
