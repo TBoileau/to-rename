@@ -8,6 +8,7 @@ use App\Entity\Video;
 use App\OAuth\Api\Google\GoogleClient;
 use App\Repository\VideoRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Google\Service\YouTube\Video as YoutubeVideo;
 
 final class InMemoryVideoHandler extends VideoHandler implements VideoHandlerInterface
 {
@@ -59,5 +60,25 @@ final class InMemoryVideoHandler extends VideoHandler implements VideoHandlerInt
 
     public function update(Video $video): void
     {
+        $listResponse = $this->get([$video->getYoutubeId()]);
+
+        /** @var YoutubeVideo $videoYoutube */
+        $videoYoutube = $listResponse[0];
+
+        $videoSnippet = $videoYoutube->getSnippet();
+        $videoSnippet->setDefaultAudioLanguage('FR');
+        $videoSnippet->setDefaultLanguage('FR');
+        $videoSnippet->setTitle(
+            sprintf(
+                'S%02dE%02d - %s',
+                $video->getSeason(),
+                $video->getEpisode(),
+                $video->getTitle()
+            )
+        );
+        $videoSnippet->setDescription($video->getDescription());
+        $videoSnippet->setTags(array_values($video->getTags()));
+
+        $this->videosUpdated[] = $videoYoutube;
     }
 }
