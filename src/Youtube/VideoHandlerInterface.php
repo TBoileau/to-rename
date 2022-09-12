@@ -15,6 +15,11 @@ interface VideoHandlerInterface
     public function list(): iterable;
 
     /**
+     * @return array<array-key, YoutubeVideo>
+     */
+    public function getVideosUpdated(): array;
+
+    /**
      * @param array<array-key, string> $ids
      *
      * @return array<array-key, YoutubeVideo>
