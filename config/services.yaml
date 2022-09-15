@@ -30,6 +30,10 @@ services:
         App\OAuth\Security\Guard\AuthenticatorInterface:
             tags: ['app.oauth.authenticator']
 
+        App\Doctrine\Type\AbstractEnumType:
+            tags:
+                - { name: 'app.doctrine_enum_type' }
+
     App\:
         resource: '../src/'
         exclude:
@@ -40,14 +44,6 @@ services:
     Intervention\Image\ImageManager:
         factory: [App\ImageManager\ImageManagerFactory, 'create']
         arguments: ['%intervention.driver%']
-
-    App\Youtube\InMemoryVideoHandler:
-        arguments:
-            $googleFixturesSearchList: '%kernel.project_dir%/fixtures/search_list.php'
-            $googleFixturesVideosList: '%kernel.project_dir%/fixtures/videos_list.php'
-
-    App\Youtube\VideoHandlerInterface: '@App\Youtube\VideoHandler'
-    App\Youtube\VideoSynchronizerInterface: '@App\Youtube\VideoHandler'
 
     App\OAuth\Security\Token\OAuthTokenStorage:
         arguments: [!tagged_iterator { tag: 'app.oauth.client', default_index_method: 'getName' }]
