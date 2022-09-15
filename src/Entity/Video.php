@@ -12,7 +12,6 @@ use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
-use Symfony\Component\Validator\Constraints\GreaterThan;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[Entity(repositoryClass: VideoRepository::class)]
@@ -23,20 +22,19 @@ class Video
     #[Column(type: Types::INTEGER)]
     private ?int $id = null;
 
-    #[NotBlank]
+    #[NotBlank(groups: ['update'])]
     #[Column(type: Types::STRING)]
     private string $title;
 
-    #[NotBlank]
+    #[NotBlank(groups: ['update'])]
     #[Column(type: Types::INTEGER)]
     private int $season = 0;
 
-    #[NotBlank]
-    #[GreaterThan(0)]
+    #[NotBlank(groups: ['update'])]
     #[Column(type: Types::INTEGER)]
     private int $episode = 0;
 
-    #[NotBlank]
+    #[NotBlank(groups: ['update'])]
     #[Column(type: Types::TEXT)]
     private string $description;
 
@@ -53,7 +51,7 @@ class Video
     #[Column(type: Types::JSON)]
     private array $thumbnails = [];
 
-    #[NotBlank]
+    #[NotBlank(groups: ['create'])]
     #[Column(type: Types::STRING)]
     private string $youtubeId;
 

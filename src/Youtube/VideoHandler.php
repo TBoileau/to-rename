@@ -13,7 +13,6 @@ use Google\Service\YouTube\Video as YoutubeVideo;
 use Google_Http_MediaFileUpload;
 use Google_Service_YouTube;
 use GuzzleHttp\Psr7\Request;
-use RuntimeException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 use function Symfony\Component\String\u;
@@ -22,16 +21,17 @@ class VideoHandler implements VideoHandlerInterface, VideoSynchronizerInterface
 {
     protected Google_Service_YouTube $youtube;
 
+    /**
+     * @var array<array-key, YoutubeVideo>
+     */
+    protected array $videosUpdated = [];
+
     public function __construct(
         GoogleClient $googleClient,
         private string $uploadDir,
         private EntityManagerInterface $entityManager,
         private VideoRepository $videoRepository
     ) {
-        if ($googleClient->isAccessTokenExpired()) {
-            throw new RuntimeException('Google access token is expired');
-        }
-
         $this->youtube = new Google_Service_YouTube($googleClient);
     }
 
@@ -79,7 +79,14 @@ class VideoHandler implements VideoHandlerInterface, VideoSynchronizerInterface
         $videoSnippet = $videoYoutube->getSnippet();
         $videoSnippet->setDefaultAudioLanguage('FR');
         $videoSnippet->setDefaultLanguage('FR');
-        $videoSnippet->setTitle($video->getTitle());
+        $videoSnippet->setTitle(
+            sprintf(
+                'S%02dE%02d - %s',
+                $video->getSeason(),
+                $video->getEpisode(),
+                $video->getTitle()
+            )
+        );
         $videoSnippet->setDescription($video->getDescription());
         $videoSnippet->setTags(array_values($video->getTags()));
 
@@ -122,7 +129,9 @@ class VideoHandler implements VideoHandlerInterface, VideoSynchronizerInterface
 
         $this->youtube->getClient()->setDefer(false);
 
-        $this->syncOne($video);
+        $this->videosUpdated[] = $videoYoutube;
+
+        $this->hydrateVideo($video);
     }
 
     public function syncOne(Video $video): void
@@ -147,9 +156,29 @@ class VideoHandler implements VideoHandlerInterface, VideoSynchronizerInterface
 
         if (null === $video) {
             $video = new Video();
-            $video->setYoutubeId($youtubeVideo->getId());
             $this->entityManager->persist($video);
         }
+
+        $this->hydrateVideo($video, $youtubeVideo);
+
+        $this->entityManager->flush();
+    }
+
+    /**
+     * @return array<array-key, YoutubeVideo>
+     */
+    public function getVideosUpdated(): array
+    {
+        return $this->videosUpdated;
+    }
+
+    public function hydrateVideo(Video $video, ?YoutubeVideo $youtubeVideo = null): void
+    {
+        if (null === $youtubeVideo) {
+            $youtubeVideo = $this->get([$video->getYoutubeId()])[0];
+        }
+
+        $video->setYoutubeId($youtubeVideo->getId());
 
         $video->setTitle($youtubeVideo->getSnippet()->getTitle());
 
@@ -166,7 +195,9 @@ class VideoHandler implements VideoHandlerInterface, VideoSynchronizerInterface
         }
 
         $video->setDescription($youtubeVideo->getSnippet()->getDescription());
-        $video->setTags($youtubeVideo->getSnippet()->getTags() ?? []); /** @phpstan-ignore-line */
+
+        /** @phpstan-ignore-next-line */
+        $video->setTags($youtubeVideo->getSnippet()->getTags() ?? []);
 
         /** @var array<string, string> $thumbnails */
         $thumbnails = [];
@@ -184,6 +215,6 @@ class VideoHandler implements VideoHandlerInterface, VideoSynchronizerInterface
 
         $video->setThumbnails($thumbnails);
 
-        $this->entityManager->flush();
+        dd($video);
     }
 }
