@@ -46,8 +46,8 @@ services:
             $googleFixturesSearchList: '%kernel.project_dir%/fixtures/search_list.php'
             $googleFixturesVideosList: '%kernel.project_dir%/fixtures/videos_list.php'
 
-    App\Youtube\VideoHandlerInterface: '@App\Youtube\InMemoryVideoHandler'
-    App\Youtube\VideoSynchronizerInterface: '@App\Youtube\InMemoryVideoHandler'
+    App\Youtube\VideoHandlerInterface: '@App\Youtube\VideoHandler'
+    App\Youtube\VideoSynchronizerInterface: '@App\Youtube\VideoHandler'
 
     App\OAuth\Security\Token\OAuthTokenStorage:
         arguments: [!tagged_iterator { tag: 'app.oauth.client', default_index_method: 'getName' }]

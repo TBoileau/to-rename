@@ -131,7 +131,7 @@ class VideoHandler implements VideoHandlerInterface, VideoSynchronizerInterface
 
         $this->videosUpdated[] = $videoYoutube;
 
-        $this->syncOne($video);
+        $this->hydrateVideo($video);
     }
 
     public function syncOne(Video $video): void
@@ -156,9 +156,29 @@ class VideoHandler implements VideoHandlerInterface, VideoSynchronizerInterface
 
         if (null === $video) {
             $video = new Video();
-            $video->setYoutubeId($youtubeVideo->getId());
             $this->entityManager->persist($video);
         }
+
+        $this->hydrateVideo($video, $youtubeVideo);
+
+        $this->entityManager->flush();
+    }
+
+    /**
+     * @return array<array-key, YoutubeVideo>
+     */
+    public function getVideosUpdated(): array
+    {
+        return $this->videosUpdated;
+    }
+
+    public function hydrateVideo(Video $video, ?YoutubeVideo $youtubeVideo = null): void
+    {
+        if (null === $youtubeVideo) {
+            $youtubeVideo = $this->get([$video->getYoutubeId()])[0];
+        }
+
+        $video->setYoutubeId($youtubeVideo->getId());
 
         $video->setTitle($youtubeVideo->getSnippet()->getTitle());
 
@@ -175,7 +195,9 @@ class VideoHandler implements VideoHandlerInterface, VideoSynchronizerInterface
         }
 
         $video->setDescription($youtubeVideo->getSnippet()->getDescription());
-        $video->setTags($youtubeVideo->getSnippet()->getTags() ?? []); /** @phpstan-ignore-line */
+
+        /** @phpstan-ignore-next-line */
+        $video->setTags($youtubeVideo->getSnippet()->getTags() ?? []);
 
         /** @var array<string, string> $thumbnails */
         $thumbnails = [];
@@ -193,14 +215,6 @@ class VideoHandler implements VideoHandlerInterface, VideoSynchronizerInterface
 
         $video->setThumbnails($thumbnails);
 
-        $this->entityManager->flush();
-    }
-
-    /**
-     * @return array<array-key, YoutubeVideo>
-     */
-    public function getVideosUpdated(): array
-    {
-        return $this->videosUpdated;
+        dd($video);
     }
 }
