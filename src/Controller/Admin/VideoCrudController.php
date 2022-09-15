@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
+use App\EasyAdmin\Field\StatusField;
 use App\Entity\Video;
 use App\OAuth\Api\Twitter\TwitterClient;
 use App\OAuth\Security\Token\OAuthToken;
@@ -26,7 +27,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class VideoCrudController extends AbstractCrudController
 {
-    public function __construct(private TokenStorageInterface $tokenStorage, private string $uploadDir)
+    public function __construct(private TokenStorageInterface $tokenStorage)
     {
     }
 
@@ -82,19 +83,12 @@ final class VideoCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        yield TextField::new('youtubeId', 'Video')
-            ->setTemplatePath('admin/field/video_youtube_id.html.twig')
-            ->hideOnForm();
-        yield TextField::new('youtubeId', 'Youtube ID')
-            ->onlyWhenCreating()
-            ->hideOnIndex();
-        yield ImageField::new('thumbnails[maxres]', 'Thumbnail Youtube')->hideOnForm();
-        yield ImageField::new('thumbnail', 'Thumbnail')
-            ->setBasePath('uploads/')
-            ->setUploadDir($this->uploadDir)
-            ->hideOnForm();
+        yield TextField::new('youtubeId', 'Youtube ID')->onlyWhenCreating();
+        yield ImageField::new('thumbnails[maxres]', 'Thumbnail')->hideOnForm();
         yield IntegerField::new('season', 'Saison N°')->hideWhenCreating();
         yield IntegerField::new('episode', 'Episode N°')->hideWhenCreating();
+        yield StatusField::new('status', 'Statut')
+            ->hideWhenCreating();
         yield TextField::new('title', 'Titre')->hideWhenCreating();
         yield TextareaField::new('description', 'Description')
             ->hideWhenCreating()
@@ -105,6 +99,9 @@ final class VideoCrudController extends AbstractCrudController
             ->hideWhenCreating();
         yield AssociationField::new('live', 'Live')->hideWhenCreating();
         yield AssociationField::new('logo', 'Logo')->hideWhenCreating();
+        yield TextField::new('youtubeId', 'Video')
+            ->setTemplatePath('admin/field/video_youtube_id.html.twig')
+            ->hideOnForm();
     }
 
     #[Route('/admin/videos/sync', name: 'admin_video_sync_all')]

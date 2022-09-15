@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Youtube;
 
+use App\Entity\Status;
 use App\Entity\Video;
 use App\OAuth\Api\Google\GoogleClient;
 use App\Repository\VideoRepository;
@@ -37,7 +38,7 @@ class VideoHandler implements VideoHandlerInterface, VideoSynchronizerInterface
 
     public function get(array $ids): array
     {
-        $response = $this->youtube->videos->listVideos('snippet', [
+        $response = $this->youtube->videos->listVideos(['snippet', 'status'], [
             'id' => $ids,
         ]);
 
@@ -178,6 +179,8 @@ class VideoHandler implements VideoHandlerInterface, VideoSynchronizerInterface
             $youtubeVideo = $this->get([$video->getYoutubeId()])[0];
         }
 
+        $video->setStatus(Status::tryFrom($youtubeVideo->getStatus()->getPrivacyStatus()) ?? Status::Public);
+
         $video->setYoutubeId($youtubeVideo->getId());
 
         $video->setTitle($youtubeVideo->getSnippet()->getTitle());
@@ -196,7 +199,7 @@ class VideoHandler implements VideoHandlerInterface, VideoSynchronizerInterface
 
         $video->setDescription($youtubeVideo->getSnippet()->getDescription());
 
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         $video->setTags($youtubeVideo->getSnippet()->getTags() ?? []);
 
         /** @var array<string, string> $thumbnails */
@@ -214,5 +217,21 @@ class VideoHandler implements VideoHandlerInterface, VideoSynchronizerInterface
         }
 
         $video->setThumbnails($thumbnails);
+
+        if (null === $video->getThumbnail()) {
+            $video->setThumbnail(
+                sprintf(
+                    'S%02dE%02d-%d.png',
+                    $video->getSeason(),
+                    $video->getEpisode(),
+                    $video->getId()
+                )
+            );
+
+            copy(
+                $video->getThumbnails()['maxres'], sprintf('%s/%s',
+                    $this->uploadDir, $video->getThumbnail())
+            );
+        }
     }
 }

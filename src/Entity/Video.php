@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Doctrine\Type\StatusType;
 use App\Repository\VideoRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
@@ -64,6 +65,9 @@ class Video
     #[ManyToOne(targetEntity: Live::class)]
     #[JoinColumn(onDelete: 'SET NULL')]
     private ?Live $live;
+
+    #[Column(type: StatusType::NAME)]
+    private Status $status = Status::Public;
 
     public function getId(): ?int
     {
@@ -180,5 +184,15 @@ class Video
     public function setEpisode(int $episode): void
     {
         $this->episode = $episode;
+    }
+
+    public function getStatus(): Status
+    {
+        return $this->status;
+    }
+
+    public function setStatus(Status $status): void
+    {
+        $this->status = $status;
     }
 }
