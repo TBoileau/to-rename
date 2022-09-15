@@ -1,0 +1,11 @@
+framework:
+    notifier:
+        chatter_transports:
+            discord: '%env(DISCORD_DSN)%'
+        channel_policy:
+            urgent: ['email']
+            high: ['email']
+            medium: ['email']
+            low: ['email']
+        admin_recipients:
+            - { email: admin@example.com }
