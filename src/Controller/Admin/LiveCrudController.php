@@ -17,6 +17,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Notifier\ChatterInterface;
+use Symfony\Component\Notifier\Message\ChatMessage;
 use Symfony\Component\Routing\Annotation\Route;
 
 final class LiveCrudController extends AbstractCrudController
@@ -47,9 +49,14 @@ final class LiveCrudController extends AbstractCrudController
         $tweet = Action::new('tweet', 'Tweet')
             ->linkToRoute('admin_live_tweet', static fn (Live $live): array => ['id' => $live->getId()]);
 
+        $discord = Action::new('discord', 'Discord')
+            ->linkToRoute('admin_live_discord', static fn (Live $live): array => ['id' => $live->getId()]);
+
         return $actions
             ->add(Crud::PAGE_INDEX, $tweet)
             ->add(Crud::PAGE_DETAIL, $tweet)
+            ->add(Crud::PAGE_INDEX, $discord)
+            ->add(Crud::PAGE_DETAIL, $discord)
             ->add(Crud::PAGE_INDEX, Action::DETAIL);
     }
 
@@ -69,11 +76,32 @@ Le live Twitch commence à {$live->getLivedAt()->format('H:i')} !
 
 {$live->getDescription()} 
 
-{$live->getDescription()}
-
 https://twitch.tv/toham
 EOF
         );
+
+        return new RedirectResponse(
+            $adminUrlGenerator
+                ->setController(self::class)
+                ->setAction(Action::DETAIL)
+                ->setEntityId($live->getId())
+                ->generateUrl()
+        );
+    }
+
+    #[Route('/admin/lives/{id}/discord', name: 'admin_live_discord')]
+    public function discord(Live $live, AdminUrlGenerator $adminUrlGenerator, ChatterInterface $chatter): RedirectResponse
+    {
+        $chatter->send((new ChatMessage(<<<EOF
+@everyone
+
+Le live Twitch commence à {$live->getLivedAt()->format('H:i')} !
+
+{$live->getDescription()} 
+
+https://twitch.tv/toham
+EOF
+        ))->transport('discord'));
 
         return new RedirectResponse(
             $adminUrlGenerator
