@@ -37,10 +37,12 @@ final class VideoCrudController extends AbstractCrudController
 
     public function configureCrud(Crud $crud): Crud
     {
-        return $crud->setFormOptions(
-            ['validation_groups' => ['Default', 'create']],
-            ['validation_groups' => ['Default', 'update']]
-        );
+        return $crud
+            ->setDefaultSort(['season' => 'DESC', 'episode' => 'DESC'])
+            ->setFormOptions(
+                ['validation_groups' => ['Default', 'create']],
+                ['validation_groups' => ['Default', 'update']]
+            );
     }
 
     public function configureActions(Actions $actions): Actions
