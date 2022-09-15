@@ -91,7 +91,11 @@ class VideoHandler implements VideoHandlerInterface, VideoSynchronizerInterface
         $videoSnippet->setDescription($video->getDescription());
         $videoSnippet->setTags(array_values($video->getTags()));
 
-        $this->youtube->videos->update('snippet', $videoYoutube);
+        $videoStatus = $videoYoutube->getStatus();
+
+        $videoStatus->setPrivacyStatus($video->getStatus()->value);
+
+        $this->youtube->videos->update(['snippet', 'status'], $videoYoutube);
 
         $this->youtube->getClient()->setDefer(true);
 
