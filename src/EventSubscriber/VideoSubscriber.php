@@ -7,7 +7,7 @@ namespace App\EventSubscriber;
 use App\Entity\Video;
 use App\Generator\ThumbnailGeneratorInterface;
 use App\Youtube\VideoHandlerInterface;
-use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityUpdatedEvent;
+use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityPersistedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityUpdatedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -22,8 +22,8 @@ final class VideoSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
+            BeforeEntityPersistedEvent::class => ['beforeVideoPersisted'],
             BeforeEntityUpdatedEvent::class => ['beforeVideoUpdated'],
-            AfterEntityUpdatedEvent::class => ['afterVideoUpdated'],
         ];
     }
 
@@ -33,15 +33,16 @@ final class VideoSubscriber implements EventSubscriberInterface
 
         if ($video instanceof Video) {
             $this->generate($video);
+            $this->videoHandler->update($video);
         }
     }
 
-    public function afterVideoUpdated(AfterEntityUpdatedEvent $event): void
+    public function beforeVideoPersisted(BeforeEntityPersistedEvent $event): void
     {
         $video = $event->getEntityInstance();
 
         if ($video instanceof Video) {
-            $this->videoHandler->update($video);
+            $this->videoHandler->hydrateVideo($video);
         }
     }
 

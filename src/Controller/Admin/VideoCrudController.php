@@ -35,6 +35,14 @@ final class VideoCrudController extends AbstractCrudController
         return Video::class;
     }
 
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud->setFormOptions(
+            ['validation_groups' => ['Default', 'create']],
+            ['validation_groups' => ['Default', 'update']]
+        );
+    }
+
     public function configureActions(Actions $actions): Actions
     {
         /** @var OAuthToken $googleToken */
@@ -62,7 +70,6 @@ final class VideoCrudController extends AbstractCrudController
             ->linkToRoute('admin_video_tweet', static fn (Video $video): array => ['id' => $video->getId()]);
 
         return $actions
-            ->disable(Action::NEW)
             ->add(Crud::PAGE_INDEX, $syncOne)
             ->add(Crud::PAGE_DETAIL, $syncOne)
             ->add(Crud::PAGE_INDEX, $tweet)
@@ -77,22 +84,25 @@ final class VideoCrudController extends AbstractCrudController
             ->setTemplatePath('admin/field/video_youtube_id.html.twig')
             ->hideOnForm();
         yield TextField::new('youtubeId', 'Youtube ID')
-            ->hideOnIndex()
-            ->hideOnForm();
-        yield ImageField::new('thumbnails[high]', 'Thumbnail Youtube')->hideOnForm();
+            ->onlyWhenCreating()
+            ->hideOnIndex();
+        yield ImageField::new('thumbnails[maxres]', 'Thumbnail Youtube')->hideOnForm();
         yield ImageField::new('thumbnail', 'Thumbnail')
             ->setBasePath('uploads/')
             ->setUploadDir($this->uploadDir)
             ->hideOnForm();
-        yield IntegerField::new('season', 'Saison N°');
-        yield IntegerField::new('episode', 'Episode N°');
-        yield TextField::new('title', 'Titre');
-        yield TextareaField::new('description', 'Description')->hideOnIndex();
+        yield IntegerField::new('season', 'Saison N°')->hideWhenCreating();
+        yield IntegerField::new('episode', 'Episode N°')->hideWhenCreating();
+        yield TextField::new('title', 'Titre')->hideWhenCreating();
+        yield TextareaField::new('description', 'Description')
+            ->hideWhenCreating()
+            ->hideOnIndex();
         yield CollectionField::new('tags', 'Tags')
             ->setEntryType(TextType::class)
-            ->setTemplatePath('admin/field/video_tags.html.twig');
-        yield AssociationField::new('live', 'Live');
-        yield AssociationField::new('logo', 'Logo');
+            ->setTemplatePath('admin/field/video_tags.html.twig')
+            ->hideWhenCreating();
+        yield AssociationField::new('live', 'Live')->hideWhenCreating();
+        yield AssociationField::new('logo', 'Logo')->hideWhenCreating();
     }
 
     #[Route('/admin/videos/sync', name: 'admin_video_sync_all')]

@@ -100,8 +100,6 @@ final class TwitterClient implements ClientInterface
             throw new InvalidArgumentException('Invalid token format');
         }
 
-        $accessToken['created'] = time();
-
         $this->accessToken = $accessToken;
     }
 
