@@ -23,7 +23,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Notifier\ChatterInterface;
+use Symfony\Component\Notifier\Message\ChatMessage;
 use Symfony\Component\Routing\Annotation\Route;
+
+use function Symfony\Component\String\u;
 
 final class VideoCrudController extends AbstractCrudController
 {
@@ -72,11 +76,16 @@ final class VideoCrudController extends AbstractCrudController
         $tweet = Action::new('tweet', 'Tweet')
             ->linkToRoute('admin_video_tweet', static fn (Video $video): array => ['id' => $video->getId()]);
 
+        $discord = Action::new('discord', 'Discord')
+            ->linkToRoute('admin_video_discord', static fn (Video $video): array => ['id' => $video->getId()]);
+
         return $actions
             ->add(Crud::PAGE_INDEX, $syncOne)
             ->add(Crud::PAGE_DETAIL, $syncOne)
             ->add(Crud::PAGE_INDEX, $tweet)
             ->add(Crud::PAGE_DETAIL, $tweet)
+            ->add(Crud::PAGE_INDEX, $discord)
+            ->add(Crud::PAGE_DETAIL, $discord)
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
             ->add(Crud::PAGE_INDEX, $syncAll);
     }
@@ -142,6 +151,31 @@ Nouvelle vidéo disponible sur la chaîne Youtube !
 https://www.youtube.com/watch?v={$video->getYoutubeId()}
 EOF
         );
+
+        return new RedirectResponse(
+            $adminUrlGenerator
+                ->setController(self::class)
+                ->setAction(Action::DETAIL)
+                ->setEntityId($video->getId())
+                ->generateUrl()
+        );
+    }
+
+    #[Route('/admin/videos/{id}/discord', name: 'admin_video_discord')]
+    public function discord(Video $video, AdminUrlGenerator $adminUrlGenerator, ChatterInterface $chatter): RedirectResponse
+    {
+        $title = u($video->getTitle())->trim()->toString();
+
+        $chatter->send((new ChatMessage(<<<EOF
+@everyone
+
+Nouvelle vidéo disponible sur la chaîne Youtube ! 
+
+{$title}
+
+https://www.youtube.com/watch?v={$video->getYoutubeId()}
+EOF
+        ))->transport('discord'));
 
         return new RedirectResponse(
             $adminUrlGenerator

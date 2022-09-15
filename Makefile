@@ -52,3 +52,5 @@ container:
 	php bin/console lint:container
 
 analyse: twig yaml composer-valid container doctrine phpstan
+
+qa: fix analyse
