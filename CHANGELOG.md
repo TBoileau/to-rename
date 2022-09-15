@@ -4,6 +4,12 @@ Le `changelog` liste toutes les nouveautés intégrées à chaque `release`.
 
 Ce projet respecte [Semantic Versioning](https://semver.org/) et les [recommandations](https://keepachangelog.com/en/1.0.0/).
 
+## [2022-09-15] 0.3.0
+* Modification d'une tumbnail Youtube [#31](https://github.com/TBoileau/twitch/issues/31)
+* Ajouter une vidéo [#29](https://github.com/TBoileau/twitch/issues/29)
+* Créer un DataCollector pour Youtube [#34](https://github.com/TBoileau/twitch/issues/34)
+* Vidéo, ajouter SXXEXX en début de titre [#32](https://github.com/TBoileau/twitch/issues/32)
+
 ## [2022-09-12] 0.2.0
 * Authentification [#16](https://github.com/TBoileau/twitch/issues/16)
 * Gestion des utilisateurs [#17](https://github.com/TBoileau/twitch/issues/17)
