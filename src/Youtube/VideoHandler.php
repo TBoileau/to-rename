@@ -214,7 +214,5 @@ class VideoHandler implements VideoHandlerInterface, VideoSynchronizerInterface
         }
 
         $video->setThumbnails($thumbnails);
-
-        dd($video);
     }
 }
