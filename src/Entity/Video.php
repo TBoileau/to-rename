@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Doctrine\Type\StatusType;
 use App\Repository\VideoRepository;
+use App\Video\VideoInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
@@ -15,7 +17,7 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[Entity(repositoryClass: VideoRepository::class)]
-class Video
+class Video implements VideoInterface
 {
     #[Id]
     #[GeneratedValue]
@@ -42,14 +44,8 @@ class Video
     #[JoinColumn(onDelete: 'SET NULL')]
     private ?Logo $logo = null;
 
-    #[Column(type: Types::STRING, nullable: true)]
-    private ?string $thumbnail = null;
-
-    /**
-     * @var array<string, string>
-     */
-    #[Column(type: Types::JSON)]
-    private array $thumbnails = [];
+    #[Column(type: Types::STRING)]
+    private string $thumbnail;
 
     #[NotBlank(groups: ['create'])]
     #[Column(type: Types::STRING)]
@@ -64,6 +60,9 @@ class Video
     #[ManyToOne(targetEntity: Live::class)]
     #[JoinColumn(onDelete: 'SET NULL')]
     private ?Live $live;
+
+    #[Column(type: StatusType::NAME)]
+    private Status $status = Status::Public;
 
     public function getId(): ?int
     {
@@ -90,7 +89,7 @@ class Video
         $this->description = $description;
     }
 
-    public function getThumbnail(): ?string
+    public function getThumbnail(): string
     {
         return $this->thumbnail;
     }
@@ -146,22 +145,6 @@ class Video
         $this->tags = $tags;
     }
 
-    /**
-     * @return array<string, string>
-     */
-    public function getThumbnails(): array
-    {
-        return $this->thumbnails;
-    }
-
-    /**
-     * @param array<string, string> $thumbnails
-     */
-    public function setThumbnails(array $thumbnails): void
-    {
-        $this->thumbnails = $thumbnails;
-    }
-
     public function getSeason(): int
     {
         return $this->season;
@@ -180,5 +163,35 @@ class Video
     public function setEpisode(int $episode): void
     {
         $this->episode = $episode;
+    }
+
+    public function getStatus(): Status
+    {
+        return $this->status;
+    }
+
+    public function setStatus(Status $status): void
+    {
+        $this->status = $status;
+    }
+
+    public function getDefaultAudioLanguage(): string
+    {
+        return 'FR';
+    }
+
+    public function getDefaultLanguage(): string
+    {
+        return 'FR';
+    }
+
+    public function getPrivacyStatus(): string
+    {
+        return $this->status->value;
+    }
+
+    public function setPrivacyStatus(string $privacyStatus): void
+    {
+        $this->status = Status::from($privacyStatus);
     }
 }

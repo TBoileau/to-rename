@@ -31,6 +31,15 @@ final class TwitterClient implements ClientInterface
     {
     }
 
+    /**
+     * @param string $accessType
+     *
+     * @return void
+     */
+    public function setAccessType($accessType)
+    {
+    }
+
     public static function getName(): string
     {
         return 'twitter';
@@ -96,6 +105,7 @@ final class TwitterClient implements ClientInterface
         if (null == $accessToken) {
             throw new InvalidArgumentException('invalid json token');
         }
+
         if (!isset($accessToken['access_token'])) {
             throw new InvalidArgumentException('Invalid token format');
         }
@@ -141,5 +151,21 @@ final class TwitterClient implements ClientInterface
                 'text' => $message,
             ],
         ]);
+    }
+
+    public function fetchAccessTokenWithRefreshToken($refreshToken)
+    {
+        $response = $this->httpClient->request(Request::METHOD_POST, 'https://api.twitter.com/2/oauth2/token', [
+            'headers' => [
+                'Authorization' => sprintf('Basic %s', base64_encode(sprintf('%s:%s', $this->clientId, $this->clientSecret))),
+            ],
+            'body' => [
+                'grant_type' => 'refresh_token',
+                'client_id' => $this->clientId,
+                'refresh_token' => $refreshToken,
+            ],
+        ]);
+
+        return $response->toArray();
     }
 }
