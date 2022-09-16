@@ -4,6 +4,20 @@ Le `changelog` liste toutes les nouveautés intégrées à chaque `release`.
 
 Ce projet respecte [Semantic Versioning](https://semver.org/) et les [recommandations](https://keepachangelog.com/en/1.0.0/).
 
+## [2022-09-16] 1.0.0
+* Publier une vidéo non public [#30](https://github.com/TBoileau/twitch/issues/30)
+* Récupérer le statut d'une vidéo [#33](https://github.com/TBoileau/twitch/issues/33)
+* Poster une annonce sur Discord pour le planning, live et vidéo [#36](https://github.com/TBoileau/twitch/issues/36)
+* Tweet un live [#37](https://github.com/TBoileau/twitch/issues/37)
+* Refactoring de la gestion des vidéos [#39](https://github.com/TBoileau/twitch/issues/39)
+* Gérer le refresh token de Google [#42](https://github.com/TBoileau/twitch/issues/42)
+* Gérer le refresh token de Twitter [#43](https://github.com/TBoileau/twitch/issues/43)
+* Création des migrations pour le V1.0.0 [#45](https://github.com/TBoileau/twitch/issues/45)
+* Page planning [#46](https://github.com/TBoileau/twitch/issues/46)
+* Ajouter la page des conditions d'utilisation [#47](https://github.com/TBoileau/twitch/issues/47)
+* Ajouter la page des règles de confidentialité [#48](https://github.com/TBoileau/twitch/issues/48)
+* Optimisations du back office [#50](https://github.com/TBoileau/twitch/issues/50)
+
 ## [2022-09-15] 0.3.0
 * Modification d'une tumbnail Youtube [#31](https://github.com/TBoileau/twitch/issues/31)
 * Ajouter une vidéo [#29](https://github.com/TBoileau/twitch/issues/29)
