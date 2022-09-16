@@ -12,9 +12,11 @@ use App\Entity\Video;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
+use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 final class DashboardController extends AbstractDashboardController
 {
@@ -26,7 +28,18 @@ final class DashboardController extends AbstractDashboardController
 
     public function configureDashboard(): Dashboard
     {
-        return Dashboard::new()->setTitle('Twitch')->disableDarkMode();
+        return Dashboard::new()
+            ->setTitle('Toham')
+            ->setTranslationDomain('fr')
+            ->setFaviconPath('images/favicon.ico')
+            ->disableDarkMode();
+    }
+
+    public function configureUserMenu(UserInterface $user): UserMenu
+    {
+        return parent::configureUserMenu($user)
+            ->setName('Toham')
+            ->setAvatarUrl('images/Toham_Avatar.png');
     }
 
     public function configureAssets(): Assets
