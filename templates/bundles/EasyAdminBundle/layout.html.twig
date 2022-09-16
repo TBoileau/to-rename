@@ -1,5 +1,12 @@
 {% extends '@!EasyAdmin/layout.html.twig' %}
 
+
+{% block header_logo %}
+    <a class="logo text-center" title="{{ ea.dashboardTitle|striptags }}" href="{{ path(ea.dashboardRouteName) }}">
+        <img src="{{ asset('images/Toham_Avatar.png') }}" width="100" alt="">
+    </a>
+{% endblock header_logo %}
+
 {% block header_custom_menu %}
     <div class="d-flex align-items-stretch gap-3">
         {% if oauth.twitter.authenticated %}

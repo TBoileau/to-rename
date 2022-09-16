@@ -9,7 +9,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FieldTrait;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 
-class StatusField implements FieldInterface
+final class StatusField implements FieldInterface
 {
     use FieldTrait;
 
