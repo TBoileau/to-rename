@@ -28,6 +28,7 @@ security:
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/twitch, roles: PUBLIC_ACCESS }
         - { path: ^/cgu, roles: PUBLIC_ACCESS }
+        - { path: ^/rgpd, roles: PUBLIC_ACCESS }
         - { path: ^/, roles: ROLE_USER }
 
 when@test:
