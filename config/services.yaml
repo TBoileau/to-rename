@@ -57,9 +57,13 @@ services:
             - [setClientId, ['%env(GOOGLE_CLIENT_ID)%']]
             - [setClientSecret, ['%env(GOOGLE_CLIENT_SECRET)%']]
             - [setScopes, ['https://www.googleapis.com/auth/youtube']]
+            - [setAccessType, ['offline']]
+            - [setApprovalPrompt, ['force']]
+            - [setIncludeGrantedScopes, [true]]
 
     App\OAuth\Api\Twitter\TwitterClient:
         calls:
             - [setClientId, ['%env(TWITTER_CLIENT_ID)%']]
             - [setClientSecret, ['%env(TWITTER_CLIENT_SECRET)%']]
             - [setScopes, [['tweet.read', 'tweet.write', 'users.read']]]
+            - [setAccessType, ['offline']]
