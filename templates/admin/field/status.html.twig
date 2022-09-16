@@ -1,0 +1,7 @@
+{% if field.value.value == 'private' %}
+    <span class="badge bg-danger text-white">{{ field.value.name }}</span>
+{% elseif field.value.value == 'unlisted' %}
+    <span class="badge bg-warning text-white">{{ field.value.name }}</span>
+{% else %}
+    <span class="badge bg-success text-white">{{ field.value.name }}</span>
+{% endif %}

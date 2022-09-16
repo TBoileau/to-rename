@@ -1,0 +1,1076 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>DocumentsLégaux Politique de confidentialité d'un site web</title>
+    <style type="text/css">
+        @page {
+            margin: 90px 50px 50px;@prince-overlay{
+            content: flow(watermark)
+        }@top{
+            content: flow(header);
+            vertical-align: bottom;
+            padding: 50px 0 20px
+        }@bottom{
+            content: flow(footer);
+            margin-bottom: 30px
+        }@bottom-left {
+            content: string(copyText, last);
+            width: 0;
+            overflow: visible;
+            white-space: nowrap;
+            font-family: myriad-pro, sans-serif;
+            font-size: 9pt;
+            color: #bcbec0
+        }
+        }
+
+        @page :first {
+            margin-top: 50px;@top{
+            content: flow(firstHeader)
+        }@bottom{
+            content: flow(firstFooter);
+            margin-bottom: 30px
+        }
+        }
+
+        .templated .imageList {
+            display: block;
+            margin-left: -25px;
+            margin-bottom: 30px
+        }
+
+        .templated .imageList .imageAndData {
+            display: inline-block;
+            vertical-align: top;
+            margin-left: 25px;
+            margin-top: 30px
+        }
+
+        .templated .imageList .imageAndData .imageWrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .templated .imageList .imageAndData .imageWrapper img {
+            max-width: 100%;
+            max-height: 100%
+        }
+
+        .templated .imageList .imageAndData .comment {
+            display: block;
+            overflow-wrap: break-word
+        }
+
+        .templated .copyright {
+            visibility: hidden;
+            height: 0;
+            string-set: copyText content()
+        }
+
+        .templated .currentPageNum {
+            content: counter(page)
+        }
+
+        .templated .totalPageNum {
+            content: counter(pages)
+        }
+
+        .templated .header {
+            flow: static(header)
+        }
+
+        .templated .firstHeader {
+            flow: static(firstHeader)
+        }
+
+        .templated .footer {
+            flow: static(footer)
+        }
+
+        .templated .firstFooter {
+            flow: static(firstFooter)
+        }
+
+        .templated .printWatermark {
+            flow: static(watermark)
+        }
+
+        .templated .pageBreak {
+            page-break-before: always;
+            display: block
+        }
+
+        .templated .blankLine {
+            display: block;
+            border-bottom: 1px solid #000
+        }
+
+        .templated .keepTogether, .templated .signatureEntity {
+            page-break-inside: avoid
+        }
+
+        .templated .outputDocument {
+            counter-reset: page 1 pages 1;
+            prince-page-group: start;
+            string-set: copyText ""
+        }
+
+        .templated li ol:first-child, .templated li ol:first-child > li:first-child, .templated li ul:first-child, .templated li ul:first-child > li:first-child {
+            margin-top: 0
+        }
+
+        .templated .inlineLogoHeader {
+            display: flex;
+            margin-bottom: 30px;
+            align-items: center;
+            justify-content: center
+        }
+
+        .templated .inlineLogoHeader .imageList, .templated .inlineLogoHeader .imageAndData, .templated .inlineLogoHeader .keepTogether p:last-child {
+            margin: 0
+        }
+
+        .templated .inlineLogoHeader .imageWrapper {
+            padding-right: 25px
+        }
+
+        .sm .templated .imageList {
+            margin-bottom: 15px
+        }
+
+        .sm .templated .imageList div {
+            margin-top: 15px
+        }
+
+        @media screen {
+            .templated .header, .templated .footer, .templated .firstHeader, .templated .firstFooter, .templated .copyright, .templated .printWatermark {
+                display: none
+            }
+        }
+
+        @media print {
+            .LDCopyright, .watermark {
+                display: none
+            }
+        }
+
+        @font-face {
+            font-family: 'Lato';
+            font-style: normal;
+            font-weight: 400;
+            src: url(https://www.documentslegaux.fr/common/fonts/Lato/Lato-Regular.eot);
+            src: local('Lato Regular'), local('Lato-Regular'), url(https://www.documentslegaux.fr/common/fonts/Lato/Lato-Regular.woff2) format('woff2'), url(https://www.documentslegaux.fr/common/fonts/Lato/Lato-Regular.woff) format('woff'), url(https://www.documentslegaux.fr/common/fonts/Lato/Lato-Regular.svg#Lato) format('svg'), url(https://www.documentslegaux.fr/common/fonts/Lato/Lato-Regular.ttf) format('truetype'), url(https://www.documentslegaux.fr/common/fonts/Lato/Lato-Regular.eot?#iefix) format('embedded-opentype');
+            font-display: block;
+        }
+
+        @font-face {
+            font-family: 'Lato';
+            font-style: normal;
+            font-weight: 700;
+            src: url(https://www.documentslegaux.fr/common/fonts/Lato/Lato-Bold.eot);
+            src: local('Lato Bold'), local('Lato-Bold'), url(https://www.documentslegaux.fr/common/fonts/Lato/Lato-Bold.woff2) format('woff2'), url(https://www.documentslegaux.fr/common/fonts/Lato/Lato-Bold.woff) format('woff'), url(https://www.documentslegaux.fr/common/fonts/Lato/Lato-Bold.ttf) format('truetype'), url(https://www.documentslegaux.fr/common/fonts/Lato/Lato-Bold.eot?#iefix) format('embedded-opentype');
+            font-display: block;
+        }
+
+        @font-face {
+            font-family: 'Lato';
+            font-style: normal;
+            font-weight: 900;
+            src: url(https://www.documentslegaux.fr/common/fonts/Lato/Lato-Black.eot);
+            src: local('Lato Black'), local('Lato-Black'), url(https://www.documentslegaux.fr/common/fonts/Lato/Lato-Black.woff2) format('woff2'), url(https://www.documentslegaux.fr/common/fonts/Lato/Lato-Black.woff) format('woff'), url(https://www.documentslegaux.fr/common/fonts/Lato/Lato-Black.ttf) format('truetype'), url(https://www.documentslegaux.fr/common/fonts/Lato/Lato-Black.eot?#iefix) format('embedded-opentype');
+            font-display: block;
+        }
+
+        @font-face {
+            font-family: 'Lato';
+            font-style: italic;
+            font-weight: 400;
+            src: url(https://www.documentslegaux.fr/common/fonts/Lato/Lato-Italic.eot);
+            src: local('Lato Italic'), local('Lato-Italic'), url(https://www.documentslegaux.fr/common/fonts/Lato/Lato-Italic.woff2) format('woff2'), url(https://www.documentslegaux.fr/common/fonts/Lato/Lato-Italic.woff) format('woff'), url(https://www.documentslegaux.fr/common/fonts/Lato/Lato-Italic.ttf) format('truetype'), url(https://www.documentslegaux.fr/common/fonts/Lato/Lato-Italic.eot?#iefix) format('embedded-opentype');
+            font-display: block;
+        }
+
+        @font-face {
+            font-family: 'Lato';
+            font-style: italic;
+            font-weight: 700;
+            src: url(https://www.documentslegaux.fr/common/fonts/Lato/Lato-Bold-Italic.eot);
+            src: local('Lato Bold Italic'), local('Lato-BoldItalic'), url(https://www.documentslegaux.fr/common/fonts/Lato/Lato-Bold-Italic.woff2) format('woff2'), url(https://www.documentslegaux.fr/common/fonts/Lato/Lato-Bold-Italic.woff) format('woff'), url(https://www.documentslegaux.fr/common/fonts/Lato/Lato-Bold-Italic.ttf) format('truetype'), url(https://www.documentslegaux.fr/common/fonts/Lato/Lato-Bold-Italic.eot?#iefix) format('embedded-opentype');
+            font-display: block;
+        }
+
+        @font-face {
+            font-family: 'Open Sans';
+            font-style: normal;
+            font-weight: 300;
+            src: url(/common/fonts/Open-Sans/opensans-light.eot);
+            src: local('Open-Sans Light'), local('OpenSans-Light'), url(/common/fonts/Open-Sans/opensans-light.woff2) format('woff2'), url(/common/fonts/Open-Sans/opensans-light.woff) format('woff'), url(/common/fonts/Open-Sans/opensans-light.ttf) format('truetype'), url(/common/fonts/Open-Sans/opensans-light.eot?#iefix) format('embedded-opentype'), url(/common/fonts/Open-Sans/opensans-light.svg#opensans-light) format('svg');
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Open Sans';
+            font-style: normal;
+            font-weight: 400;
+            src: url(/common/fonts/Open-Sans/opensans-regular.eot);
+            src: local('Open-Sans Regular'), local('OpenSans-Regular'), url(/common/fonts/Open-Sans/opensans-regular.woff2) format('woff2'), url(/common/fonts/Open-Sans/opensans-regular.woff) format('woff'), url(/common/fonts/Open-Sans/opensans-regular.ttf) format('truetype'), url(/common/fonts/Open-Sans/opensans-regular.eot?#iefix) format('embedded-opentype'), url(/common/fonts/Open-Sans/opensans-regular.svg#opensans-regular) format('svg');
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Open Sans';
+            font-style: normal;
+            font-weight: 600;
+            src: url(/common/fonts/Open-Sans/opensans-semibold.eot);
+            src: local('Open-Sans SemiBold'), local('OpenSans-SemiBold'), url(/common/fonts/Open-Sans/opensans-semibold.woff2) format('woff2'), url(/common/fonts/Open-Sans/opensans-semibold.woff) format('woff'), url(/common/fonts/Open-Sans/opensans-semibold.ttf) format('truetype'), url(/common/fonts/Open-Sans/opensans-semibold.eot?#iefix) format('embedded-opentype'), url(/common/fonts/Open-Sans/opensans-semibold.svg#opensans-semibold) format('svg');
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Open Sans';
+            font-style: normal;
+            font-weight: 700;
+            src: url(/common/fonts/Open-Sans/opensans-bold.eot);
+            src: local('Open-Sans Bold'), local('OpenSans-Bold'), url(/common/fonts/Open-Sans/opensans-bold.woff2) format('woff2'), url(/common/fonts/Open-Sans/opensans-bold.woff) format('woff'), url(/common/fonts/Open-Sans/opensans-bold.ttf) format('truetype'), url(/common/fonts/Open-Sans/opensans-bold.eot?#iefix) format('embedded-opentype'), url(/common/fonts/Open-Sans/opensans-bold.svg#opensans-bold) format('svg');
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Open Sans';
+            font-style: normal;
+            font-weight: 800;
+            src: url(/common/fonts/Open-Sans/opensans-extrabold.eot);
+            src: local('Open-Sans Extra Bold'), local('OpenSans-ExtraBold'), url(/common/fonts/Open-Sans/opensans-extrabold.woff2) format('woff2'), url(/common/fonts/Open-Sans/opensans-extrabold.woff) format('woff'), url(/common/fonts/Open-Sans/opensans-extrabold.ttf) format('truetype'), url(/common/fonts/Open-Sans/opensans-extrabold.eot?#iefix) format('embedded-opentype'), url(/common/fonts/Open-Sans/opensans-extrabold.svg#opensans-extrabold) format('svg');
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Open Sans';
+            font-style: italic;
+            font-weight: 300;
+            src: url(/common/fonts/Open-Sans/opensans-lightitalic.eot);
+            src: local('Open-Sans Light Italic'), local('OpenSansLight-Italic'), url(/common/fonts/Open-Sans/opensans-lightitalic.woff2) format('woff2'), url(/common/fonts/Open-Sans/opensans-lightitalic.woff) format('woff'), url(/common/fonts/Open-Sans/opensans-lightitalic.ttf) format('truetype'), url(/common/fonts/Open-Sans/opensans-lightitalic.eot?#iefix) format('embedded-opentype'), url(/common/fonts/Open-Sans/opensans-lightitalic.svg#opensans-lightitalic) format('svg');
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Open Sans';
+            font-style: italic;
+            font-weight: 400;
+            src: url(/common/fonts/Open-Sans/opensans-italic.eot);
+            src: local('Open-Sans Italic'), local('OpenSans-Italic'), url(/common/fonts/Open-Sans/opensans-italic.woff2) format('woff2'), url(/common/fonts/Open-Sans/opensans-italic.woff) format('woff'), url(/common/fonts/Open-Sans/opensans-italic.ttf) format('truetype'), url(/common/fonts/Open-Sans/opensans-italic.eot?#iefix) format('embedded-opentype'), url(/common/fonts/Open-Sans/opensans-italic.svg#opensans-italic) format('svg');
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Open Sans';
+            font-style: italic;
+            font-weight: 600;
+            src: url(/common/fonts/Open-Sans/opensans-semibolditalic.eot);
+            src: local('Open-Sans SemiBold Italic'), local('OpenSansSemiBold-Italic'), url(/common/fonts/Open-Sans/opensans-semibolditalic.woff2) format('woff2'), url(/common/fonts/Open-Sans/opensans-semibolditalic.woff) format('woff'), url(/common/fonts/Open-Sans/opensans-semibolditalic.ttf) format('truetype'), url(/common/fonts/Open-Sans/opensans-semibolditalic.eot?#iefix) format('embedded-opentype'), url(/common/fonts/Open-Sans/opensans-semibolditalic.svg#opensans-semibolditalic) format('svg');
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Open Sans';
+            font-style: italic;
+            font-weight: 700;
+            src: url(/common/fonts/Open-Sans/opensans-bolditalic.eot);
+            src: local('Open-Sans Bold Italic'), local('OpenSansBold-Italic'), url(/common/fonts/Open-Sans/opensans-bolditalic.woff2) format('woff2'), url(/common/fonts/Open-Sans/opensans-bolditalic.woff) format('woff'), url(/common/fonts/Open-Sans/opensans-bolditalic.ttf) format('truetype'), url(/common/fonts/Open-Sans/opensans-bolditalic.eot?#iefix) format('embedded-opentype'), url(/common/fonts/Open-Sans/opensans-bolditalic.svg#opensans-bolditalic) format('svg');
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Open Sans';
+            font-style: italic;
+            font-weight: 800;
+            src: url(/common/fonts/Open-Sans/opensans-extrabolditalic.eot);
+            src: local('Open-Sans ExtraBold Italic'), local('OpenSansExtraBold-Italic'), url(/common/fonts/Open-Sans/opensans-extrabolditalic.woff2) format('woff2'), url(/common/fonts/Open-Sans/opensans-extrabolditalic.woff) format('woff'), url(/common/fonts/Open-Sans/opensans-extrabolditalic.ttf) format('truetype'), url(/common/fonts/Open-Sans/opensans-extrabolditalic.eot?#iefix) format('embedded-opentype'), url(/common/fonts/Open-Sans/opensans-extrabolditalic.svg#opensans-extrabolditalic) format('svg');
+            font-display: swap;
+        }
+
+        @page {
+            margin: 60px 35px 35px
+        }
+
+        @page :first {
+            margin-top: 35px
+        }
+
+        .template_test {
+            font-family: "Lato";
+            font-size: 10pt
+        }
+
+        .template_test .pageBreak {
+            page-break-before: always
+        }
+
+        .template_test .blankLine {
+            display: block;
+            border-bottom: 1px solid #000
+        }
+
+        .template_test .keepTogether {
+            page-break-inside: avoid
+        }
+
+        .template_test h1 {
+            font-size: 22pt;
+            text-align: center;
+            padding: 15px 0;
+            margin: 15px 0;
+            border-bottom: 2px solid #000;
+            font-weight: 900
+        }
+
+        .template_test h2 {
+            text-align: center;
+            font-size: 14pt;
+            text-transform: uppercase;
+            font-weight: 700;
+            overflow: hidden;
+            margin: 20px 0
+        }
+
+        .template_test h2::before, .template_test h2::after {
+            background-color: #000;
+            content: "";
+            display: inline-block;
+            height: 1px;
+            position: relative;
+            vertical-align: middle;
+            width: 50%
+        }
+
+        .template_test h2::before {
+            right: 10px;
+            margin-left: -50%
+        }
+
+        .template_test h2::after {
+            left: 10px;
+            margin-right: -50%
+        }
+
+        .template_test .contactInfo {
+            text-align: center;
+            margin: 15px 0
+        }
+
+        .template_test .contactInfo span::before {
+            content: " | ";
+            padding: 0 5px
+        }
+
+        .template_test .contactInfo span:first-child::before {
+            content: "";
+            padding: 0
+        }
+
+        .template_test p {
+            margin: 20px 0
+        }
+
+        .template_test .infoHeading {
+            margin: 20px 0 10px;
+            position: relative
+        }
+
+        .template_test .infoHeading .mainTitle, .template_test .infoHeading .mainInfo {
+            font-weight: 900;
+            font-size: 12pt;
+            display: block;
+            max-width: 50%
+        }
+
+        .template_test .infoHeading .subTitle, .template_test .infoHeading .subInfo {
+            font-weight: 700;
+            font-size: 11pt;
+            display: block;
+            max-width: 50%
+        }
+
+        .template_test .infoHeading .mainInfo {
+            position: absolute;
+            top: 0;
+            right: 0
+        }
+
+        .template_test .infoHeading .subInfo {
+            position: absolute;
+            bottom: 0;
+            right: 0
+        }
+
+        .template_test .infoHeading.education .subInfo {
+            font-weight: normal;
+            font-style: italic;
+            position: static;
+            display: block;
+            font-size: 10pt;
+            max-width: 100%
+        }
+
+        .template_test .infoHeading.award .subInfo, .template_test .infoHeading.volunteer .subInfo {
+            font-weight: normal;
+            position: static;
+            display: block;
+            font-size: 10pt;
+            max-width: 100%
+        }
+
+        .template_test ul {
+            margin: 0;
+            list-style-type: none
+        }
+
+        .template_test ul li::before {
+            content: "â€¢";
+            position: absolute;
+            left: 20px
+        }
+
+        .template_test li {
+            margin: 10px 0;
+            padding-left: 33px;
+            position: relative;
+            box-sizing: border-box
+        }
+
+        .template_test .columns {
+            font-size: 0
+        }
+
+        .template_test .columns li {
+            display: inline-block;
+            width: 50%;
+            font-size: 10pt;
+            margin: 5px 0;
+            vertical-align: top
+        }
+
+        .template_test .workSample {
+            margin-left: 20px
+        }
+
+        .ua-mobile .template_test h2::before, .ua-mobile .template_test h2::after {
+            height: 2px
+        }
+
+        .ua-android.ua-webkit .template_test .columns {
+            font-size: 10pt
+        }
+
+        .ua-android.ua-webkit .template_test .columns li {
+            width: 49%
+        }
+
+        body, html {
+            background: #FFF;
+        }
+
+        noscript, #navigation, #banner, #footer, #intro, #outtro, .ImportantInfoDialog,
+        .headerSimplePreview, .sectionMenuTop, .selLicense, .previewHead,
+        iframe, iframe *, .noMobile, .woahbar, .contractFootControls, .previewFormatWarning {
+            display: none;
+        }
+
+        #upsell, #popupContainer, #popupMask, .contentBreak, .contentBreakEnd {
+            display: none !important;
+        }
+
+        #popupContainer, #popupMask {
+            visibility: hidden;
+        }
+
+        #wrapper, #content {
+            background: none;
+            position: relative;
+            display: block;
+            width: auto;
+        }
+
+        #outputPage {
+            display: block;
+            padding: 3px;
+            background: #FFF;
+            color: #000;
+            position: relative;
+            mso-style-parent: "";
+            margin: 0;
+            margin-bottom: 0.0001pt;
+            mso-pagination: widow-orphan;
+            tab-stops: -.5in;
+            font-size: 12pt;
+            font-family: "Times New Roman", serif;
+            mso-fareast-font-family: "Times New Roman";
+            line-height: 18pt;
+        }
+
+        #outputPage {
+            width: 100%;
+            background: none;
+        }
+
+        #outputPage table {
+            border-collapse: collapse
+        }
+
+        #outputPage ol {
+            list-style: decimal;
+        }
+
+        #outputPage ol ol {
+            list-style: lower-alpha;
+        }
+
+        #outputPage ol ol ol {
+            list-style: lower-roman;
+        }
+
+        #outputPage ol ol ol ol {
+            list-style: decimal;
+            list-style-position: inherit;
+        }
+
+        #outputPage br.pageBreak {
+            page-break-before: always
+        }
+
+        @media screen {
+            #outputPage br.pageBreak {
+                display: none
+            }
+        }
+
+        #outputPage .outputVersion2 p, #outputPage .outputVersion2 ol, #outputPage .outputVersion2 ul, #outputPage .outputVersion2 table {
+            margin-bottom: 0
+        }
+
+        #outputPage .outputVersion2 ol, #outputPage .outputVersion2 ul {
+            margin-left: 0;
+            padding-left: 0
+        }
+
+        #outputPage .outputVersion2 li > div {
+            display: table;
+            *display: inline;
+            *margin-left: -17px
+        }
+
+        #outputPage .format-doc .outputVersion2 li,
+        #outputPage .format-rtf .outputVersion2 li,
+        #outputPage .format-docx .outputVersion2 li,
+        #outputPage .format-pdf .outputVersion2 li {
+            margin-left: 18pt
+        }
+
+        #outputPage .outputVersion2 {
+            padding-top: 43pt
+        }
+
+        .LDCopyright {
+            font-size: 67%;
+        }
+
+        .LDCellCenter {
+            text-align: center;
+        }
+
+        .LDCellPadLeft {
+            padding-left: 100px;
+        }
+
+        .LDCellRight {
+            text-align: right;
+        }
+
+        .LDResRentalBox {
+            width: 100%;
+        }
+
+        .LDQuitclaimHead {
+            height: 3in;
+        }
+
+        .LDWarrantyHead {
+            height: 3in;
+        }
+
+        .LDQuitclaimHeadCA {
+            height: 1in;
+        }
+
+        .LDWarrantyHeadCA {
+            height: 1in;
+        }
+
+        .LDWarrantyHeadMO {
+            height: 2in;
+        }
+
+        .LDQuitclaimHeadMO {
+            height: 2in;
+        }
+
+        .SubHeadStyle {
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+        .SectionTitle {
+            font-weight: bold;
+            text-decoration: underline;
+            margin: 1em 0;
+        }
+
+        .invoiceBorder {
+            border: 1px solid #000;
+        }
+
+        .invoiceGreyBG {
+            background-color: #ccc;
+        }
+
+        .LDBold {
+            font-weight: bold;
+        }
+
+        .LDBackgroundOL {
+            list-style-type: upper-alpha;
+        }
+
+        #bottomTabs, #topTabs, #introContent, #loadingIndicator, #questionpage, #documentControls, #questionpage {
+            display: none
+        }
+
+        #productContent, #documentContent {
+            width: 100%;
+            border: 0;
+            margin: 0
+        }
+
+        #outputPage li {
+            margin-bottom: 1em;
+        }
+
+        #outputPage li li {
+            margin-bottom: 1em;
+        }
+
+        #outputPage li ol {
+            margin-top: 1em;
+        }
+
+        #outputPage li ol li {
+            margin-bottom: 1em;
+        }
+
+        #outputPage li.lh, #outputPage li.lhl {
+            margin-bottom: 0;
+            list-style: none;
+        }
+
+        .FirstMajorListHeading {
+            font-weight: bold;
+            margin-bottom: 1.6em;
+        }
+
+        .FirstListHeading {
+            font-weight: bold;
+            text-decoration: underline;
+            font-size: 12pt;
+            margin: 1.4em 0 0.2em 2em; /* 2em should be set to left margin of lists */
+        }
+
+        .ListHeading {
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+        div.header,
+        div.firstHeader,
+        div.footer,
+        div.firstFooter {
+            display: none;
+        }
+
+        .blankLine {
+            display: block;
+            border-bottom: solid 1px #000;
+        }
+
+
+        .ua-mobile .contractbody::-webkit-scrollbar,
+        .ua-mobile #contractbody::-webkit-scrollbar,
+        .ua-mobile .groupNavigationInner > ul::-webkit-scrollbar,
+        .ua-mobile #contentTopInnerDisclaimer::-webkit-scrollbar,
+        .ua-mobile #contentTopInnerPrivacy::-webkit-scrollbar,
+        .ua-mobile #contentTopInnerTerms::-webkit-scrollbar,
+        .ua-mac_os_x .contractbody::-webkit-scrollbar,
+        .ua-mac_os_x #contractbody::-webkit-scrollbar,
+        .ua-mac_os_x .groupNavigationInner > ul::-webkit-scrollbar,
+        .ua-mac_os_x #contentTopInnerDisclaimer::-webkit-scrollbar,
+        .ua-mac_os_x #contentTopInnerPrivacy::-webkit-scrollbar,
+        .ua-mac_os_x #contentTopInnerTerms::-webkit-scrollbar,
+        .ua-mobile #DIVContractList::-webkit-scrollbar,
+        .mac_os_x #DIVContractList::-webkit-scrollbar,
+        .ua-mobile #tip::-webkit-scrollbar,
+        .ua-mac_os_x #tip::-webkit-scrollbar,
+        .ua-mac_os_x ul.ui-autocomplete::-webkit-scrollbar,
+        .ua-mobile ul.ui-autocomplete::-webkit-scrollbar,
+        .ua-mobile:not(.ua-ios) .inlineFooterDialog .ui-dialog-content::-webkit-scrollbar,
+        .addRecipientDialog::-webkit-scrollbar {
+            -webkit-appearance: none;
+            width: 7px;
+        }
+
+        .ua-mobile .contractbody::-webkit-scrollbar-thumb,
+        .ua-mobile #contractbody::-webkit-scrollbar-thumb,
+        .ua-mobile .groupNavigationInner > ul::-webkit-scrollbar-thumb,
+        .ua-mobile #contentTopInnerDisclaimer::-webkit-scrollbar-thumb,
+        .ua-mobile #contentTopInnerPrivacy::-webkit-scrollbar-thumb,
+        .ua-mobile #contentTopInnerTerms::-webkit-scrollbar-thumb,
+        .ua-mac_os_x .contractbody::-webkit-scrollbar-thumb,
+        .ua-mac_os_x #contractbody::-webkit-scrollbar-thumb,
+        .ua-mac_os_x .groupNavigationInner > ul::-webkit-scrollbar-thumb,
+        .ua-mac_os_x #contentTopInnerDisclaimer::-webkit-scrollbar-thumb,
+        .ua-mac_os_x #contentTopInnerPrivacy::-webkit-scrollbar-thumb,
+        .ua-mac_os_x #contentTopInnerTerms::-webkit-scrollbar-thumb,
+        .ua-mac_os_x #DIVContractList::-webkit-scrollbar-thumb,
+        .ua-mobile #DIVContractList::-webkit-scrollbar-thumb,
+        .ua-mobile #tip::-webkit-scrollbar-thumb,
+        .ua-mac_os_x #tip::-webkit-scrollbar-thumb,
+        .ua-mac_os_x ul.ui-autocomplete::-webkit-scrollbar-thumb,
+        .ua-mobile ul.ui-autocomplete::-webkit-scrollbar-thumb,
+        .ua-mobile:not(.ua-ios) .inlineFooterDialog .ui-dialog-content::-webkit-scrollbar-thumb,
+        .addRecipientDialog::-webkit-scrollbar-thumb {
+            border-radius: 4px;
+            background-color: rgba(0, 0, 0, .5);
+            -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+        }
+
+        body li > ol:first-child, body li > ul:first-child {
+            margin-top: 0;
+        }
+
+        .ua-edge body li > ol:first-child, .ua-edge body li > ul:first-child, .ua-ie body li > ol:first-child, .ua-ie body li > ul:first-child {
+            margin-top: -24px;
+        }
+
+        body li ol, body li ul {
+            margin-top: 1em;
+        }
+
+        body li {
+            margin-bottom: 1em;
+        }
+
+        body li.lh, body li.lhl {
+            margin-bottom: 0;
+        }
+
+        body th {
+            font-weight: normal;
+        }
+
+        body td > p:first-child, body th > p:first-child {
+            margin-top: 0
+        }
+
+        body td > p:last-child, body th > p:last-child {
+            margin-bottom: 0
+        }
+
+        body br.pageBreak {
+            display: none
+        }
+
+        body .blankLine {
+            display: block;
+            border-bottom: solid 1px black;
+        }
+
+        body .outputVersion2 p, body .outputVersion2 ol, body .outputVersion2 ul, body .outputVersion2 table {
+            margin-bottom: 0
+        }
+
+        body .outputVersion2 ol, body .outputVersion2 ul {
+            margin-left: 0;
+            padding-left: 0
+        }
+
+        body .outputVersion2 li > div {
+            display: table
+        }
+
+        .ua-ie-7 body .outputVersion2 li > div {
+            display: inline
+        }
+
+        .ua-ie-7 body .outputVersion2 li.lhl {
+            margin-left: -17px
+        }
+
+        body div.header,
+        body div.firstHeader,
+        body div.footer,
+        body div.firstFooter,
+        body div.printWatermark {
+            display: none;
+        }
+
+        .ua-ios .contractbody, .ua-ios #contractbody {
+            overflow: scroll;
+            -webkit-overflow-scrolling: touch;
+            overflow-scrolling: touch;
+        }
+
+        .ua-ios .contractbody::-webkit-scrollbar-thumb, .ua-ios #contractbody::-webkit-scrollbar-thumb {
+            display: none;
+        }
+
+        .ua-ios .contractbody::-webkit-scrollbar, .ua-ios #contractbody::-webkit-scrollbar {
+            -webkit-appearance: unset;
+        }
+
+        body li ol, body li ul {
+            margin-top: 1em;
+        }
+
+        body li {
+            margin-left: 1em;
+            margin-bottom: 1em;
+            padding-left: 25px;
+            margin-left: 15px;
+        }
+
+        body .lhl {
+            padding-left: 0px;
+            margin-left: 0px;
+        }
+
+        body li.lh, body li.lhl {
+            margin-bottom: 0;
+        }
+
+        body ol, body ul {
+            padding-left: 0
+        }
+
+        body td > p:first-child {
+            margin-top: 0
+        }
+
+        body td > p:last-child {
+            margin-bottom: 0
+        }
+
+        body br.pageBreak {
+            display: none
+        }
+
+        @media only screen and (max-device-width: 1024px) {
+            body {
+                -webkit-text-size-adjust: 100%;
+                -moz-text-size-adjust: 100%;
+                -ms-text-size-adjust: 100%;
+            }
+        }</style>
+</head>
+<body>
+<div id="outputPage" class="ContractText">
+    <div class="format-html">
+        <div data-exp="simple2" class="outputVersion1">
+            <div class=" header">
+                <span style="line-height:18.0pt;" class="content">Politique de confidentialité d'un site web</span>
+                <span style="line-height:18.0pt;" class="pageNumbers">Page <span class="currentPageNum"></span> de <span
+                            class="totalPageNum"></span></span></div>
+            <div class=" footer"></div>
+            <div class=" firstHeader"></div>
+            <div class=" firstFooter">
+                <span style="line-height:18.0pt;" class="pageNumbers">Page <span class="currentPageNum"></span> de <span
+                            class="totalPageNum"></span></span></div>
+            <div>
+                <p style="line-height:18.0pt;font-size:12.0pt;line-height:18.0pt;font-family:Times New Roman;color:#000000;text-align:Center;">
+                    <br><br><span
+                            style="font-style:normal;font-weight:bold;">POLITIQUE DE CONFIDENTIALITÉ</span><br><br><br><span
+                            style="font-style:normal;font-weight:bold;">toham.thomas-boileau.fr</span><br>Thomas Boileau<br><br>Type
+                    de site&nbsp;: Application web de gestion des streams Twitch et des vidéos Youtube
+                </p></div>
+            <div>
+                <p style="line-height:18.0pt;font-size:12.0pt;line-height:18.0pt;font-family:Times New Roman;color:#000000;text-align:Left;">
+                    <span style="font-style:normal;font-weight:bold;text-decoration:underline;">Le but de cette politique de confidentialité </span><br><br>Le
+                    but de cette politique de confidentialité est d'informer les utilisateurs de notre site des données
+                    personnelles que nous recueillerons ainsi que les informations suivantes, le cas échéant :
+                </p>
+                <ol start="1"
+                    style="line-height:18.0pt;font-size:12.0pt;line-height:18.0pt;font-family:Times New Roman;color:#000000;list-style:lower-alpha;">
+                    <li style="margin-bottom:18.0pt;" value="1">
+                        <span>Les données personnelles que nous recueillerons</span><span
+                                style="color:#000000;"><br></span>
+                    </li>
+                    <li style="margin-bottom:18.0pt;" value="2"><span>L’utilisation des données recueillies</span><span
+                                style="color:#000000;"><br></span>
+                    </li>
+                    <li style="margin-bottom:18.0pt;" value="3"><span>Qui a accès aux données recueillies</span><span
+                                style="color:#000000;"><br></span>
+                    </li>
+                    <li style="margin-bottom:18.0pt;" value="4"><span>Les droits des utilisateurs du site</span><span
+                                style="color:#000000;"><br></span>
+                    </li>
+                    <li style="margin-bottom:0.0pt;" value="5"><span>La politique de cookies du site</span><span
+                                style="color:#000000;"><br></span>
+                    </li>
+                </ol>
+                <p style="line-height:18.0pt;font-size:12.0pt;line-height:18.0pt;font-family:Times New Roman;color:#000000;text-align:Left;">
+                    Cette politique de confidentialité fonctionne parallèlement aux conditions générales d’utilisation
+                    de notre site.
+                </p></div>
+            <div>
+                <p style="line-height:18.0pt;font-size:12.0pt;line-height:18.0pt;font-family:Times New Roman;color:#000000;text-align:Left;">
+                    <span style="font-style:normal;font-weight:bold;text-decoration:underline;">Lois applicables</span>
+                </p>
+                <p style="line-height:18.0pt;font-size:12.0pt;line-height:18.0pt;font-family:Times New Roman;color:#000000;text-align:Left;">
+                    Conformément au <span style="font-style:italic;font-weight:normal;">Règlement général sur la protection des données</span>
+                    (RGPD), cette politique de confidentialité est conforme aux règlements suivants.<br><br>Les données
+                    à caractère personnel doivent être :
+                </p>
+                <ol start="1"
+                    style="line-height:18.0pt;font-size:12.0pt;line-height:18.0pt;font-family:Times New Roman;color:#000000;list-style:lower-alpha;">
+                    <li style="margin-bottom:18.0pt;" value="1"><span>traitées de manière licite, loyale et transparente au regard de la personne concernée (licéité, loyauté, transparence) ;</span><span
+                                style="color:#000000;"><br></span>
+                    </li>
+                    <li style="margin-bottom:18.0pt;" value="2"><span>collectées pour des finalités déterminées, explicites et légitimes, et ne pas être traitées ultérieurement d'une manière incompatible avec ces finalités; le traitement ultérieur à des fins archivistiques dans l'intérêt public, à des fins de recherche scientifique ou historique ou à des fins statistiques n'est pas considéré, conformément à l'article 89, paragraphe 1, comme incompatible avec les finalités initiales (limitation des finalités) ;</span><span
+                                style="color:#000000;"><br></span>
+                    </li>
+                    <li style="margin-bottom:18.0pt;" value="3"><span>adéquates, pertinentes et limitées à ce qui est nécessaire au regard des finalités pour lesquelles elles sont traitées (minimisation des données) ;</span><span
+                                style="color:#000000;"><br></span>
+                    </li>
+                    <li style="margin-bottom:18.0pt;" value="4"><span>exactes et, si nécessaire, tenues à jour; toutes les mesures raisonnables doivent être prises pour que les données à caractère personnel qui sont inexactes, eu égard aux finalités pour lesquelles elles sont traitées, soient effacées ou rectifiées sans tarder (exactitude) ;</span><span
+                                style="color:#000000;"><br></span>
+                    </li>
+                    <li style="margin-bottom:18.0pt;" value="5"><span>conservées sous une forme permettant l'identification des personnes concernées pendant une durée n'excédant pas celle nécessaire au regard des finalités pour lesquelles elles sont traitées; les données à caractère personnel peuvent être conservées pour des durées plus longues dans la mesure où elles seront traitées exclusivement à des fins archivistiques dans l'intérêt public, à des fins de recherche scientifique ou historique ou à des fins statistiques conformément à l'article 89, paragraphe 1, pour autant que soient mises en œuvre les mesures techniques et organisationnelles appropriées requises par le règlement afin de garantir les droits et libertés de la personne concernée (limitation de la conservation) ;</span><span
+                                style="color:#000000;"><br></span>
+                    </li>
+                    <li style="margin-bottom:0.0pt;" value="6"><span>traitées de façon à garantir une sécurité appropriée des données à caractère personnel, y compris la protection contre le traitement non autorisé ou illicite et contre la perte, la destruction ou les dégâts d'origine accidentelle, à l'aide de mesures techniques ou organisationnelles appropriées (intégrité et confidentialité).<br></span><span
+                                style="color:#000000;"><br></span>
+                    </li>
+                </ol>
+                <p style="line-height:18.0pt;font-size:12.0pt;line-height:18.0pt;font-family:Times New Roman;color:#000000;text-align:Left;">
+                    Le traitement n'est licite que si, et dans la mesure où, au moins une des conditions suivantes est
+                    remplie :
+                </p>
+                <ol start="1"
+                    style="line-height:18.0pt;font-size:12.0pt;line-height:18.0pt;font-family:Times New Roman;color:#000000;list-style:lower-alpha;">
+                    <li style="margin-bottom:18.0pt;" value="1"><span>la personne concernée a consenti au traitement de ses données à caractère personnel pour une ou plusieurs finalités spécifiques ;</span><span
+                                style="color:#000000;"><br></span>
+                    </li>
+                    <li style="margin-bottom:18.0pt;" value="2"><span>le traitement est nécessaire à l'exécution d'un contrat auquel la personne concernée est partie ou à l'exécution de mesures précontractuelles prises à la demande de celle-ci ;</span><span
+                                style="color:#000000;"><br></span>
+                    </li>
+                    <li style="margin-bottom:18.0pt;" value="3"><span>le traitement est nécessaire au respect d'une obligation légale à laquelle le responsable du traitement est soumis ;</span><span
+                                style="color:#000000;"><br></span>
+                    </li>
+                    <li style="margin-bottom:18.0pt;" value="4"><span>le traitement est nécessaire à la sauvegarde des intérêts vitaux de la personne concernée ou d'une autre personne physique ;</span><span
+                                style="color:#000000;"><br></span>
+                    </li>
+                    <li style="margin-bottom:18.0pt;" value="5"><span>le traitement est nécessaire à l'exécution d'une mission d'intérêt public ou relevant de l'exercice de l'autorité publique dont est investi le responsable du traitement ;</span><span
+                                style="color:#000000;"><br></span>
+                    </li>
+                    <li style="margin-bottom:0.0pt;" value="6"><span>le traitement est nécessaire aux fins des intérêts légitimes poursuivis par le responsable du traitement ou par un tiers, à moins que ne prévalent les intérêts ou les libertés et droits fondamentaux de la personne concernée qui exigent une protection des données à caractère personnel, notamment lorsque la personne concernée est un enfant.</span><span
+                                style="color:#000000;"><br></span>
+                    </li>
+                </ol>
+                <p style="line-height:18.0pt;font-size:12.0pt;line-height:18.0pt;font-family:Times New Roman;color:#000000;text-align:Left;">
+                    Pour les résidents de l’État de Californie, cette politique de confidentialité vise à se conformer à
+                    la <span style="font-style:italic;font-weight:normal;">California Consumer Privacy Act (CCPA)</span>.
+                    S’il y a des incohérences entre ce document et la <span
+                            style="font-style:italic;font-weight:normal;">CCPA</span>, la législation de l’État
+                    s’appliquera. Si nous constatons des incohérences, nous modifierons notre politique pour nous
+                    conformer à la loi pertinente.
+                </p></div>
+            <div>
+                <p style="line-height:18.0pt;font-size:12.0pt;line-height:18.0pt;font-family:Times New Roman;color:#000000;text-align:Left;">
+                    <span style="font-style:normal;font-weight:bold;text-decoration:underline;">Consentement</span><br><br>Les
+                    utilisateurs conviennent qu’en utilisant notre site, ils consentent à :
+                </p>
+                <ol start="1"
+                    style="line-height:18.0pt;font-size:12.0pt;line-height:18.0pt;font-family:Times New Roman;color:#000000;list-style:lower-alpha;">
+                    <li style="margin-bottom:18.0pt;" value="1"><span>les conditions énoncées dans la présente politique de confidentialité et</span><span
+                                style="color:#000000;"><br></span>
+                    </li>
+                    <li style="margin-bottom:0.0pt;" value="2"><span>la collecte, l’utilisation et la conservation des données énumérées dans la présente politique.</span><span
+                                style="color:#000000;"><br></span>
+                    </li>
+                </ol>
+            </div>
+            <div>
+                <p style="line-height:18.0pt;font-size:12.0pt;line-height:18.0pt;font-family:Times New Roman;color:#000000;text-align:Left;">
+                    <span style="font-style:normal;font-weight:bold;text-decoration:underline;">Données personnelles que nous collectons</span>
+                </p>
+                <div>
+                    <p style="line-height:18.0pt;font-size:12.0pt;line-height:18.0pt;font-family:Times New Roman;color:#000000;text-align:Left;">
+                        Nous ne collectons, ne stockons ni n’utilisons aucune donnée utilisateur sur notre site. Dans le
+                        cas où nous avons besoin de recueillir vos données, nous veillerons à vous fournir un préavis de
+                        ce recueil de données.
+                    </p></div>
+            </div>
+            <div>
+                <p style="line-height:18.0pt;font-size:12.0pt;line-height:18.0pt;font-family:Times New Roman;color:#000000;text-align:Left;">
+                    <span style="font-style:normal;font-weight:bold;text-decoration:underline;">Politique sur les cookies</span><br><br>Un
+                    cookie est un petit fichier, stocké sur le disque dur d’un utilisateur par le site Web. Son but est
+                    de recueillir des données relatives aux habitudes de navigation de l’utilisateur.
+                </p>
+                <p style="line-height:18.0pt;font-size:12.0pt;line-height:18.0pt;font-family:Times New Roman;color:#000000;text-align:Left;">
+                    Nous utilisons les types de cookies suivants sur notre site&nbsp;:
+                </p>
+                <ol start="1"
+                    style="line-height:18.0pt;font-size:12.0pt;line-height:18.0pt;font-family:Times New Roman;color:#000000;list-style:lower-alpha;">
+                    <li style="margin-bottom:18.0pt;" value="1"><span style="font-style:normal;font-weight:bold;">Cookies fonctionnels</span><br>Nous
+                        les utilisons pour mémoriser toutes les sélections que vous faites sur notre site afin qu’elles
+                        soient sauvegardées pour vos prochaines visites.<span style="color:#000000;"><br></span>
+                    </li>
+                    <li style="margin-bottom:0.0pt;" value="2"><span style="font-style:normal;font-weight:bold;">__________</span><br>___________________________________________________________<br>___________________________________________________________<br>___________________________________________________________<br>___________________________________________________________<br>___________________________________________________________<br>___________________________________________________________<br>___________________________________________________________<br>___________________________________________________________<br>___________________________________________________________<br>___________________________________________________________<br><span
+                                style="color:#000000;"><br></span>
+                    </li>
+                </ol>
+                <p style="line-height:18.0pt;font-size:12.0pt;line-height:18.0pt;font-family:Times New Roman;color:#000000;text-align:Left;">
+                    Vous pouvez choisir d’être averti chaque fois qu’un cookie est transmis. Vous pouvez également
+                    choisir de désactiver les cookies entièrement dans votre navigateur Internet, mais cela peut
+                    diminuer la qualité de votre expérience d’utilisation.
+                </p></div>
+            <div>
+                <p style="line-height:18.0pt;font-size:12.0pt;line-height:18.0pt;font-family:Times New Roman;color:#000000;text-align:Left;">
+                    <span style="font-style:normal;font-weight:bold;text-decoration:underline;">Modifications</span>
+                </p>
+                <p style="line-height:18.0pt;font-size:12.0pt;line-height:18.0pt;font-family:Times New Roman;color:#000000;text-align:Left;">
+                    Cette politique de confidentialité peut être modifiée à l’occasion afin de maintenir la conformité
+                    avec la loi et de tenir compte de tout changement à notre processus de collecte de données. Nous
+                    recommandons à nos utilisateurs de vérifier notre politique de temps à autre pour s’assurer qu’ils
+                    soient informés de toute mise à jour. Au besoin, nous pouvons informer les utilisateurs par courriel
+                    des changements apportés à cette politique.
+                </p></div>
+            <div>
+                <p style="line-height:18.0pt;font-size:12.0pt;line-height:18.0pt;font-family:Times New Roman;color:#000000;text-align:Left;">
+                    <span style="font-style:normal;font-weight:bold;text-decoration:underline;">Contact</span>
+                </p>
+                <p style="line-height:18.0pt;font-size:12.0pt;line-height:18.0pt;font-family:Times New Roman;color:#000000;text-align:Left;">
+                    Si vous avez des questions à nous poser, n’hésitez pas à communiquer avec nous en utilisant ce qui
+                    suit&nbsp;:<br>06 72 14 54 18<br>tboileau.info@gmail.com<br>183 Avenue de Pessicart, 06100, Nice
+                </p></div>
+            <p style="line-height:18.0pt;font-size:12.0pt;line-height:18.0pt;font-family:Times New Roman;color:#000000;text-align:Left;">
+                <br><span style="font-style:italic;font-weight:normal;">Date d’entrée en vigueur&nbsp;: </span>le 16
+                septembre 2022
+            </p>
+            <div class="LDCopyright">
+                <p>&copy; 2002-2022, DocumentsLégaux&trade; (Sequiter Inc.)</p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

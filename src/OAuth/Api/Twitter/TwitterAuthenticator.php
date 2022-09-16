@@ -6,16 +6,19 @@ namespace App\OAuth\Api\Twitter;
 
 use App\OAuth\ClientInterface;
 use App\OAuth\Security\Guard\AbstractOAuthAuthenticator;
-use Symfony\Component\HttpFoundation\Request;
+use App\Repository\TokenRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class TwitterAuthenticator extends AbstractOAuthAuthenticator
 {
     public function __construct(
         private UrlGeneratorInterface $urlGenerator,
-        ClientInterface $twitterClient
+        ClientInterface $twitterClient,
+        TokenRepository $tokenRepository,
+        EntityManagerInterface $entityManager
     ) {
-        parent::__construct($twitterClient);
+        parent::__construct($twitterClient, $tokenRepository, $entityManager);
     }
 
     protected function getRedirectUri(): string
@@ -25,13 +28,6 @@ final class TwitterAuthenticator extends AbstractOAuthAuthenticator
             [],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
-    }
-
-    public function authenticate(Request $request): void
-    {
-        $accessToken = $this->provider->fetchAccessToken($request);
-        $accessToken['created'] = time();
-        $request->getSession()->set($this->getSessionKey(), $accessToken);
     }
 
     protected function getSessionKey(): string

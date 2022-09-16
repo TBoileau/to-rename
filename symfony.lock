@@ -154,6 +154,15 @@
             "bin/console"
         ]
     },
+    "symfony/discord-notifier": {
+        "version": "6.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "5.2",
+            "ref": "1bbc2f7c212346491efde98bf55a3f689056ed3f"
+        }
+    },
     "symfony/flex": {
         "version": "2.2",
         "recipe": {
@@ -183,6 +192,27 @@
             "public/index.php",
             "src/Controller/.gitignore",
             "src/Kernel.php"
+        ]
+    },
+    "symfony/maker-bundle": {
+        "version": "1.45",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
+        }
+    },
+    "symfony/notifier": {
+        "version": "6.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "5.0",
+            "ref": "c31585e252b32fe0e1f30b1f256af553f4a06eb9"
+        },
+        "files": [
+            "config/packages/notifier.yaml"
         ]
     },
     "symfony/phpunit-bridge": {
