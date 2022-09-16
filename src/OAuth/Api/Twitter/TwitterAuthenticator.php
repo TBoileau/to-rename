@@ -8,7 +8,6 @@ use App\OAuth\ClientInterface;
 use App\OAuth\Security\Guard\AbstractOAuthAuthenticator;
 use App\Repository\TokenRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class TwitterAuthenticator extends AbstractOAuthAuthenticator
@@ -29,13 +28,6 @@ final class TwitterAuthenticator extends AbstractOAuthAuthenticator
             [],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
-    }
-
-    public function authenticate(Request $request): void
-    {
-        $accessToken = $this->provider->fetchAccessToken($request);
-        $accessToken['created'] = time();
-        $request->getSession()->set($this->getSessionKey(), $accessToken);
     }
 
     protected function getSessionKey(): string

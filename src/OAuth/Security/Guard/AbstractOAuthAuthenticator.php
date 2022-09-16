@@ -55,6 +55,15 @@ abstract class AbstractOAuthAuthenticator implements AuthenticatorInterface
 
             $accessToken = $this->provider->fetchAccessTokenWithRefreshToken($token->getRefreshToken());
 
+            if (!isset($accessToken['created'])) {
+                $accessToken['created'] = time();
+            }
+
+            /** @var string $refreshToken */
+            $refreshToken = $accessToken['refresh_token'];
+
+            $this->updateRefreshToken($refreshToken);
+
             $session->set($this->getSessionKey(), $accessToken);
 
             $this->token->save($accessToken);
@@ -65,17 +74,26 @@ abstract class AbstractOAuthAuthenticator implements AuthenticatorInterface
     {
         $accessToken = $this->provider->fetchAccessToken($request);
 
-        /** @var Token $token */
-        $token = $this->tokenRepository->findOneBy(['name' => static::getName()]);
+        if (!isset($accessToken['created'])) {
+            $accessToken['created'] = time();
+        }
 
         /** @var string $refreshToken */
         $refreshToken = $accessToken['refresh_token'];
 
+        $this->updateRefreshToken($refreshToken);
+
+        $request->getSession()->set($this->getSessionKey(), $accessToken);
+    }
+
+    private function updateRefreshToken(string $refreshToken): void
+    {
+        /** @var Token $token */
+        $token = $this->tokenRepository->findOneBy(['name' => static::getName()]);
+
         $token->setRefreshToken($refreshToken);
 
         $this->entityManager->flush();
-
-        $request->getSession()->set($this->getSessionKey(), $accessToken);
     }
 
     public function authorize(): RedirectResponse

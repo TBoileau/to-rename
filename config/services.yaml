@@ -65,5 +65,4 @@ services:
         calls:
             - [setClientId, ['%env(TWITTER_CLIENT_ID)%']]
             - [setClientSecret, ['%env(TWITTER_CLIENT_SECRET)%']]
-            - [setScopes, [['tweet.read', 'tweet.write', 'users.read']]]
-            - [setAccessType, ['offline']]
+            - [setScopes, [['tweet.read', 'tweet.write', 'users.read', 'offline.access']]]
