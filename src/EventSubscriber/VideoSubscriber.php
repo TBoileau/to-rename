@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\EventSubscriber;
 
 use App\Entity\Video;
-use App\Generator\ThumbnailGeneratorInterface;
-use App\Youtube\VideoHandlerInterface;
+use App\Video\Thumbnail\ThumbnailGeneratorInterface;
+use App\Video\VideoManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityPersistedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityUpdatedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -15,7 +15,7 @@ final class VideoSubscriber implements EventSubscriberInterface
 {
     public function __construct(
         private ThumbnailGeneratorInterface $thumbnailGenerator,
-        private VideoHandlerInterface $videoHandler
+        private VideoManagerInterface $videoManager
     ) {
     }
 
@@ -33,7 +33,7 @@ final class VideoSubscriber implements EventSubscriberInterface
 
         if ($video instanceof Video) {
             $this->generate($video);
-            $this->videoHandler->update($video);
+            $this->videoManager->update($video);
         }
     }
 
@@ -42,7 +42,7 @@ final class VideoSubscriber implements EventSubscriberInterface
         $video = $event->getEntityInstance();
 
         if ($video instanceof Video) {
-            $this->videoHandler->hydrateVideo($video);
+            $this->videoManager->hydrate($video);
         }
     }
 

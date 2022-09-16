@@ -21,7 +21,7 @@ database:
 	php bin/console doctrine:database:drop --if-exists --force --env=$(env)
 	php bin/console doctrine:database:create --env=$(env)
 	php bin/console doctrine:query:sql "SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));" --env=$(env)
-	php bin/console doctrine:schema:update --force --env=$(env)
+	php bin/console doctrine:migration:migrate --no-interaction --env=$(env)
 
 prepare:
 	make database env=$(env)
