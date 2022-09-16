@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\EasyAdmin\Field\StatusField;
+use App\EasyAdmin\Filter\StatusFilter;
 use App\Entity\Video;
 use App\OAuth\Api\Twitter\TwitterClient;
 use App\OAuth\Security\Token\OAuthToken;
@@ -13,6 +14,7 @@ use App\Youtube\VideoSynchronizerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
@@ -40,9 +42,19 @@ final class VideoCrudController extends AbstractCrudController
         return Video::class;
     }
 
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+            ->add('season')
+            ->add('episode')
+            ->add(StatusFilter::new('status', 'Statut'));
+    }
+
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
+            ->setEntityLabelInSingular('Vidéo')
+            ->setEntityLabelInPlural('Vidéos')
             ->setDefaultSort(['season' => 'DESC', 'episode' => 'DESC'])
             ->setFormOptions(
                 ['validation_groups' => ['Default', 'create']],

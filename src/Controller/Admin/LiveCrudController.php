@@ -11,6 +11,7 @@ use App\OAuth\Security\Token\TokenStorageInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
@@ -32,9 +33,17 @@ final class LiveCrudController extends AbstractCrudController
         return Live::class;
     }
 
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters->add('planning')->add('livedAt');
+    }
+
     public function configureCrud(Crud $crud): Crud
     {
-        return $crud->setDefaultSort(['livedAt' => 'DESC']);
+        return $crud
+            ->setEntityLabelInSingular('Live')
+            ->setEntityLabelInPlural('Lives')
+            ->setDefaultSort(['livedAt' => 'DESC']);
     }
 
     public function configureActions(Actions $actions): Actions
