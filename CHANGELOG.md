@@ -4,6 +4,9 @@ Le `changelog` liste toutes les nouveautés intégrées à chaque `release`.
 
 Ce projet respecte [Semantic Versioning](https://semver.org/) et les [recommandations](https://keepachangelog.com/en/1.0.0/).
 
+## [2022-09-16] 1.0.1
+* [Dump du conteneur de service](https://symfony.com/doc/current/performance.html#dump-the-service-container-into-a-single-file)
+
 ## [2022-09-16] 1.0.0
 * Publier une vidéo non public [#30](https://github.com/TBoileau/twitch/issues/30)
 * Récupérer le statut d'une vidéo [#33](https://github.com/TBoileau/twitch/issues/33)
