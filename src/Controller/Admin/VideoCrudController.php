@@ -10,7 +10,7 @@ use App\Entity\Video;
 use App\OAuth\Api\Twitter\TwitterClient;
 use App\OAuth\Security\Token\OAuthToken;
 use App\OAuth\Security\Token\TokenStorageInterface;
-use App\Youtube\VideoSynchronizerInterface;
+use App\Video\VideoManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -68,7 +68,7 @@ final class VideoCrudController extends AbstractCrudController
         $googleToken = $this->tokenStorage['google'];
 
         if (!$googleToken->isAuthenticated()) {
-            $actions->disable(Action::EDIT, 'syncAll', 'syncOne');
+            $actions->disable(Action::EDIT, 'synchronize');
         }
 
         /** @var OAuthToken $twitterToken */
@@ -78,12 +78,9 @@ final class VideoCrudController extends AbstractCrudController
             $actions->disable('tweet');
         }
 
-        $syncAll = Action::new('syncAll', 'Synchroniser toutes les vidéos')
+        $synchronize = Action::new('synchronize', 'Synchroniser')
             ->createAsGlobalAction()
-            ->linkToRoute('admin_video_sync_all');
-
-        $syncOne = Action::new('syncOne', 'Synchroniser')
-            ->linkToRoute('admin_video_sync_one', static fn (Video $video): array => ['id' => $video->getId()]);
+            ->linkToRoute('admin_video_synchronize');
 
         $tweet = Action::new('tweet', 'Tweet')
             ->linkToRoute('admin_video_tweet', static fn (Video $video): array => ['id' => $video->getId()]);
@@ -92,20 +89,20 @@ final class VideoCrudController extends AbstractCrudController
             ->linkToRoute('admin_video_discord', static fn (Video $video): array => ['id' => $video->getId()]);
 
         return $actions
-            ->add(Crud::PAGE_INDEX, $syncOne)
-            ->add(Crud::PAGE_DETAIL, $syncOne)
             ->add(Crud::PAGE_INDEX, $tweet)
             ->add(Crud::PAGE_DETAIL, $tweet)
             ->add(Crud::PAGE_INDEX, $discord)
             ->add(Crud::PAGE_DETAIL, $discord)
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
-            ->add(Crud::PAGE_INDEX, $syncAll);
+            ->add(Crud::PAGE_INDEX, $synchronize);
     }
 
     public function configureFields(string $pageName): iterable
     {
         yield TextField::new('youtubeId', 'Youtube ID')->onlyWhenCreating();
-        yield ImageField::new('thumbnails[maxres]', 'Thumbnail')->hideOnForm();
+        yield ImageField::new('thumbnail', 'Thumbnail')
+            ->setBasePath('uploads/')
+            ->hideOnForm();
         yield IntegerField::new('season', 'Saison N°')->hideWhenCreating();
         yield IntegerField::new('episode', 'Episode N°')->hideWhenCreating();
         yield StatusField::new('status', 'Statut')
@@ -125,29 +122,15 @@ final class VideoCrudController extends AbstractCrudController
             ->hideOnForm();
     }
 
-    #[Route('/admin/videos/sync', name: 'admin_video_sync_all')]
-    public function syncAll(VideoSynchronizerInterface $videoSynchronizer, AdminUrlGenerator $adminUrlGenerator): RedirectResponse
+    #[Route('/admin/videos/synchronize', name: 'admin_video_synchronize')]
+    public function synchronize(VideoManagerInterface $videoManager, AdminUrlGenerator $adminUrlGenerator): RedirectResponse
     {
-        $videoSynchronizer->syncAll();
+        $videoManager->synchronize();
 
         return new RedirectResponse(
             $adminUrlGenerator
                 ->setController(self::class)
                 ->setAction(Action::INDEX)
-                ->generateUrl()
-        );
-    }
-
-    #[Route('/admin/videos/{id}/sync', name: 'admin_video_sync_one')]
-    public function syncOne(Video $video, VideoSynchronizerInterface $videoSynchronizer, AdminUrlGenerator $adminUrlGenerator): RedirectResponse
-    {
-        $videoSynchronizer->syncOne($video);
-
-        return new RedirectResponse(
-            $adminUrlGenerator
-                ->setController(self::class)
-                ->setAction(Action::DETAIL)
-                ->setEntityId($video->getId())
                 ->generateUrl()
         );
     }
