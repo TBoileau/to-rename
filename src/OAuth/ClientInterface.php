@@ -49,6 +49,13 @@ interface ClientInterface
      */
     public function fetchAccessTokenWithAuthCode($code);
 
+    /**
+     * @param string $code
+     *
+     * @return array<string, mixed>
+     */
+    public function fetchAccessTokenWithRefreshToken($code);
+
     public function getProvider(): ProviderInterface;
 
     public function getToken(): TokenInterface;

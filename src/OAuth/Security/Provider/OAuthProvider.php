@@ -18,4 +18,9 @@ final class OAuthProvider implements ProviderInterface
         /* @phpstan-ignore-next-line */
         return $this->client->fetchAccessTokenWithAuthCode($request->get('code'));
     }
+
+    public function fetchAccessTokenWithRefreshToken(string $refreshToken): array
+    {
+        return $this->client->fetchAccessTokenWithRefreshToken($refreshToken);
+    }
 }
