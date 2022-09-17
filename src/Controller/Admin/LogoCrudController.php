@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
-use App\Entity\Logo;
+use App\Entity\Category;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
@@ -14,14 +14,14 @@ final class LogoCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
-        return Logo::class;
+        return Category::class;
     }
 
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setEntityLabelInSingular('Logo')
-            ->setEntityLabelInPlural('Logos')
+            ->setEntityLabelInSingular('Catégorie')
+            ->setEntityLabelInPlural('Catégories')
             ->setDefaultSort(['name' => 'ASC']);
     }
 

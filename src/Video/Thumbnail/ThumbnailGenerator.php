@@ -50,11 +50,11 @@ final class ThumbnailGenerator implements ThumbnailGeneratorInterface
                     ->valign('top')
             );
 
-        if (null !== $video->getLogo()) {
-            $logoImageFile = sprintf('%s/%s', $this->uploadDir, $video->getLogo()->getImage());
+        if (null !== $video->getCategory()) {
+            $categoryImageFile = sprintf('%s/%s', $this->uploadDir, $video->getCategory()->getImage());
 
             /** @var array<int, int> $imageInfo */
-            $imageInfo = getimagesize($logoImageFile);
+            $imageInfo = getimagesize($categoryImageFile);
 
             /**
              * @var int $imageWidth
@@ -62,12 +62,12 @@ final class ThumbnailGenerator implements ThumbnailGeneratorInterface
              */
             [$imageWidth, $imageHeight] = $imageInfo;
 
-            $logoW = 490;
-            $logoH = $imageHeight * $logoW / $imageWidth;
+            $categoryW = 490;
+            $categoryH = $imageHeight * $categoryW / $imageWidth;
 
-            $logo = $this->imageManager->make($logoImageFile)->resize($logoW, $logoH);
+            $category = $this->imageManager->make($categoryImageFile)->resize($categoryW, $categoryH);
 
-            $thumbnail->insert($logo, 'center-left', 270, intval(round(555 - ($logoH / 2))));
+            $thumbnail->insert($category, 'center-left', 270, intval(round(555 - ($categoryH / 2))));
         }
 
         $thumbnail->save(sprintf('%s/%s', $this->uploadDir, $video->getThumbnail()));

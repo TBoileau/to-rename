@@ -119,6 +119,7 @@ final class VideoCrudController extends AbstractCrudController
         yield IntegerField::new('episode', 'Episode N°')->hideWhenCreating();
         yield StatusField::new('status', 'Statut')
             ->hideWhenCreating();
+        yield AssociationField::new('category', 'Catégorie')->hideWhenCreating();
         yield TextField::new('title', 'Titre')->hideWhenCreating();
         yield TextareaField::new('description', 'Description')
             ->hideWhenCreating()
@@ -128,7 +129,6 @@ final class VideoCrudController extends AbstractCrudController
             ->setTemplatePath('admin/field/video_tags.html.twig')
             ->hideWhenCreating();
         yield AssociationField::new('live', 'Live')->hideWhenCreating();
-        yield AssociationField::new('logo', 'Logo')->hideWhenCreating();
         yield TextField::new('youtubeId', 'Video')
             ->setTemplatePath('admin/field/video_youtube_id.html.twig')
             ->hideOnForm();

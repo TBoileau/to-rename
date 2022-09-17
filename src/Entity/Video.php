@@ -40,9 +40,9 @@ class Video implements VideoInterface
     #[Column(type: Types::TEXT)]
     private string $description;
 
-    #[ManyToOne(targetEntity: Logo::class)]
+    #[ManyToOne(targetEntity: Category::class)]
     #[JoinColumn(onDelete: 'SET NULL')]
-    private ?Logo $logo = null;
+    private ?Category $category = null;
 
     #[Column(type: Types::STRING)]
     private string $thumbnail;
@@ -119,14 +119,14 @@ class Video implements VideoInterface
         $this->live = $live;
     }
 
-    public function getLogo(): ?Logo
+    public function getCategory(): ?Category
     {
-        return $this->logo;
+        return $this->category;
     }
 
-    public function setLogo(Logo $logo): void
+    public function setCategory(Category $category): void
     {
-        $this->logo = $logo;
+        $this->category = $category;
     }
 
     /**
