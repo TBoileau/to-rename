@@ -57,17 +57,29 @@ final class PlanningCrudController extends AbstractCrudController
             $actions->disable('tweet');
         }
 
+        /** @var OAuthToken $linkedInToken */
+        $linkedInToken = $this->tokenStorage['linkedin'];
+
+        if (!$linkedInToken->isAuthenticated()) {
+            $actions->disable('linkedin');
+        }
+
         $tweet = Action::new('tweet', 'Tweet')
             ->linkToRoute('admin_planning_tweet', static fn (Planning $planning): array => ['id' => $planning->getId()]);
 
         $discord = Action::new('discord', 'Discord')
             ->linkToRoute('admin_planning_discord', static fn (Planning $planning): array => ['id' => $planning->getId()]);
 
+        $linkedin = Action::new('linkedin', 'LinkedIn')
+            ->linkToRoute('admin_planning_linkedin', static fn (Planning $planning): array => ['id' => $planning->getId()]);
+
         return $actions
             ->add(Crud::PAGE_INDEX, $tweet)
             ->add(Crud::PAGE_DETAIL, $tweet)
             ->add(Crud::PAGE_INDEX, $discord)
             ->add(Crud::PAGE_DETAIL, $discord)
+            ->add(Crud::PAGE_INDEX, $linkedin)
+            ->add(Crud::PAGE_DETAIL, $linkedin)
             ->add(Crud::PAGE_INDEX, Action::DETAIL);
     }
 
@@ -111,6 +123,27 @@ final class PlanningCrudController extends AbstractCrudController
 Planning de stream du {$planning->getStartedAt()->format('d/m/Y')} au {$planning->getEndedAt()->format('d/m/Y')}
 EOF
         ))->options($discordOptions)->transport('discord'));
+
+        return new RedirectResponse(
+            $adminUrlGenerator
+                ->setController(self::class)
+                ->setAction(Action::DETAIL)
+                ->setEntityId($planning->getId())
+                ->generateUrl()
+        );
+    }
+
+    #[Route('/admin/plannings/{id}/linkedin', name: 'admin_planning_linkedin')]
+    public function linkedin(Planning $planning, AdminUrlGenerator $adminUrlGenerator, ChatterInterface $chatter): RedirectResponse
+    {
+        $image = sprintf('https://toham.thomas-boileau.fr/twitch/%d', $planning->getId());
+
+        $chatter->send((new ChatMessage(<<<EOF
+Planning de stream du {$planning->getStartedAt()->format('d/m/Y')} au {$planning->getEndedAt()->format('d/m/Y')}
+
+{$image}
+EOF
+        ))->transport('linkedin'));
 
         return new RedirectResponse(
             $adminUrlGenerator

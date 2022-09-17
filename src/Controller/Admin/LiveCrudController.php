@@ -55,17 +55,29 @@ final class LiveCrudController extends AbstractCrudController
             $actions->disable('tweet');
         }
 
+        /** @var OAuthToken $linkedInToken */
+        $linkedInToken = $this->tokenStorage['linkedin'];
+
+        if (!$linkedInToken->isAuthenticated()) {
+            $actions->disable('linkedin');
+        }
+
         $tweet = Action::new('tweet', 'Tweet')
             ->linkToRoute('admin_live_tweet', static fn (Live $live): array => ['id' => $live->getId()]);
 
         $discord = Action::new('discord', 'Discord')
             ->linkToRoute('admin_live_discord', static fn (Live $live): array => ['id' => $live->getId()]);
 
+        $linkedin = Action::new('linkedin', 'LinkedIn')
+            ->linkToRoute('admin_live_linkedin', static fn (Live $live): array => ['id' => $live->getId()]);
+
         return $actions
             ->add(Crud::PAGE_INDEX, $tweet)
             ->add(Crud::PAGE_DETAIL, $tweet)
             ->add(Crud::PAGE_INDEX, $discord)
             ->add(Crud::PAGE_DETAIL, $discord)
+            ->add(Crud::PAGE_INDEX, $linkedin)
+            ->add(Crud::PAGE_DETAIL, $linkedin)
             ->add(Crud::PAGE_INDEX, Action::DETAIL);
     }
 
@@ -111,6 +123,27 @@ Le live Twitch commence à {$live->getLivedAt()->format('H:i')} !
 https://twitch.tv/toham
 EOF
         ))->transport('discord'));
+
+        return new RedirectResponse(
+            $adminUrlGenerator
+                ->setController(self::class)
+                ->setAction(Action::DETAIL)
+                ->setEntityId($live->getId())
+                ->generateUrl()
+        );
+    }
+
+    #[Route('/admin/lives/{id}/linkedin', name: 'admin_live_linkedin')]
+    public function linkedin(Live $live, AdminUrlGenerator $adminUrlGenerator, ChatterInterface $chatter): RedirectResponse
+    {
+        $chatter->send((new ChatMessage(<<<EOF
+Le live Twitch commence à {$live->getLivedAt()->format('H:i')} !
+
+{$live->getDescription()} 
+
+https://twitch.tv/toham
+EOF
+        ))->transport('linkedin'));
 
         return new RedirectResponse(
             $adminUrlGenerator
