@@ -126,7 +126,7 @@ final class VideoManager implements VideoManagerInterface, VideoCollectInterface
 
         $video->setYoutubeId($youtubeVideo->getId());
         $video->setDescription($videoSnippet->getDescription());
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         $video->setTags($videoSnippet->getTags() ?? []);
 
         if (false !== preg_match('/(S(\d{2})E(\d{2})) - (.+)/', $videoSnippet->getTitle(), $matches)) {

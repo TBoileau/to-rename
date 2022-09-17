@@ -20,7 +20,7 @@ abstract class AbstractOAuthAuthenticator implements AuthenticatorInterface
     protected TokenInterface $token;
 
     public function __construct(
-        private ClientInterface $client,
+        protected ClientInterface $client,
         private TokenRepository $tokenRepository,
         private EntityManagerInterface $entityManager
     ) {
@@ -43,6 +43,8 @@ abstract class AbstractOAuthAuthenticator implements AuthenticatorInterface
 
         if (null !== $token) {
             $this->token->save($token);
+
+            $this->onAuthenticationSuccess($token);
         }
 
         if (null === $token || !$this->token->isAuthenticated()) {
@@ -67,6 +69,8 @@ abstract class AbstractOAuthAuthenticator implements AuthenticatorInterface
             $session->set($this->getSessionKey(), $accessToken);
 
             $this->token->save($accessToken);
+
+            $this->onAuthenticationSuccess($accessToken);
         }
     }
 
@@ -78,12 +82,22 @@ abstract class AbstractOAuthAuthenticator implements AuthenticatorInterface
             $accessToken['created'] = time();
         }
 
-        /** @var string $refreshToken */
-        $refreshToken = $accessToken['refresh_token'];
+        if (isset($accessToken['refresh_token'])) {
+            /** @var string $refreshToken */
+            $refreshToken = $accessToken['refresh_token'];
 
-        $this->updateRefreshToken($refreshToken);
+            $this->updateRefreshToken($refreshToken);
+        }
 
         $request->getSession()->set($this->getSessionKey(), $accessToken);
+
+        $this->client->setAccessToken($accessToken);
+
+        $this->onAuthenticationSuccess($accessToken);
+    }
+
+    public function onAuthenticationSuccess(array $accessToken): void
+    {
     }
 
     private function updateRefreshToken(string $refreshToken): void
