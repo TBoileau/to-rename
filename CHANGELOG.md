@@ -4,6 +4,9 @@ Le `changelog` liste toutes les nouveautés intégrées à chaque `release`.
 
 Ce projet respecte [Semantic Versioning](https://semver.org/) et les [recommandations](https://keepachangelog.com/en/1.0.0/).
 
+## [2022-09-17] 1.0.2
+* Modification de la LICENSE
+
 ## [2022-09-16] 1.0.1
 * [Dump du conteneur de service](https://symfony.com/doc/current/performance.html#dump-the-service-container-into-a-single-file)
 
