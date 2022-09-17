@@ -78,6 +78,13 @@ final class VideoCrudController extends AbstractCrudController
             $actions->disable('tweet');
         }
 
+        /** @var OAuthToken $linkedInToken */
+        $linkedInToken = $this->tokenStorage['linkedin'];
+
+        if (!$linkedInToken->isAuthenticated()) {
+            $actions->disable('linkedin');
+        }
+
         $synchronize = Action::new('synchronize', 'Synchroniser')
             ->createAsGlobalAction()
             ->linkToRoute('admin_video_synchronize');
@@ -88,11 +95,16 @@ final class VideoCrudController extends AbstractCrudController
         $discord = Action::new('discord', 'Discord')
             ->linkToRoute('admin_video_discord', static fn (Video $video): array => ['id' => $video->getId()]);
 
+        $linkedin = Action::new('linkedin', 'LinkedIn')
+            ->linkToRoute('admin_video_linkedin', static fn (Video $video): array => ['id' => $video->getId()]);
+
         return $actions
             ->add(Crud::PAGE_INDEX, $tweet)
             ->add(Crud::PAGE_DETAIL, $tweet)
             ->add(Crud::PAGE_INDEX, $discord)
             ->add(Crud::PAGE_DETAIL, $discord)
+            ->add(Crud::PAGE_INDEX, $linkedin)
+            ->add(Crud::PAGE_DETAIL, $linkedin)
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
             ->add(Crud::PAGE_INDEX, $synchronize);
     }
@@ -171,6 +183,29 @@ Nouvelle vidéo disponible sur la chaîne Youtube !
 https://www.youtube.com/watch?v={$video->getYoutubeId()}
 EOF
         ))->transport('discord'));
+
+        return new RedirectResponse(
+            $adminUrlGenerator
+                ->setController(self::class)
+                ->setAction(Action::DETAIL)
+                ->setEntityId($video->getId())
+                ->generateUrl()
+        );
+    }
+
+    #[Route('/admin/videos/{id}/linkedin', name: 'admin_video_linkedin')]
+    public function linkedin(Video $video, AdminUrlGenerator $adminUrlGenerator, ChatterInterface $chatter): RedirectResponse
+    {
+        $title = u($video->getTitle())->trim()->toString();
+
+        $chatter->send((new ChatMessage(<<<EOF
+Nouvelle vidéo disponible sur la chaîne Youtube ! 
+
+{$title}
+
+https://www.youtube.com/watch?v={$video->getYoutubeId()}
+EOF
+        ))->transport('linkedin'));
 
         return new RedirectResponse(
             $adminUrlGenerator
