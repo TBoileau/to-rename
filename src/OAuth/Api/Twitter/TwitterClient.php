@@ -141,9 +141,12 @@ final class TwitterClient implements ClientInterface
         return $response->toArray();
     }
 
-    public function tweet(string $message): void
+    /**
+     * @return array{data: array{id: string, text: string}}
+     */
+    public function tweet(string $message): array
     {
-        $this->httpClient->request(Request::METHOD_POST, 'https://api.twitter.com/2/tweets', [
+        $response = $this->httpClient->request(Request::METHOD_POST, 'https://api.twitter.com/2/tweets', [
             'headers' => [
                 'Authorization' => sprintf('Bearer %s', $this->accessToken['access_token']), /* @phpstan-ignore-line */
             ],
@@ -151,6 +154,9 @@ final class TwitterClient implements ClientInterface
                 'text' => $message,
             ],
         ]);
+
+        /** @phpstan-ignore-next-line */
+        return $response->toArray();
     }
 
     public function fetchAccessTokenWithRefreshToken($refreshToken)

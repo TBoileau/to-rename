@@ -3,6 +3,7 @@ framework:
         chatter_transports:
             discord: '%env(DISCORD_DSN)%'
             linkedin: '%env(LINKEDIN_DSN)%'
+            twitter: 'twitter://default'
         channel_policy:
             urgent: ['email']
             high: ['email']
