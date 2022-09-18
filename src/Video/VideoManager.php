@@ -7,6 +7,7 @@ namespace App\Video;
 use App\DataCollector\VideoCollectInterface;
 use App\Entity\Video;
 use App\OAuth\Api\Google\GoogleClient;
+use App\Repository\CategoryRepository;
 use App\Repository\VideoRepository;
 use App\Video\Youtube\VideoProviderInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -29,6 +30,7 @@ final class VideoManager implements VideoManagerInterface, VideoCollectInterface
     public function __construct(
         GoogleClient $googleClient,
         private VideoRepository $videoRepository,
+        private CategoryRepository $categoryRepository,
         private EntityManagerInterface $entityManager,
         private VideoProviderInterface $videoProvider,
         private string $uploadDir
@@ -61,11 +63,16 @@ final class VideoManager implements VideoManagerInterface, VideoCollectInterface
         $videoSnippet = $youtubeVideo->getSnippet();
         $videoSnippet->setDefaultAudioLanguage($video->getDefaultAudioLanguage());
         $videoSnippet->setDefaultLanguage($video->getDefaultLanguage());
+
+        /** @var CategoryInterface $category */
+        $category = $video->getCategory();
+
         $videoSnippet->setTitle(sprintf(
-            'S%02dE%02d - %s',
+            'S%02dE%02d - %s - %s',
             $video->getSeason(),
             $video->getEpisode(),
-            u($video->getTitle())->trim()
+            u($video->getTitle())->trim(),
+            u($category->getName())->trim(),
         ));
         $videoSnippet->setDescription($video->getDescription());
         $videoSnippet->setTags(array_values($video->getTags()));
@@ -129,15 +136,26 @@ final class VideoManager implements VideoManagerInterface, VideoCollectInterface
         /* @phpstan-ignore-next-line */
         $video->setTags($videoSnippet->getTags() ?? []);
 
-        if (false !== preg_match('/(S(\d{2})E(\d{2})) - (.+)/', $videoSnippet->getTitle(), $matches)) {
+        if (false !== preg_match('/(S(\d{2})E(\d{2})) - (.+) - (.+)/', $videoSnippet->getTitle(), $matches)) {
             if (isset($matches[1])) {
-                [, , $season, $episode, $title] = $matches;
+                /**
+                 * @var string $categoryName
+                 * @var string $title
+                 * @var string $episode
+                 * @var string $season
+                 */
+                [, , $season, $episode, $categoryName, $title] = $matches;
+
+                /** @var CategoryInterface $category */
+                $category = $this->categoryRepository->findOneBy(['name' => u($categoryName)->trim()->toString()]);
                 $video->setTitle(u($title)->trim()->toString());
+                $video->setCategory($category);
                 $video->setSeason((int) $season);
                 $video->setEpisode((int) $episode);
             }
         } else {
             $video->setTitle($videoSnippet->getTitle());
+            $video->setCategory(null);
             $video->setSeason(0);
             $video->setEpisode(0);
         }
@@ -159,6 +177,54 @@ final class VideoManager implements VideoManagerInterface, VideoCollectInterface
         $videoStatus = $youtubeVideo->getStatus();
 
         $video->setPrivacyStatus($videoStatus->getPrivacyStatus());
+
+        $videoStatistics = $youtubeVideo->getStatistics();
+
+        $video->setViews((int) $videoStatistics->getViewCount());
+        $video->setLikes((int) $videoStatistics->getLikeCount());
+        $video->setComments((int) $videoStatistics->getCommentCount());
+    }
+
+    public function updateStatistics(): void
+    {
+        /** @var array<array-key, Video> $videos */
+        $videos = $this->videoRepository->findAll();
+
+        /** @var array<string, Video> $videos */
+        $videos = array_combine(
+            array_map(
+                static fn (Video $video): string => $video->getYoutubeId(),
+                $videos
+            ),
+            $videos
+        );
+
+        $page = 1;
+
+        do {
+            $videosToUpdate = array_slice($videos, ($page - 1) * 50, 50);
+
+            $youtubeVideos = $this->videoProvider->get(
+                array_map(
+                    static fn (Video $video): string => $video->getYoutubeId(),
+                    $videosToUpdate
+                )
+            );
+
+            foreach ($youtubeVideos as $youtubeVideo) {
+                $video = $videos[$youtubeVideo->getId()];
+
+                $videoStatistics = $youtubeVideo->getStatistics();
+
+                $video->setViews((int) $videoStatistics->getViewCount());
+                $video->setLikes((int) $videoStatistics->getLikeCount());
+                $video->setComments((int) $videoStatistics->getCommentCount());
+            }
+
+            $this->entityManager->flush();
+
+            ++$page;
+        } while (ceil(count($videos) / 50) < $page);
     }
 
     public function getVideosUpdated(): array

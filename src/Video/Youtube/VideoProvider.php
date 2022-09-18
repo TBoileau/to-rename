@@ -57,13 +57,11 @@ final class VideoProvider implements VideoProviderInterface
     }
 
     /**
-     * @param array<array-key, string> $ids
-     *
-     * @return array<array-key, Video>
+     * {@inheritDoc}
      */
-    private function get(array $ids): array
+    public function get(array $ids): array
     {
-        $response = $this->youtube->videos->listVideos(['snippet', 'status'], [
+        $response = $this->youtube->videos->listVideos(['snippet', 'status', 'statistics'], [
             'id' => $ids,
         ]);
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\CategoryRepository;
+use App\Video\CategoryInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
@@ -14,7 +15,7 @@ use Stringable;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[Entity(repositoryClass: CategoryRepository::class)]
-class Category implements Stringable
+class Category implements Stringable, CategoryInterface
 {
     #[Id]
     #[GeneratedValue]

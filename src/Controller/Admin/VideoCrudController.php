@@ -31,6 +31,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 use function Symfony\Component\String\u;
 
+use Symfony\Component\Validator\Constraints\NotNull;
+
 final class VideoCrudController extends AbstractCrudController
 {
     public function __construct(private TokenStorageInterface $tokenStorage)
@@ -68,7 +70,7 @@ final class VideoCrudController extends AbstractCrudController
         $googleToken = $this->tokenStorage['google'];
 
         if (!$googleToken->isAuthenticated()) {
-            $actions->disable(Action::EDIT, 'synchronize');
+            $actions->disable(Action::EDIT, 'synchronize', 'statistics');
         }
 
         /** @var OAuthToken $twitterToken */
@@ -84,6 +86,10 @@ final class VideoCrudController extends AbstractCrudController
         if (!$linkedInToken->isAuthenticated()) {
             $actions->disable('linkedin');
         }
+
+        $statistics = Action::new('statistics', 'Statistiques')
+            ->createAsGlobalAction()
+            ->linkToRoute('admin_video_statistics');
 
         $synchronize = Action::new('synchronize', 'Synchroniser')
             ->createAsGlobalAction()
@@ -106,7 +112,8 @@ final class VideoCrudController extends AbstractCrudController
             ->add(Crud::PAGE_INDEX, $linkedin)
             ->add(Crud::PAGE_DETAIL, $linkedin)
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
-            ->add(Crud::PAGE_INDEX, $synchronize);
+            ->add(Crud::PAGE_INDEX, $synchronize)
+            ->add(Crud::PAGE_INDEX, $statistics);
     }
 
     public function configureFields(string $pageName): iterable
@@ -119,11 +126,16 @@ final class VideoCrudController extends AbstractCrudController
         yield IntegerField::new('episode', 'Episode N°')->hideWhenCreating();
         yield StatusField::new('status', 'Statut')
             ->hideWhenCreating();
-        yield AssociationField::new('category', 'Catégorie')->hideWhenCreating();
+        yield AssociationField::new('category', 'Catégorie')
+            ->setFormTypeOption('constraints', [new NotNull()])
+            ->hideWhenCreating();
         yield TextField::new('title', 'Titre')->hideWhenCreating();
         yield TextareaField::new('description', 'Description')
             ->hideWhenCreating()
             ->hideOnIndex();
+        yield IntegerField::new('views', 'Vues')->hideOnForm();
+        yield IntegerField::new('likes', 'Likes')->hideOnForm();
+        yield IntegerField::new('comments', 'Commentaires')->hideOnForm();
         yield CollectionField::new('tags', 'Tags')
             ->setEntryType(TextType::class)
             ->setTemplatePath('admin/field/video_tags.html.twig')
@@ -138,6 +150,19 @@ final class VideoCrudController extends AbstractCrudController
     public function synchronize(VideoManagerInterface $videoManager, AdminUrlGenerator $adminUrlGenerator): RedirectResponse
     {
         $videoManager->synchronize();
+
+        return new RedirectResponse(
+            $adminUrlGenerator
+                ->setController(self::class)
+                ->setAction(Action::INDEX)
+                ->generateUrl()
+        );
+    }
+
+    #[Route('/admin/videos/admin_video_statistics', name: 'admin_video_statistics')]
+    public function admin_video_statistics(VideoManagerInterface $videoManager, AdminUrlGenerator $adminUrlGenerator): RedirectResponse
+    {
+        $videoManager->updateStatistics();
 
         return new RedirectResponse(
             $adminUrlGenerator

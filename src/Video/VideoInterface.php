@@ -47,4 +47,20 @@ interface VideoInterface
     public function getThumbnail(): string;
 
     public function setThumbnail(string $thumbnail): void;
+
+    public function getCategory(): ?CategoryInterface;
+
+    public function setCategory(?CategoryInterface $category): void;
+
+    public function getViews(): int;
+
+    public function setViews(int $views): void;
+
+    public function getLikes(): int;
+
+    public function setLikes(int $likes): void;
+
+    public function getComments(): int;
+
+    public function setComments(int $comments): void;
 }

@@ -13,4 +13,6 @@ interface VideoManagerInterface
     public function update(VideoInterface $video): void;
 
     public function hydrate(VideoInterface $video, ?YoutubeVideo $youtubeVideo = null): void;
+
+    public function updateStatistics(): void;
 }
