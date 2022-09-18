@@ -29,6 +29,7 @@ use Symfony\Component\Notifier\ChatterInterface;
 use Symfony\Component\Notifier\Message\ChatMessage;
 use Symfony\Component\Routing\Annotation\Route;
 
+use Symfony\Component\Validator\Constraints\NotNull;
 use function Symfony\Component\String\u;
 
 final class VideoCrudController extends AbstractCrudController
@@ -119,7 +120,9 @@ final class VideoCrudController extends AbstractCrudController
         yield IntegerField::new('episode', 'Episode N°')->hideWhenCreating();
         yield StatusField::new('status', 'Statut')
             ->hideWhenCreating();
-        yield AssociationField::new('category', 'Catégorie')->hideWhenCreating();
+        yield AssociationField::new('category', 'Catégorie')
+            ->setFormTypeOption('constraints', [new NotNull()])
+            ->hideWhenCreating();
         yield TextField::new('title', 'Titre')->hideWhenCreating();
         yield TextareaField::new('description', 'Description')
             ->hideWhenCreating()

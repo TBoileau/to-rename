@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use App\Doctrine\Type\StatusType;
 use App\Repository\VideoRepository;
+use App\Video\CategoryInterface;
 use App\Video\VideoInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
@@ -42,7 +43,7 @@ class Video implements VideoInterface
 
     #[ManyToOne(targetEntity: Category::class)]
     #[JoinColumn(onDelete: 'SET NULL')]
-    private ?Category $category = null;
+    private ?CategoryInterface $category = null;
 
     #[Column(type: Types::STRING)]
     private string $thumbnail;
@@ -119,12 +120,12 @@ class Video implements VideoInterface
         $this->live = $live;
     }
 
-    public function getCategory(): ?Category
+    public function getCategory(): ?CategoryInterface
     {
         return $this->category;
     }
 
-    public function setCategory(Category $category): void
+    public function setCategory(?CategoryInterface $category): void
     {
         $this->category = $category;
     }

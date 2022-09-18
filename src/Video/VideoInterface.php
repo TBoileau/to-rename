@@ -47,4 +47,8 @@ interface VideoInterface
     public function getThumbnail(): string;
 
     public function setThumbnail(string $thumbnail): void;
+
+    public function getCategory(): ?CategoryInterface;
+
+    public function setCategory(?CategoryInterface $category): void;
 }
