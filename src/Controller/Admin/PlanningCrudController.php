@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Entity\Planning;
-use App\OAuth\Api\Twitter\TwitterClient;
 use App\OAuth\Security\Token\OAuthToken;
 use App\OAuth\Security\Token\TokenStorageInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -96,9 +95,12 @@ final class PlanningCrudController extends AbstractCrudController
     }
 
     #[Route('/admin/plannings/{id}/tweet', name: 'admin_planning_tweet')]
-    public function tweet(int $id, AdminUrlGenerator $adminUrlGenerator, TwitterClient $twitterClient): RedirectResponse
+    public function tweet(int $id, AdminUrlGenerator $adminUrlGenerator, ChatterInterface $chatter): RedirectResponse
     {
-        $twitterClient->tweet(sprintf('https://toham.thomas-boileau.fr/twitch/%d', $id));
+        $chatter->send(
+            (new ChatMessage(sprintf('https://toham.thomas-boileau.fr/twitch/%d', $id)))
+                ->transport('twitter')
+        );
 
         return new RedirectResponse(
             $adminUrlGenerator

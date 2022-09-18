@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Entity\Live;
-use App\OAuth\Api\Twitter\TwitterClient;
 use App\OAuth\Security\Token\OAuthToken;
 use App\OAuth\Security\Token\TokenStorageInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -90,15 +89,18 @@ final class LiveCrudController extends AbstractCrudController
     }
 
     #[Route('/admin/lives/{id}/tweet', name: 'admin_lives_tweet')]
-    public function tweet(Live $live, AdminUrlGenerator $adminUrlGenerator, TwitterClient $twitterClient): RedirectResponse
+    public function tweet(Live $live, AdminUrlGenerator $adminUrlGenerator, ChatterInterface $chatter): RedirectResponse
     {
-        $twitterClient->tweet(<<<EOF
+        $chatter->send(
+            (new ChatMessage(<<<EOF
 Le live Twitch commence à {$live->getLivedAt()->format('H:i')} !
 
 {$live->getDescription()} 
 
 https://twitch.tv/toham
 EOF
+            ))
+                ->transport('twitter')
         );
 
         return new RedirectResponse(

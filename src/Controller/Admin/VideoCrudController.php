@@ -7,7 +7,6 @@ namespace App\Controller\Admin;
 use App\EasyAdmin\Field\StatusField;
 use App\EasyAdmin\Filter\StatusFilter;
 use App\Entity\Video;
-use App\OAuth\Api\Twitter\TwitterClient;
 use App\OAuth\Security\Token\OAuthToken;
 use App\OAuth\Security\Token\TokenStorageInterface;
 use App\Video\VideoManagerInterface;
@@ -173,16 +172,16 @@ final class VideoCrudController extends AbstractCrudController
     }
 
     #[Route('/admin/videos/{id}/tweet', name: 'admin_video_tweet')]
-    public function tweet(Video $video, AdminUrlGenerator $adminUrlGenerator, TwitterClient $twitterClient): RedirectResponse
+    public function tweet(Video $video, AdminUrlGenerator $adminUrlGenerator, ChatterInterface $chatter): RedirectResponse
     {
-        $twitterClient->tweet(<<<EOF
+        $chatter->send((new ChatMessage(<<<EOF
 Nouvelle vidéo disponible sur la chaîne Youtube ! 
 
 {$video->getTitle()}
 
 https://www.youtube.com/watch?v={$video->getYoutubeId()}
 EOF
-        );
+        ))->transport('twitter'));
 
         return new RedirectResponse(
             $adminUrlGenerator
