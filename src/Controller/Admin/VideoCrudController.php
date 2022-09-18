@@ -7,9 +7,9 @@ namespace App\Controller\Admin;
 use App\EasyAdmin\Field\StatusField;
 use App\EasyAdmin\Filter\StatusFilter;
 use App\Entity\Video;
-use App\OAuth\Api\Twitter\TwitterClient;
 use App\OAuth\Security\Token\OAuthToken;
 use App\OAuth\Security\Token\TokenStorageInterface;
+use App\SocialNetwork\SocialNetworkInterface;
 use App\Video\VideoManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -25,11 +25,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Notifier\ChatterInterface;
-use Symfony\Component\Notifier\Message\ChatMessage;
 use Symfony\Component\Routing\Annotation\Route;
-
-use function Symfony\Component\String\u;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 final class VideoCrudController extends AbstractCrudController
 {
@@ -68,33 +65,26 @@ final class VideoCrudController extends AbstractCrudController
         $googleToken = $this->tokenStorage['google'];
 
         if (!$googleToken->isAuthenticated()) {
-            $actions->disable(Action::EDIT, 'synchronize');
+            $actions->disable(Action::EDIT, 'synchronize', 'statistics');
         }
 
-        /** @var OAuthToken $twitterToken */
-        $twitterToken = $this->tokenStorage['twitter'];
-
-        if (!$twitterToken->isAuthenticated()) {
-            $actions->disable('tweet');
-        }
+        $statistics = Action::new('statistics', 'Statistiques')
+            ->createAsGlobalAction()
+            ->linkToRoute('admin_video_statistics');
 
         $synchronize = Action::new('synchronize', 'Synchroniser')
             ->createAsGlobalAction()
             ->linkToRoute('admin_video_synchronize');
 
-        $tweet = Action::new('tweet', 'Tweet')
-            ->linkToRoute('admin_video_tweet', static fn (Video $video): array => ['id' => $video->getId()]);
-
-        $discord = Action::new('discord', 'Discord')
-            ->linkToRoute('admin_video_discord', static fn (Video $video): array => ['id' => $video->getId()]);
+        $communicate = Action::new('communicate', 'Communiquer')
+            ->linkToRoute('admin_video_communicate', static fn (Video $video): array => ['id' => $video->getId()]);
 
         return $actions
-            ->add(Crud::PAGE_INDEX, $tweet)
-            ->add(Crud::PAGE_DETAIL, $tweet)
-            ->add(Crud::PAGE_INDEX, $discord)
-            ->add(Crud::PAGE_DETAIL, $discord)
+            ->add(Crud::PAGE_INDEX, $communicate)
+            ->add(Crud::PAGE_DETAIL, $communicate)
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
-            ->add(Crud::PAGE_INDEX, $synchronize);
+            ->add(Crud::PAGE_INDEX, $synchronize)
+            ->add(Crud::PAGE_INDEX, $statistics);
     }
 
     public function configureFields(string $pageName): iterable
@@ -107,16 +97,21 @@ final class VideoCrudController extends AbstractCrudController
         yield IntegerField::new('episode', 'Episode N°')->hideWhenCreating();
         yield StatusField::new('status', 'Statut')
             ->hideWhenCreating();
+        yield AssociationField::new('category', 'Catégorie')
+            ->setFormTypeOption('constraints', [new NotNull()])
+            ->hideWhenCreating();
         yield TextField::new('title', 'Titre')->hideWhenCreating();
         yield TextareaField::new('description', 'Description')
             ->hideWhenCreating()
             ->hideOnIndex();
+        yield IntegerField::new('views', 'Vues')->hideOnForm();
+        yield IntegerField::new('likes', 'Likes')->hideOnForm();
+        yield IntegerField::new('comments', 'Commentaires')->hideOnForm();
         yield CollectionField::new('tags', 'Tags')
             ->setEntryType(TextType::class)
             ->setTemplatePath('admin/field/video_tags.html.twig')
             ->hideWhenCreating();
         yield AssociationField::new('live', 'Live')->hideWhenCreating();
-        yield AssociationField::new('logo', 'Logo')->hideWhenCreating();
         yield TextField::new('youtubeId', 'Video')
             ->setTemplatePath('admin/field/video_youtube_id.html.twig')
             ->hideOnForm();
@@ -135,10 +130,26 @@ final class VideoCrudController extends AbstractCrudController
         );
     }
 
-    #[Route('/admin/videos/{id}/tweet', name: 'admin_video_tweet')]
-    public function tweet(Video $video, AdminUrlGenerator $adminUrlGenerator, TwitterClient $twitterClient): RedirectResponse
+    #[Route('/admin/videos/admin_video_statistics', name: 'admin_video_statistics')]
+    public function admin_video_statistics(VideoManagerInterface $videoManager, AdminUrlGenerator $adminUrlGenerator): RedirectResponse
     {
-        $twitterClient->tweet(<<<EOF
+        $videoManager->updateStatistics();
+
+        return new RedirectResponse(
+            $adminUrlGenerator
+                ->setController(self::class)
+                ->setAction(Action::INDEX)
+                ->generateUrl()
+        );
+    }
+
+    #[Route('/admin/videos/{id}/communicate', name: 'admin_video_communicate')]
+    public function communicate(
+        Video $video,
+        AdminUrlGenerator $adminUrlGenerator,
+        SocialNetworkInterface $socialNetwork
+    ): RedirectResponse {
+        $socialNetwork->send(<<<EOF
 Nouvelle vidéo disponible sur la chaîne Youtube ! 
 
 {$video->getTitle()}
@@ -146,31 +157,6 @@ Nouvelle vidéo disponible sur la chaîne Youtube !
 https://www.youtube.com/watch?v={$video->getYoutubeId()}
 EOF
         );
-
-        return new RedirectResponse(
-            $adminUrlGenerator
-                ->setController(self::class)
-                ->setAction(Action::DETAIL)
-                ->setEntityId($video->getId())
-                ->generateUrl()
-        );
-    }
-
-    #[Route('/admin/videos/{id}/discord', name: 'admin_video_discord')]
-    public function discord(Video $video, AdminUrlGenerator $adminUrlGenerator, ChatterInterface $chatter): RedirectResponse
-    {
-        $title = u($video->getTitle())->trim()->toString();
-
-        $chatter->send((new ChatMessage(<<<EOF
-@everyone
-
-Nouvelle vidéo disponible sur la chaîne Youtube ! 
-
-{$title}
-
-https://www.youtube.com/watch?v={$video->getYoutubeId()}
-EOF
-        ))->transport('discord'));
 
         return new RedirectResponse(
             $adminUrlGenerator

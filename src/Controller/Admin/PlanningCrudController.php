@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Entity\Planning;
-use App\OAuth\Api\Twitter\TwitterClient;
-use App\OAuth\Security\Token\OAuthToken;
-use App\OAuth\Security\Token\TokenStorageInterface;
+use App\SocialNetwork\SocialNetworkInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -17,19 +15,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Notifier\Bridge\Discord\DiscordOptions;
-use Symfony\Component\Notifier\Bridge\Discord\Embeds\DiscordEmbed;
-use Symfony\Component\Notifier\Bridge\Discord\Embeds\DiscordMediaEmbedObject;
-use Symfony\Component\Notifier\ChatterInterface;
-use Symfony\Component\Notifier\Message\ChatMessage;
 use Symfony\Component\Routing\Annotation\Route;
 
 final class PlanningCrudController extends AbstractCrudController
 {
-    public function __construct(private TokenStorageInterface $tokenStorage)
-    {
-    }
-
     public static function getEntityFqcn(): string
     {
         return Planning::class;
@@ -50,24 +39,12 @@ final class PlanningCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-        /** @var OAuthToken $twitterToken */
-        $twitterToken = $this->tokenStorage['twitter'];
-
-        if (!$twitterToken->isAuthenticated()) {
-            $actions->disable('tweet');
-        }
-
-        $tweet = Action::new('tweet', 'Tweet')
-            ->linkToRoute('admin_planning_tweet', static fn (Planning $planning): array => ['id' => $planning->getId()]);
-
-        $discord = Action::new('discord', 'Discord')
-            ->linkToRoute('admin_planning_discord', static fn (Planning $planning): array => ['id' => $planning->getId()]);
+        $communicate = Action::new('communicate', 'Communiquer')
+            ->linkToRoute('admin_planning_communicate', static fn (Planning $planning): array => ['id' => $planning->getId()]);
 
         return $actions
-            ->add(Crud::PAGE_INDEX, $tweet)
-            ->add(Crud::PAGE_DETAIL, $tweet)
-            ->add(Crud::PAGE_INDEX, $discord)
-            ->add(Crud::PAGE_DETAIL, $discord)
+            ->add(Crud::PAGE_INDEX, $communicate)
+            ->add(Crud::PAGE_DETAIL, $communicate)
             ->add(Crud::PAGE_INDEX, Action::DETAIL);
     }
 
@@ -83,34 +60,22 @@ final class PlanningCrudController extends AbstractCrudController
             ->hideOnForm();
     }
 
-    #[Route('/admin/plannings/{id}/tweet', name: 'admin_planning_tweet')]
-    public function tweet(int $id, AdminUrlGenerator $adminUrlGenerator, TwitterClient $twitterClient): RedirectResponse
-    {
-        $twitterClient->tweet(sprintf('https://toham.thomas-boileau.fr/twitch/%d', $id));
+    #[Route('/admin/plannings/{id}/communicate', name: 'admin_planning_communicate')]
+    public function communicate(
+        Planning $planning,
+        AdminUrlGenerator $adminUrlGenerator,
+        SocialNetworkInterface $socialNetwork
+    ): RedirectResponse {
+        $image = sprintf('https://toham.thomas-boileau.fr/uploads/%d', $planning->getImage());
 
-        return new RedirectResponse(
-            $adminUrlGenerator
-                ->setController(self::class)
-                ->setAction(Action::DETAIL)
-                ->setEntityId($id)
-                ->generateUrl()
-        );
-    }
+        $link = sprintf('https://toham.thomas-boileau.fr/twitch/%d', $planning->getId());
 
-    #[Route('/admin/plannings/{id}/discord', name: 'admin_planning_discord')]
-    public function discord(Planning $planning, AdminUrlGenerator $adminUrlGenerator, ChatterInterface $chatter): RedirectResponse
-    {
-        $discordEmbedObject = (new DiscordMediaEmbedObject())
-            ->url(sprintf('https://toham.thomas-boileau.fr/uploads/%d', $planning->getImage()));
-
-        $discordOptions = (new DiscordOptions())->addEmbed((new DiscordEmbed())->image($discordEmbedObject));
-
-        $chatter->send((new ChatMessage(<<<EOF
-@everyone
-
+        $socialNetwork->send(<<<EOF
 Planning de stream du {$planning->getStartedAt()->format('d/m/Y')} au {$planning->getEndedAt()->format('d/m/Y')}
+
+{$link}
 EOF
-        ))->options($discordOptions)->transport('discord'));
+            , $image);
 
         return new RedirectResponse(
             $adminUrlGenerator

@@ -6,7 +6,7 @@ namespace App\EventSubscriber;
 
 use App\Entity\Live;
 use App\Entity\Planning;
-use App\Generator\PlanningGeneratorInterface;
+use App\Planning\PlanningGeneratorInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityDeletedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityPersistedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityUpdatedEvent;

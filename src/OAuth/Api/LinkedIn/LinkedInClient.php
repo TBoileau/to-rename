@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\OAuth\Api\Twitter;
+namespace App\OAuth\Api\LinkedIn;
 
 use App\OAuth\ClientInterface;
 use App\OAuth\ClientTrait;
@@ -10,7 +10,7 @@ use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-final class TwitterClient implements ClientInterface
+final class LinkedInClient implements ClientInterface
 {
     use ClientTrait;
 
@@ -42,7 +42,7 @@ final class TwitterClient implements ClientInterface
 
     public static function getName(): string
     {
-        return 'twitter';
+        return 'linkedin';
     }
 
     /**
@@ -84,12 +84,9 @@ final class TwitterClient implements ClientInterface
     public function createAuthUrl(): string
     {
         return sprintf(
-            'https://twitter.com/i/oauth2/authorize?%s',
+            'https://www.linkedin.com/oauth/v2/authorization?%s',
             http_build_query([
                 'response_type' => 'code',
-                'code_challenge' => 'challenge',
-                'code_challenge_method' => 'plain',
-                'state' => 'state',
                 'client_id' => $this->clientId,
                 'redirect_uri' => $this->redirectUri,
                 'scope' => $this->scopes,
@@ -126,27 +123,22 @@ final class TwitterClient implements ClientInterface
 
     public function fetchAccessTokenWithAuthCode($code): array
     {
-        $response = $this->httpClient->request(Request::METHOD_POST, 'https://api.twitter.com/2/oauth2/token', [
-            'headers' => [
-                'Authorization' => sprintf('Basic %s', base64_encode(sprintf('%s:%s', $this->clientId, $this->clientSecret))),
-            ],
+        $response = $this->httpClient->request(Request::METHOD_POST, 'https://www.linkedin.com/oauth/v2/accessToken', [
             'body' => [
                 'grant_type' => 'authorization_code',
                 'code' => $code,
+                'client_id' => $this->clientId,
+                'client_secret' => $this->clientSecret,
                 'redirect_uri' => $this->redirectUri,
-                'code_verifier' => 'challenge',
             ],
         ]);
 
         return $response->toArray();
     }
 
-    /**
-     * @return array{data: array{id: string, text: string}}
-     */
-    public function tweet(string $message): array
+    public function tweet(string $message): void
     {
-        $response = $this->httpClient->request(Request::METHOD_POST, 'https://api.twitter.com/2/tweets', [
+        $this->httpClient->request(Request::METHOD_POST, 'https://api.twitter.com/2/tweets', [
             'headers' => [
                 'Authorization' => sprintf('Bearer %s', $this->accessToken['access_token']), /* @phpstan-ignore-line */
             ],
@@ -154,24 +146,21 @@ final class TwitterClient implements ClientInterface
                 'text' => $message,
             ],
         ]);
-
-        /** @phpstan-ignore-next-line */
-        return $response->toArray();
     }
 
     public function fetchAccessTokenWithRefreshToken($refreshToken)
     {
-        $response = $this->httpClient->request(Request::METHOD_POST, 'https://api.twitter.com/2/oauth2/token', [
+        return [];
+    }
+
+    public function getProfileId(): string
+    {
+        $response = $this->httpClient->request(Request::METHOD_GET, 'https://api.linkedin.com/v2/me?projection=(id)', [
             'headers' => [
-                'Authorization' => sprintf('Basic %s', base64_encode(sprintf('%s:%s', $this->clientId, $this->clientSecret))),
-            ],
-            'body' => [
-                'grant_type' => 'refresh_token',
-                'client_id' => $this->clientId,
-                'refresh_token' => $refreshToken,
+                'Authorization' => sprintf('Bearer %s', $this->accessToken['access_token']), /* @phpstan-ignore-line */
             ],
         ]);
 
-        return $response->toArray();
+        return $response->toArray()['id'];
     }
 }

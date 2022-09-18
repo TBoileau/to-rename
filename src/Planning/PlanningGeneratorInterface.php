@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Generator;
+namespace App\Planning;
 
 use App\Entity\Planning;
 

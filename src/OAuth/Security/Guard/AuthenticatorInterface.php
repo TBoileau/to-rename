@@ -18,4 +18,9 @@ interface AuthenticatorInterface
     public function setRedirectUri(): void;
 
     public static function getName(): string;
+
+    /**
+     * @param array<string, mixed> $accessToken
+     */
+    public function onAuthenticationSuccess(array $accessToken): void;
 }

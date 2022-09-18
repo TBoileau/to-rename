@@ -14,4 +14,11 @@ interface VideoProviderInterface
      * @return iterable<array-key, Video>
      */
     public function findAll(): iterable;
+
+    /**
+     * @param array<array-key, string> $ids
+     *
+     * @return array<array-key, Video>
+     */
+    public function get(array $ids): array;
 }

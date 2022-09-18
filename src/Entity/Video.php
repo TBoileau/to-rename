@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use App\Doctrine\Type\StatusType;
 use App\Repository\VideoRepository;
+use App\Video\CategoryInterface;
 use App\Video\VideoInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
@@ -40,9 +41,9 @@ class Video implements VideoInterface
     #[Column(type: Types::TEXT)]
     private string $description;
 
-    #[ManyToOne(targetEntity: Logo::class)]
+    #[ManyToOne(targetEntity: Category::class)]
     #[JoinColumn(onDelete: 'SET NULL')]
-    private ?Logo $logo = null;
+    private ?CategoryInterface $category = null;
 
     #[Column(type: Types::STRING)]
     private string $thumbnail;
@@ -63,6 +64,15 @@ class Video implements VideoInterface
 
     #[Column(type: StatusType::NAME)]
     private Status $status = Status::Public;
+
+    #[Column(type: Types::INTEGER)]
+    private int $views = 0;
+
+    #[Column(type: Types::INTEGER)]
+    private int $likes = 0;
+
+    #[Column(type: Types::INTEGER)]
+    private int $comments = 0;
 
     public function getId(): ?int
     {
@@ -119,14 +129,14 @@ class Video implements VideoInterface
         $this->live = $live;
     }
 
-    public function getLogo(): ?Logo
+    public function getCategory(): ?CategoryInterface
     {
-        return $this->logo;
+        return $this->category;
     }
 
-    public function setLogo(Logo $logo): void
+    public function setCategory(?CategoryInterface $category): void
     {
-        $this->logo = $logo;
+        $this->category = $category;
     }
 
     /**
@@ -193,5 +203,35 @@ class Video implements VideoInterface
     public function setPrivacyStatus(string $privacyStatus): void
     {
         $this->status = Status::from($privacyStatus);
+    }
+
+    public function getViews(): int
+    {
+        return $this->views;
+    }
+
+    public function setViews(int $views): void
+    {
+        $this->views = $views;
+    }
+
+    public function getLikes(): int
+    {
+        return $this->likes;
+    }
+
+    public function setLikes(int $likes): void
+    {
+        $this->likes = $likes;
+    }
+
+    public function getComments(): int
+    {
+        return $this->comments;
+    }
+
+    public function setComments(int $comments): void
+    {
+        $this->comments = $comments;
     }
 }
