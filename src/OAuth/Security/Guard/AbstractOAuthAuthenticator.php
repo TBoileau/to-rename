@@ -10,6 +10,7 @@ use App\OAuth\Security\Provider\ProviderInterface;
 use App\OAuth\Security\Token\TokenInterface;
 use App\Repository\TokenRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -55,22 +56,26 @@ abstract class AbstractOAuthAuthenticator implements AuthenticatorInterface
                 return;
             }
 
-            $accessToken = $this->provider->fetchAccessTokenWithRefreshToken($token->getRefreshToken());
+            try {
+                $accessToken = $this->provider->fetchAccessTokenWithRefreshToken($token->getRefreshToken());
 
-            if (!isset($accessToken['created'])) {
-                $accessToken['created'] = time();
+                if (!isset($accessToken['created'])) {
+                    $accessToken['created'] = time();
+                }
+
+                /** @var string $refreshToken */
+                $refreshToken = $accessToken['refresh_token'];
+
+                $this->updateRefreshToken($refreshToken);
+
+                $session->set($this->getSessionKey(), $accessToken);
+
+                $this->token->save($accessToken);
+
+                $this->onAuthenticationSuccess($accessToken);
+            } catch (Exception) {
+                $session->remove($this->getSessionKey());
             }
-
-            /** @var string $refreshToken */
-            $refreshToken = $accessToken['refresh_token'];
-
-            $this->updateRefreshToken($refreshToken);
-
-            $session->set($this->getSessionKey(), $accessToken);
-
-            $this->token->save($accessToken);
-
-            $this->onAuthenticationSuccess($accessToken);
         }
     }
 
