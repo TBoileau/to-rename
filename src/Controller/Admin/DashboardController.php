@@ -53,13 +53,13 @@ final class DashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Utilisateurs', 'fa fa-user', User::class);
-        yield MenuItem::subMenu('Contenu', 'fa fa-video')->setSubItems([
+        yield MenuItem::subMenu('Gestion du contenu', 'fa fa-video')->setSubItems([
             MenuItem::linkToCrud('Videos', 'fab fa-youtube', Video::class),
             MenuItem::linkToCrud('Catégories', 'fa fa-image', Category::class),
             MenuItem::linkToCrud('Planning', 'fa fa-calendar', Planning::class),
              MenuItem::linkToCrud('Lives', 'fa fa-video-camera', Live::class),
         ]);
-        yield MenuItem::subMenu('Défi', 'fa fa-dice')->setSubItems([
+        yield MenuItem::subMenu('Gestion des défis', 'fa fa-dice')->setSubItems([
             MenuItem::linkToCrud('Règles', 'fa fa-scroll', Rule::class),
             MenuItem::linkToCrud('Défis', 'fa fa-chess', Challenge::class),
         ]);
