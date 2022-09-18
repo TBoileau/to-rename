@@ -4,6 +4,14 @@ Le `changelog` liste toutes les nouveautés intégrées à chaque `release`.
 
 Ce projet respecte [Semantic Versioning](https://semver.org/) et les [recommandations](https://keepachangelog.com/en/1.0.0/).
 
+## [2022-09-18] 1.1.0
+* Communiquer en une seule fois [#64](https://github.com/TBoileau/twitch/issues/64)
+* Récupérer les statistiques des vidéos [#62](https://github.com/TBoileau/twitch/issues/62)
+* Créer un transport notifier pour Twitter [#61](https://github.com/TBoileau/twitch/issues/61)
+* Revoir la gestion du titre d'une vidéo en fonction de la catégorie [#59](https://github.com/TBoileau/twitch/issues/59)
+* Remplacer la notion de logo par catégorie [#57](https://github.com/TBoileau/twitch/issues/57)
+* Poster le contenu sur LinkedIn [#54](https://github.com/TBoileau/twitch/issues/54)
+
 ## [2022-09-17] 1.0.2
 * Modification de la LICENSE
 
