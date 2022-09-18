@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Entity\Category;
+use App\Entity\Challenge;
 use App\Entity\Live;
 use App\Entity\Planning;
 use App\Entity\Rule;
@@ -60,6 +61,7 @@ final class DashboardController extends AbstractDashboardController
         ]);
         yield MenuItem::subMenu('Défi', 'fa fa-dice')->setSubItems([
             MenuItem::linkToCrud('Règles', 'fa fa-scroll', Rule::class),
+            MenuItem::linkToCrud('Défis', 'fa fa-chess', Challenge::class),
         ]);
     }
 }

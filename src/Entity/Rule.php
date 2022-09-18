@@ -10,9 +10,10 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
+use Stringable;
 
 #[Entity(repositoryClass: RuleRepository::class)]
-class Rule
+class Rule implements Stringable
 {
     #[Id]
     #[GeneratedValue]
@@ -61,5 +62,10 @@ class Rule
     public function setPoints(int $points): void
     {
         $this->points = $points;
+    }
+
+    public function __toString(): string
+    {
+        return $this->name;
     }
 }

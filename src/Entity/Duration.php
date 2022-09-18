@@ -7,16 +7,24 @@ namespace App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Embeddable;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
+use Symfony\Component\Validator\Constraints\LessThanOrEqual;
 
 #[Embeddable]
 class Duration
 {
+    #[GreaterThanOrEqual(0)]
+    #[LessThanOrEqual(23)]
     #[Column(type: Types::INTEGER)]
     private int $hours;
 
+    #[GreaterThanOrEqual(0)]
+    #[LessThanOrEqual(59)]
     #[Column(type: Types::INTEGER)]
     private int $minutes;
 
+    #[GreaterThanOrEqual(0)]
+    #[LessThanOrEqual(59)]
     #[Column(type: Types::INTEGER)]
     private int $seconds;
 

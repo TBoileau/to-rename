@@ -14,9 +14,14 @@ use Doctrine\ORM\Mapping\Embedded;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
-use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
+use Symfony\Component\Validator\Constraints\Count;
+use Symfony\Component\Validator\Constraints\GreaterThan;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Constraints\Url;
+use Symfony\Component\Validator\Constraints\Valid;
 
 #[Entity(repositoryClass: ChallengeRepository::class)]
 class Challenge
@@ -27,32 +32,42 @@ class Challenge
     private ?int $id = null;
 
     #[ManyToOne(targetEntity: Live::class)]
-    #[JoinColumn(nullable: false)]
-    private Live $live;
+    private ?Live $live = null;
 
     #[ManyToOne(targetEntity: Video::class)]
-    private ?Video $video;
+    private ?Video $video = null;
 
+    #[NotBlank]
     #[Column(type: Types::TEXT)]
     private string $description;
 
+    #[NotNull]
+    #[Valid]
     #[Embedded(class: Duration::class)]
     private Duration $duration;
 
-    #[Column(type: Types::DATETIME_IMMUTABLE)]
+    #[Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?DateTimeImmutable $startedAt = null;
 
-    #[Column(type: Types::DATETIME_IMMUTABLE)]
+    #[Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?DateTimeImmutable $endedAt = null;
 
+    #[NotBlank]
+    #[GreaterThan(0)]
     #[Column(type: Types::INTEGER)]
     private int $basePoints;
 
     /**
      * @var Collection<int, ChallengeRule>
      */
-    #[OneToMany(mappedBy: 'challenge', targetEntity: ChallengeRule::class)]
+    #[OneToMany(mappedBy: 'challenge', targetEntity: ChallengeRule::class, cascade: ['persist'], orphanRemoval: true)]
+    #[Valid]
+    #[Count(min: 1)]
     private Collection $rules;
+
+    #[Url]
+    #[Column(type: Types::STRING, nullable: true)]
+    private ?string $repository = null;
 
     public function __construct()
     {
@@ -64,12 +79,12 @@ class Challenge
         return $this->id;
     }
 
-    public function getLive(): Live
+    public function getLive(): ?Live
     {
         return $this->live;
     }
 
-    public function setLive(Live $live): void
+    public function setLive(?Live $live): void
     {
         $this->live = $live;
     }
@@ -132,6 +147,18 @@ class Challenge
         return $this->rules;
     }
 
+    public function addRule(ChallengeRule $rule): void
+    {
+        $rule->setChallenge($this);
+        $this->rules->add($rule);
+    }
+
+    public function removeRule(ChallengeRule $rule): void
+    {
+        $rule->setChallenge(null);
+        $this->rules->removeElement($rule);
+    }
+
     public function getBasePoints(): int
     {
         return $this->basePoints;
@@ -144,8 +171,32 @@ class Challenge
 
     public function isSucceed(): bool
     {
-        return $this->basePoints - array_sum($this->getRules()
-            ->map(static fn (ChallengeRule $challengeRule): int => $challengeRule->getHit() * $challengeRule->getRule()->getPoints())
-            ->toArray()) > 0;
+        return null !== $this->endedAt && $this->getFinalPoints() >= 0;
+    }
+
+    public function getRepository(): ?string
+    {
+        return $this->repository;
+    }
+
+    public function setRepository(?string $repository): void
+    {
+        $this->repository = $repository;
+    }
+
+    public function getTotalPoints(): int
+    {
+        return intval(
+            array_sum(
+                $this->getRules()
+                        ->map(static fn (ChallengeRule $challengeRule): int => $challengeRule->getTotal())
+                        ->toArray()
+            )
+        );
+    }
+
+    public function getFinalPoints(): int
+    {
+        return $this->basePoints - $this->getTotalPoints();
     }
 }
