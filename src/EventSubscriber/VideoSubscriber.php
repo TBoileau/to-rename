@@ -22,7 +22,7 @@ final class VideoSubscriber implements EventSubscriberInterface
         private VideoManagerInterface $videoManager,
         TokenStorageInterface $tokenStorage
     ) {
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         $this->googleToken = $tokenStorage['google'];
     }
 

@@ -65,6 +65,15 @@ class Video implements VideoInterface
     #[Column(type: StatusType::NAME)]
     private Status $status = Status::Public;
 
+    #[Column(type: Types::INTEGER)]
+    private int $views = 0;
+
+    #[Column(type: Types::INTEGER)]
+    private int $likes = 0;
+
+    #[Column(type: Types::INTEGER)]
+    private int $comments = 0;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -194,5 +203,35 @@ class Video implements VideoInterface
     public function setPrivacyStatus(string $privacyStatus): void
     {
         $this->status = Status::from($privacyStatus);
+    }
+
+    public function getViews(): int
+    {
+        return $this->views;
+    }
+
+    public function setViews(int $views): void
+    {
+        $this->views = $views;
+    }
+
+    public function getLikes(): int
+    {
+        return $this->likes;
+    }
+
+    public function setLikes(int $likes): void
+    {
+        $this->likes = $likes;
+    }
+
+    public function getComments(): int
+    {
+        return $this->comments;
+    }
+
+    public function setComments(int $comments): void
+    {
+        $this->comments = $comments;
     }
 }

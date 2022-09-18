@@ -1,3 +1,7 @@
+:root {
+    --body-max-width: 100%;
+}
+
 .modal-body iframe {
     aspect-ratio: 16/9;
     max-height: 90%;

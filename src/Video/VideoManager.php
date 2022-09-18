@@ -177,6 +177,54 @@ final class VideoManager implements VideoManagerInterface, VideoCollectInterface
         $videoStatus = $youtubeVideo->getStatus();
 
         $video->setPrivacyStatus($videoStatus->getPrivacyStatus());
+
+        $videoStatistics = $youtubeVideo->getStatistics();
+
+        $video->setViews((int) $videoStatistics->getViewCount());
+        $video->setLikes((int) $videoStatistics->getLikeCount());
+        $video->setComments((int) $videoStatistics->getCommentCount());
+    }
+
+    public function updateStatistics(): void
+    {
+        /** @var array<array-key, Video> $videos */
+        $videos = $this->videoRepository->findAll();
+
+        /** @var array<string, Video> $videos */
+        $videos = array_combine(
+            array_map(
+                static fn (Video $video): string => $video->getYoutubeId(),
+                $videos
+            ),
+            $videos
+        );
+
+        $page = 1;
+
+        do {
+            $videosToUpdate = array_slice($videos, ($page - 1) * 50, 50);
+
+            $youtubeVideos = $this->videoProvider->get(
+                array_map(
+                    static fn (Video $video): string => $video->getYoutubeId(),
+                    $videosToUpdate
+                )
+            );
+
+            foreach ($youtubeVideos as $youtubeVideo) {
+                $video = $videos[$youtubeVideo->getId()];
+
+                $videoStatistics = $youtubeVideo->getStatistics();
+
+                $video->setViews((int) $videoStatistics->getViewCount());
+                $video->setLikes((int) $videoStatistics->getLikeCount());
+                $video->setComments((int) $videoStatistics->getCommentCount());
+            }
+
+            $this->entityManager->flush();
+
+            ++$page;
+        } while (ceil(count($videos) / 50) < $page);
     }
 
     public function getVideosUpdated(): array
