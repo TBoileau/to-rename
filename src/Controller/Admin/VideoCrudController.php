@@ -9,6 +9,7 @@ use App\EasyAdmin\Filter\StatusFilter;
 use App\Entity\Video;
 use App\OAuth\Security\Token\OAuthToken;
 use App\OAuth\Security\Token\TokenStorageInterface;
+use App\SocialNetwork\SocialNetworkInterface;
 use App\Video\VideoManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -24,12 +25,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Notifier\ChatterInterface;
-use Symfony\Component\Notifier\Message\ChatMessage;
 use Symfony\Component\Routing\Annotation\Route;
-
-use function Symfony\Component\String\u;
-
 use Symfony\Component\Validator\Constraints\NotNull;
 
 final class VideoCrudController extends AbstractCrudController
@@ -72,20 +68,6 @@ final class VideoCrudController extends AbstractCrudController
             $actions->disable(Action::EDIT, 'synchronize', 'statistics');
         }
 
-        /** @var OAuthToken $twitterToken */
-        $twitterToken = $this->tokenStorage['twitter'];
-
-        if (!$twitterToken->isAuthenticated()) {
-            $actions->disable('tweet');
-        }
-
-        /** @var OAuthToken $linkedInToken */
-        $linkedInToken = $this->tokenStorage['linkedin'];
-
-        if (!$linkedInToken->isAuthenticated()) {
-            $actions->disable('linkedin');
-        }
-
         $statistics = Action::new('statistics', 'Statistiques')
             ->createAsGlobalAction()
             ->linkToRoute('admin_video_statistics');
@@ -94,22 +76,12 @@ final class VideoCrudController extends AbstractCrudController
             ->createAsGlobalAction()
             ->linkToRoute('admin_video_synchronize');
 
-        $tweet = Action::new('tweet', 'Tweet')
-            ->linkToRoute('admin_video_tweet', static fn (Video $video): array => ['id' => $video->getId()]);
-
-        $discord = Action::new('discord', 'Discord')
-            ->linkToRoute('admin_video_discord', static fn (Video $video): array => ['id' => $video->getId()]);
-
-        $linkedin = Action::new('linkedin', 'LinkedIn')
-            ->linkToRoute('admin_video_linkedin', static fn (Video $video): array => ['id' => $video->getId()]);
+        $communicate = Action::new('communicate', 'Communiquer')
+            ->linkToRoute('admin_video_communicate', static fn (Video $video): array => ['id' => $video->getId()]);
 
         return $actions
-            ->add(Crud::PAGE_INDEX, $tweet)
-            ->add(Crud::PAGE_DETAIL, $tweet)
-            ->add(Crud::PAGE_INDEX, $discord)
-            ->add(Crud::PAGE_DETAIL, $discord)
-            ->add(Crud::PAGE_INDEX, $linkedin)
-            ->add(Crud::PAGE_DETAIL, $linkedin)
+            ->add(Crud::PAGE_INDEX, $communicate)
+            ->add(Crud::PAGE_DETAIL, $communicate)
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
             ->add(Crud::PAGE_INDEX, $synchronize)
             ->add(Crud::PAGE_INDEX, $statistics);
@@ -171,65 +143,20 @@ final class VideoCrudController extends AbstractCrudController
         );
     }
 
-    #[Route('/admin/videos/{id}/tweet', name: 'admin_video_tweet')]
-    public function tweet(Video $video, AdminUrlGenerator $adminUrlGenerator, ChatterInterface $chatter): RedirectResponse
-    {
-        $chatter->send((new ChatMessage(<<<EOF
+    #[Route('/admin/videos/{id}/communicate', name: 'admin_video_communicate')]
+    public function communicate(
+        Video $video,
+        AdminUrlGenerator $adminUrlGenerator,
+        SocialNetworkInterface $socialNetwork
+    ): RedirectResponse {
+        $socialNetwork->send(<<<EOF
 Nouvelle vidéo disponible sur la chaîne Youtube ! 
 
 {$video->getTitle()}
 
 https://www.youtube.com/watch?v={$video->getYoutubeId()}
 EOF
-        ))->transport('twitter'));
-
-        return new RedirectResponse(
-            $adminUrlGenerator
-                ->setController(self::class)
-                ->setAction(Action::DETAIL)
-                ->setEntityId($video->getId())
-                ->generateUrl()
         );
-    }
-
-    #[Route('/admin/videos/{id}/discord', name: 'admin_video_discord')]
-    public function discord(Video $video, AdminUrlGenerator $adminUrlGenerator, ChatterInterface $chatter): RedirectResponse
-    {
-        $title = u($video->getTitle())->trim()->toString();
-
-        $chatter->send((new ChatMessage(<<<EOF
-@everyone
-
-Nouvelle vidéo disponible sur la chaîne Youtube ! 
-
-{$title}
-
-https://www.youtube.com/watch?v={$video->getYoutubeId()}
-EOF
-        ))->transport('discord'));
-
-        return new RedirectResponse(
-            $adminUrlGenerator
-                ->setController(self::class)
-                ->setAction(Action::DETAIL)
-                ->setEntityId($video->getId())
-                ->generateUrl()
-        );
-    }
-
-    #[Route('/admin/videos/{id}/linkedin', name: 'admin_video_linkedin')]
-    public function linkedin(Video $video, AdminUrlGenerator $adminUrlGenerator, ChatterInterface $chatter): RedirectResponse
-    {
-        $title = u($video->getTitle())->trim()->toString();
-
-        $chatter->send((new ChatMessage(<<<EOF
-Nouvelle vidéo disponible sur la chaîne Youtube ! 
-
-{$title}
-
-https://www.youtube.com/watch?v={$video->getYoutubeId()}
-EOF
-        ))->transport('linkedin'));
 
         return new RedirectResponse(
             $adminUrlGenerator
