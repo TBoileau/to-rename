@@ -155,7 +155,7 @@ final class TwitterClient implements ClientInterface
             ],
         ]);
 
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         return $response->toArray();
     }
 
