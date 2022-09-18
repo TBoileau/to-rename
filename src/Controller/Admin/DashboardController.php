@@ -7,6 +7,7 @@ namespace App\Controller\Admin;
 use App\Entity\Category;
 use App\Entity\Live;
 use App\Entity\Planning;
+use App\Entity\Rule;
 use App\Entity\User;
 use App\Entity\Video;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
@@ -51,9 +52,14 @@ final class DashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Utilisateurs', 'fa fa-user', User::class);
-        yield MenuItem::linkToCrud('Videos', 'fab fa-youtube', Video::class);
-        yield MenuItem::linkToCrud('Catégories', 'fa fa-image', Category::class);
-        yield MenuItem::linkToCrud('Planning', 'fa fa-calendar', Planning::class);
-        yield MenuItem::linkToCrud('Lives', 'fa fa-video-camera', Live::class);
+        yield MenuItem::subMenu('Contenu', 'fa fa-video')->setSubItems([
+            MenuItem::linkToCrud('Videos', 'fab fa-youtube', Video::class),
+            MenuItem::linkToCrud('Catégories', 'fa fa-image', Category::class),
+            MenuItem::linkToCrud('Planning', 'fa fa-calendar', Planning::class),
+             MenuItem::linkToCrud('Lives', 'fa fa-video-camera', Live::class),
+        ]);
+        yield MenuItem::subMenu('Défi', 'fa fa-dice')->setSubItems([
+            MenuItem::linkToCrud('Règles', 'fa fa-scroll', Rule::class),
+        ]);
     }
 }

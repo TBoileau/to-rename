@@ -25,7 +25,7 @@ class ChallengeRule
     private Challenge $challenge;
 
     #[ManyToOne(targetEntity: Rule::class)]
-    #[JoinColumn(nullable: false)]
+    #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private Rule $rule;
 
     #[Column(type: Types::INTEGER)]
