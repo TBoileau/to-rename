@@ -66,7 +66,7 @@ final class PlanningCrudController extends AbstractCrudController
         AdminUrlGenerator $adminUrlGenerator,
         SocialNetworkInterface $socialNetwork
     ): RedirectResponse {
-        $image = sprintf('https://toham.thomas-boileau.fr/uploads/%d', $planning->getImage());
+        $image = sprintf('https://toham.thomas-boileau.fr/uploads/%s', $planning->getImage());
 
         $link = sprintf('https://toham.thomas-boileau.fr/twitch/%d', $planning->getId());
 
