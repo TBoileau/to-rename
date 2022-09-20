@@ -115,7 +115,7 @@ final class TwitterClient implements ClientInterface
 
     public function isAccessTokenExpired(): bool
     {
-        if (null === $this->accessToken) {
+        if (null === $this->accessToken || !isset($this->accessToken['access_token'])) {
             return true;
         }
 
