@@ -10,6 +10,7 @@ use App\OAuth\Security\Provider\ProviderInterface;
 use App\OAuth\Security\Token\TokenInterface;
 use App\Repository\TokenRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -44,6 +45,8 @@ abstract class AbstractOAuthAuthenticator implements AuthenticatorInterface
         if (null !== $token) {
             $this->token->save($token);
 
+            $this->updateRefreshToken();
+
             $this->onAuthenticationSuccess($token);
         }
 
@@ -55,7 +58,14 @@ abstract class AbstractOAuthAuthenticator implements AuthenticatorInterface
                 return;
             }
 
-            $accessToken = $this->provider->fetchAccessTokenWithRefreshToken($token->getRefreshToken());
+            try {
+                $accessToken = $this->provider->fetchAccessTokenWithRefreshToken($token->getRefreshToken());
+            } catch (Exception) {
+                $this->updateRefreshToken();
+                $session->remove($this->getSessionKey());
+
+                return;
+            }
 
             if (!isset($accessToken['created'])) {
                 $accessToken['created'] = time();
@@ -100,7 +110,7 @@ abstract class AbstractOAuthAuthenticator implements AuthenticatorInterface
     {
     }
 
-    private function updateRefreshToken(string $refreshToken): void
+    private function updateRefreshToken(?string $refreshToken = null): void
     {
         /** @var Token $token */
         $token = $this->tokenRepository->findOneBy(['name' => static::getName()]);
