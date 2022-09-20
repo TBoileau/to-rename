@@ -32,6 +32,13 @@ class ChallengeRule
     #[Column(type: Types::INTEGER)]
     private int $hits = 0;
 
+    public static function createFromRule(Rule $rule): self
+    {
+        $challengeRule = new self();
+        $challengeRule->rule = $rule;
+        return $challengeRule;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

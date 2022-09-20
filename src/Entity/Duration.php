@@ -18,17 +18,17 @@ class Duration
     #[GreaterThanOrEqual(0)]
     #[LessThanOrEqual(23)]
     #[Column(type: Types::INTEGER)]
-    private int $hours;
+    private int $hours = 0;
 
     #[GreaterThanOrEqual(0)]
     #[LessThanOrEqual(59)]
     #[Column(type: Types::INTEGER)]
-    private int $minutes;
+    private int $minutes = 0;
 
     #[GreaterThanOrEqual(0)]
     #[LessThanOrEqual(59)]
     #[Column(type: Types::INTEGER)]
-    private int $seconds;
+    private int $seconds = 0;
 
     public function getHours(): int
     {
