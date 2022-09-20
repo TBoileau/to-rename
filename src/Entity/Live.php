@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\LiveRepository;
-use DateTimeInterface;
+use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Embedded;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
@@ -19,6 +20,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use function Symfony\Component\String\u;
 
 use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Constraints\Valid;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[Entity(repositoryClass: LiveRepository::class)]
@@ -31,7 +34,12 @@ class Live implements Stringable
     private ?int $id = null;
 
     #[Column(type: Types::DATETIME_IMMUTABLE)]
-    private DateTimeInterface $livedAt;
+    private DateTimeImmutable $livedAt;
+
+    #[NotNull]
+    #[Valid]
+    #[Embedded(class: Duration::class)]
+    private Duration $duration;
 
     #[Column(type: Types::TEXT)]
     private string $description;
@@ -45,12 +53,12 @@ class Live implements Stringable
         return $this->id;
     }
 
-    public function getLivedAt(): DateTimeInterface
+    public function getLivedAt(): DateTimeImmutable
     {
         return $this->livedAt;
     }
 
-    public function setLivedAt(DateTimeInterface $livedAt): void
+    public function setLivedAt(DateTimeImmutable $livedAt): void
     {
         $this->livedAt = $livedAt;
     }
@@ -102,5 +110,20 @@ class Live implements Stringable
                 ->atPath('livedAt')
                 ->addViolation();
         }
+    }
+
+    public function getDuration(): Duration
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(Duration $duration): void
+    {
+        $this->duration = $duration;
+    }
+
+    public function getEndedAt(): DateTimeImmutable
+    {
+        return $this->duration->addTo($this->livedAt);
     }
 }

@@ -11,6 +11,7 @@ parameters:
     fonts.monument: '%kernel.project_dir%/public/fonts/MonumentExtended-Regular.otf'
     intervention.driver: imagick
     container.dumper.inline_factories: true
+    timezone: '%env(APP_TIMEZONE)%'
 services:
     # default configuration for services in *this* file
     _defaults:

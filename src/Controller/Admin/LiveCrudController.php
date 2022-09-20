@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
+use App\EasyAdmin\Field\DurationField;
 use App\Entity\Live;
 use App\SocialNetwork\SocialNetworkInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -55,6 +56,7 @@ final class LiveCrudController extends AbstractCrudController
         yield AssociationField::new('planning', 'Planning');
         yield DateTimeField::new('livedAt', 'Date')
             ->setFormat('dd/MM/yyyy HH:mm');
+        yield DurationField::new('duration', 'Durée')->setRequired(true);
     }
 
     #[Route('/admin/lives/{id}/communicate', name: 'admin_live_communicate')]
