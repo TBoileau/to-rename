@@ -81,7 +81,7 @@ final class VideoManager implements VideoManagerInterface, VideoCollectInterface
 
         $videoStatus->setPrivacyStatus($video->getPrivacyStatus());
 
-        $this->youtube->videos->update(['snippet', 'status'], $youtubeVideo);
+        $this->youtube->videos->update(['snippet', 'status', 'statistics'], $youtubeVideo);
 
         $this->youtube->getClient()->setDefer(true);
 
