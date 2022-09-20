@@ -55,14 +55,12 @@ class Challenge
     #[NotBlank]
     #[GreaterThan(0)]
     #[Column(type: Types::INTEGER)]
-    private int $basePoints;
+    private int $basePoints = 30;
 
     /**
      * @var Collection<int, ChallengeRule>
      */
     #[OneToMany(mappedBy: 'challenge', targetEntity: ChallengeRule::class, cascade: ['persist'], orphanRemoval: true)]
-    #[Valid]
-    #[Count(min: 1)]
     private Collection $rules;
 
     #[Url]
@@ -72,6 +70,7 @@ class Challenge
     public function __construct()
     {
         $this->rules = new ArrayCollection();
+        $this->duration = new Duration();
     }
 
     public function getId(): ?int

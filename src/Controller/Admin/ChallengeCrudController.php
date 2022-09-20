@@ -18,6 +18,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Routing\Annotation\Route;
 
 final class ChallengeCrudController extends AbstractCrudController
 {
@@ -56,6 +58,7 @@ final class ChallengeCrudController extends AbstractCrudController
             ->allowAdd(true)
             ->allowDelete(true)
             ->setTemplatePath('admin/field/challenge_rules.html.twig')
+            ->hideWhenCreating()
             ->hideOnIndex();
         yield IntegerField::new('basePoints', 'Points de base');
         yield IntegerField::new('totalPoints', 'Points total')->hideOnForm();
