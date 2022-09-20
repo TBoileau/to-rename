@@ -44,9 +44,6 @@ abstract class AbstractOAuthAuthenticator implements AuthenticatorInterface
 
         if (null !== $token) {
             $this->token->save($token);
-
-            $this->updateRefreshToken();
-
             $this->onAuthenticationSuccess($token);
         }
 
