@@ -45,6 +45,8 @@ abstract class AbstractOAuthAuthenticator implements AuthenticatorInterface
         if (null !== $token) {
             $this->token->save($token);
 
+            $this->updateRefreshToken();
+
             $this->onAuthenticationSuccess($token);
         }
 
@@ -74,6 +76,7 @@ abstract class AbstractOAuthAuthenticator implements AuthenticatorInterface
 
                 $this->onAuthenticationSuccess($accessToken);
             } catch (Exception) {
+                $this->updateRefreshToken();
                 $session->remove($this->getSessionKey());
             }
         }
@@ -105,7 +108,7 @@ abstract class AbstractOAuthAuthenticator implements AuthenticatorInterface
     {
     }
 
-    private function updateRefreshToken(string $refreshToken): void
+    private function updateRefreshToken(?string $refreshToken = null): void
     {
         /** @var Token $token */
         $token = $this->tokenRepository->findOneBy(['name' => static::getName()]);
