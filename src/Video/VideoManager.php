@@ -71,8 +71,8 @@ final class VideoManager implements VideoManagerInterface, VideoCollectInterface
             'S%02dE%02d - %s - %s',
             $video->getSeason(),
             $video->getEpisode(),
-            u($video->getTitle())->trim(),
             u($category->getName())->trim(),
+            u($video->getTitle())->trim(),
         ));
         $videoSnippet->setDescription($video->getDescription());
         $videoSnippet->setTags(array_values($video->getTags()));
