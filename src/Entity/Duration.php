@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use DateInterval;
+use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Embeddable;
@@ -56,5 +58,19 @@ class Duration
     public function setSeconds(int $seconds): void
     {
         $this->seconds = $seconds;
+    }
+
+    public function addTo(DateTimeImmutable $date): DateTimeImmutable
+    {
+        return $date->add(
+            new DateInterval(
+                sprintf(
+                    'PT%dH%dM%dS',
+                    $this->hours,
+                    $this->minutes,
+                    $this->seconds
+                )
+            )
+        );
     }
 }
