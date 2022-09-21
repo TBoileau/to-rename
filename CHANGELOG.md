@@ -4,6 +4,9 @@ Le `changelog` liste toutes les nouveautés intégrées à chaque `release`.
 
 Ce projet respecte [Semantic Versioning](https://semver.org/) et les [recommandations](https://keepachangelog.com/en/1.0.0/).
 
+## [2022-09-21] 1.2.4
+* Synchroniser une vidéo [#114](https://github.com/TBoileau/twitch/issues/114)
+
 ## [2022-09-21] 1.2.3
 * Commande pour déployer automatiquement
 
