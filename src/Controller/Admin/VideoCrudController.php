@@ -9,6 +9,7 @@ use App\EasyAdmin\Filter\StatusFilter;
 use App\Entity\Video;
 use App\OAuth\ClientInterface;
 use App\Video\VideoManagerInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -60,7 +61,7 @@ final class VideoCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         if ($this->googleClient->isAccessTokenExpired()) {
-            $actions->disable(Action::EDIT, 'synchronize', 'statistics');
+            $actions->disable(Action::EDIT, Action::NEW, 'synchronize', 'synchronizeOne', 'statistics');
         }
 
         $statistics = Action::new('statistics', 'Statistiques')
@@ -71,9 +72,14 @@ final class VideoCrudController extends AbstractCrudController
             ->createAsGlobalAction()
             ->linkToRoute('admin_video_synchronize');
 
+        $synchronizeOne = Action::new('synchronizeOne', 'Synchroniser')
+            ->linkToRoute('admin_video_synchronize_one', static fn (Video $video): array => ['id' => $video->getId()]);
+
         return $actions
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
             ->add(Crud::PAGE_INDEX, $synchronize)
+            ->add(Crud::PAGE_INDEX, $synchronizeOne)
+            ->add(Crud::PAGE_DETAIL, $synchronizeOne)
             ->add(Crud::PAGE_INDEX, $statistics);
     }
 
@@ -116,6 +122,26 @@ final class VideoCrudController extends AbstractCrudController
             $adminUrlGenerator
                 ->setController(self::class)
                 ->setAction(Action::INDEX)
+                ->generateUrl()
+        );
+    }
+
+    #[Route('/admin/videos/{id}/synchronize', name: 'admin_video_synchronize_one')]
+    public function synchronizeOne(
+        Video $video,
+        EntityManagerInterface $entityManager,
+        VideoManagerInterface $videoManager,
+        AdminUrlGenerator $adminUrlGenerator
+    ): RedirectResponse {
+        $videoManager->hydrate($video);
+
+        $entityManager->flush();
+
+        return new RedirectResponse(
+            $adminUrlGenerator
+                ->setController(self::class)
+                ->setAction(Action::DETAIL)
+                ->setEntityId($video->getId())
                 ->generateUrl()
         );
     }
