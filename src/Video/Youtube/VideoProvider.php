@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Video\Youtube;
 
-use App\OAuth\Api\Google\GoogleClient;
+use App\OAuth\GoogleClient;
 use Google\Service\YouTube\Video;
 use Google_Service_YouTube;
 

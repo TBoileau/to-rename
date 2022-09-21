@@ -36,6 +36,7 @@ class ChallengeRule
     {
         $challengeRule = new self();
         $challengeRule->rule = $rule;
+
         return $challengeRule;
     }
 
@@ -77,5 +78,10 @@ class ChallengeRule
     public function getTotal(): int
     {
         return $this->hits * $this->rule->getPoints();
+    }
+
+    public function hit(int $count): void
+    {
+        $this->hits += $count;
     }
 }

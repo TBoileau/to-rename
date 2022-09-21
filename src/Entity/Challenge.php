@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\ChallengeRepository;
+use DateInterval;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -16,7 +17,7 @@ use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
-use Symfony\Component\Validator\Constraints\Count;
+use LogicException;
 use Symfony\Component\Validator\Constraints\GreaterThan;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
@@ -196,6 +197,24 @@ class Challenge
 
     public function getFinalPoints(): int
     {
-        return $this->basePoints - $this->getTotalPoints();
+        return $this->basePoints + $this->getTotalPoints();
+    }
+
+    public function getTheoreticalEndDate(): DateTimeImmutable
+    {
+        if (null === $this->startedAt) {
+            throw new LogicException('The challenge must be started to get the theoretical end date.');
+        }
+
+        return $this->duration->addTo($this->startedAt);
+    }
+
+    public function getDiff(): ?DateInterval
+    {
+        if (null === $this->endedAt || null === $this->startedAt) {
+            return null;
+        }
+
+        return $this->endedAt->diff($this->startedAt);
     }
 }

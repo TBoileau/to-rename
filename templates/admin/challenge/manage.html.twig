@@ -1,0 +1,183 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block page_title 'Gestion d\'un challenge' %}
+
+{% block head_stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('css/countdown.css') }}" rel="stylesheet"/>
+{% endblock head_stylesheets %}
+
+{% block head_javascript %}
+    {{ parent() }}
+    <script defer src="{{ asset('js/countdown.js') }}"></script>
+{% endblock head_javascript %}
+
+{% block page_actions %}
+    {% if challenge.startedAt is null %}
+        <a class="btn btn-primary" href="{{ path('admin_challenge_start', {id: challenge.id}) }}">
+            <span class="btn-label"><span class="action-label">Commencer</span></span>
+        </a>
+    {% endif %}
+    {% if challenge.startedAt is not null and challenge.endedAt is null %}
+        <a class="btn btn-primary" href="{{ path('admin_challenge_finish', {id: challenge.id}) }}">
+            <span class="btn-label"><span class="action-label">Terminer</span></span>
+        </a>
+    {% endif %}
+    {% set url = ea_url()
+        .setController('App\\Controller\\Admin\\ChallengeCrudController')
+        .setAction('detail')
+        .setEntityId(challenge.id)
+    %}
+    <a class="btn btn-primary" href="{{ url }}">
+        <span class="btn-label"><span class="action-label">Consulter</span></span>
+    </a>
+    {% set url = ea_url()
+        .setController('App\\Controller\\Admin\\ChallengeCrudController')
+        .setAction('index')
+    %}
+    <a class="btn btn-light" href="{{ url }}">
+        <span class="btn-label"><span class="action-label">Retour à la liste</span></span>
+    </a>
+{% endblock %}
+
+{% block page_content %}
+    {% if challenge.startedAt is not null and challenge.endedAt is null %}
+        <div class="row">
+            <div class="col">
+                <div id="countdown" data-remaining-time="{{ challenge.theoreticalEndDate|date('U') }}">
+                    <ul>
+                        <li>
+                            <span id="hours"></span>
+                            Heures
+                        </li>
+                        <li>
+                            <span id="minutes"></span>
+                            Minutes
+                        </li>
+                        <li>
+                            <span id="seconds"></span>
+                            Secondes
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    {% elseif challenge.startedAt is null %}
+        <div class="row">
+            <div class="col">
+                <div class="alert alert-warning font-weight-bold">Ce challenge n'a toujours pas été commencé.</div>
+            </div>
+        </div>
+    {% endif %}
+    <dl class="datalist">
+        <div class="data-row field-textarea">
+            <dt>Description</dt>
+            <dd><span title="{{ challenge.description }}">{{ challenge.description }}</span></dd>
+        </div>
+        <div class="data-row ">
+            <dt>Durée</dt>
+            <dd><span class="badge bg-info text-white">{{ challenge.duration.hours }}h {{ challenge.duration.minutes }}min {{ challenge.duration.seconds }}sec</span></dd>
+        </div>
+        <div class="data-row field-datetime">
+            <dt>Date de début</dt>
+            <dd>
+                {% if challenge.startedAt is not null %}
+                    <time datetime="{{ challenge.startedAt|date('c') }}" title="{{ challenge.startedAt|date('r') }}">
+                        {{ challenge.startedAt|format_datetime('full', 'short', locale='fr') }}
+                    </time>
+                {% else %}
+                    <span class="badge badge-secondary">Aucun(e)</span>
+                {% endif %}
+            </dd>
+        </div>
+        <div class="data-row field-datetime">
+            <dt>Date de fin</dt>
+            <dd>
+                {% if challenge.endedAt is not null %}
+                    <time datetime="{{ challenge.endedAt|date('c') }}" title="{{ challenge.endedAt|date('r') }}">
+                        {{ challenge.endedAt|format_datetime('full', 'short', locale='fr') }}
+                    </time>
+                {% else %}
+                    <span class="badge badge-secondary">Aucun(e)</span>
+                {% endif %}
+            </dd>
+        </div>
+        {% if challenge.endedAt is not null %}
+            <div class="data-row ">
+                <dt>Différence</dt>
+                <dd><span class="badge bg-info text-white">{{ challenge.diff.h }}h {{ challenge.diff.i }}min {{ challenge.diff.s }}sec</span></dd>
+            </div>
+            <div class="data-row field-boolean">
+                <dt>Réussi ?</dt>
+                <dd>
+                    {% if challenge.succeed %}
+                        <span class="badge badge-boolean-true">
+                            Oui
+                        </span>
+                    {% else %}
+                        <span class="badge badge-boolean-false">
+                            Non
+                        </span>
+                    {% endif %}
+                </dd>
+            </div>
+        {% endif %}
+        <div class="data-row field-integer">
+            <dt>Points de base</dt>
+            <dd>{{ challenge.basePoints }}</dd>
+        </div>
+        <div class="data-row field-integer">
+            <dt>Points gagnés</dt>
+            <dd>{{ challenge.totalPoints }}</dd>
+        </div>
+        <div class="data-row field-integer">
+            <dt>Points total</dt>
+            <dd>{{ challenge.finalPoints }}</dd>
+        </div>
+    </dl>
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>Règle</th>
+                <th>Points</th>
+                <th>Nombre de coups</th>
+                <th>Total</th>
+                {% if challenge.startedAt is not null or challenge.endedAt is not null %}
+                    <th>Action</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for rule in challenge.rules %}
+                <tr>
+                    <td>{{ rule.rule.name }}</td>
+                    <td>
+                        {% if rule.rule.points > 0 %}
+                            <span class="badge bg-success text-light">{{ rule.rule.points }}</span>
+                        {% else %}
+                            <span class="badge bg-danger text-light">{{ rule.rule.points }}</span>
+                        {% endif %}
+                    </td>
+                    <td><span class="badge bg-primary text-light">{{ rule.hits }}</span></td>
+                    <td>
+                        {% if rule.total > 0 %}
+                            <span class="badge bg-success text-light">{{ rule.total }}</span>
+                        {% else %}
+                            <span class="badge bg-danger text-light">{{ rule.total }}</span>
+                        {% endif %}
+                    </td>
+                    {% if challenge.startedAt is not null or challenge.endedAt is not null %}
+                        <td>
+                            <a href="{{ path('admin_challenge_hit', {id: rule.id, count: 1}) }}" class="btn btn-primary">
+                                <i class="fa-solid fa-arrow-up"></i>
+                            </a>
+                            <a href="{{ path('admin_challenge_hit', {id: rule.id, count: -1}) }}" class="btn btn-primary">
+                                <i class="fa-solid fa-arrow-down"></i>
+                            </a>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
