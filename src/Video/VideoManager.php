@@ -6,7 +6,7 @@ namespace App\Video;
 
 use App\DataCollector\VideoCollectInterface;
 use App\Entity\Video;
-use App\OAuth\Api\Google\GoogleClient;
+use App\OAuth\GoogleClient;
 use App\Repository\CategoryRepository;
 use App\Repository\VideoRepository;
 use App\Video\Youtube\VideoProviderInterface;

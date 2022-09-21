@@ -6,12 +6,9 @@ namespace App\EventSubscriber;
 
 use App\Entity\Challenge;
 use App\Entity\ChallengeRule;
-use App\Entity\User;
 use App\Repository\RuleRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityPersistedEvent;
-use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityUpdatedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 final class ChallengeSubscriber implements EventSubscriberInterface
 {
@@ -31,7 +28,6 @@ final class ChallengeSubscriber implements EventSubscriberInterface
         $challenge = $event->getEntityInstance();
 
         if ($challenge instanceof Challenge) {
-
             $randomRules = $this->ruleRepository->get10RandomRules();
 
             foreach ($randomRules as $rule) {

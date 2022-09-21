@@ -36,6 +36,7 @@ class ChallengeRule
     {
         $challengeRule = new self();
         $challengeRule->rule = $rule;
+
         return $challengeRule;
     }
 

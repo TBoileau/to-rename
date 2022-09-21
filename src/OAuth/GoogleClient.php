@@ -2,18 +2,19 @@
 
 declare(strict_types=1);
 
-namespace App\OAuth\Api\Google;
+namespace App\OAuth;
 
-use App\OAuth\ClientInterface;
-use App\OAuth\ClientTrait;
 use Google\Client;
 
 final class GoogleClient extends Client implements ClientInterface
 {
-    use ClientTrait;
-
     public static function getName(): string
     {
         return 'google';
+    }
+
+    public static function getSessionKey(): string
+    {
+        return 'google_access_token';
     }
 }
