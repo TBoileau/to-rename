@@ -25,7 +25,7 @@ security:
                 path: admin_security_logout
 
     access_control:
-        - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/admin/login, roles: PUBLIC_ACCESS }
         - { path: ^/twitch, roles: PUBLIC_ACCESS }
         - { path: ^/calendar, roles: PUBLIC_ACCESS }
         - { path: ^/cgu, roles: PUBLIC_ACCESS }

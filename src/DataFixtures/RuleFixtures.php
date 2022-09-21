@@ -23,7 +23,7 @@ final class RuleFixtures extends Fixture
         $rule = new Rule();
         $rule->setName(sprintf('Rule %d', $index));
         $rule->setDescription(sprintf('Description %d', $index));
-        $rule->setPoints(rand(1, 5));
+        $rule->setPoints(rand(-5, 5));
 
         return $rule;
     }
