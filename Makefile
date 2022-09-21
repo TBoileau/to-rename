@@ -54,3 +54,9 @@ container:
 analyse: twig yaml composer-valid container doctrine phpstan
 
 qa: fix analyse
+
+deploy:
+	git pull origin main
+	composer i --classmap-authoritative --optimize-autoloader
+	bin/console d:m:m --env=prod
+	sudo service apache2 restart
