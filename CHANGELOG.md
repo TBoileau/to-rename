@@ -4,6 +4,16 @@ Le `changelog` liste toutes les nouveautés intégrées à chaque `release`.
 
 Ce projet respecte [Semantic Versioning](https://semver.org/) et les [recommandations](https://keepachangelog.com/en/1.0.0/).
 
+## [2022-09-21] 1.2.0
+* Rafraîchir le token par une commande [#110](https://github.com/TBoileau/twitch/issues/110)
+* Commencer un défi [#75](https://github.com/TBoileau/twitch/issues/75)
+* Supprimer toute notion de communication [#109](https://github.com/TBoileau/twitch/issues/109)
+* Générer un défi aléatoirement [#78](https://github.com/TBoileau/twitch/issues/78)
+* Exporter le planning pour Google Calendar [#71](https://github.com/TBoileau/twitch/issues/71)
+* CRUD des défis [#74](https://github.com/TBoileau/twitch/issues/74)
+* CRUD des règles [#73](https://github.com/TBoileau/twitch/issues/73)
+* Système de défi [#72](https://github.com/TBoileau/twitch/issues/72)
+
 ## [2022-09-18] 1.1.0
 * Communiquer en une seule fois [#64](https://github.com/TBoileau/twitch/issues/64)
 * Récupérer les statistiques des vidéos [#62](https://github.com/TBoileau/twitch/issues/62)

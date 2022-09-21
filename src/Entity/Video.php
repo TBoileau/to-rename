@@ -15,6 +15,9 @@ use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
+
+use function Symfony\Component\String\u;
+
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[Entity(repositoryClass: VideoRepository::class)]
@@ -233,5 +236,18 @@ class Video implements VideoInterface
     public function setComments(int $comments): void
     {
         $this->comments = $comments;
+    }
+
+    public function __toString(): string
+    {
+        $category = $this->getCategory()?->getName();
+
+        return sprintf(
+            'S%02dE%02d - %s - %s',
+            $this->getSeason(),
+            $this->getEpisode(),
+            u($this->getTitle())->trim(),
+            u($category ?? '')->trim(),
+        );
     }
 }

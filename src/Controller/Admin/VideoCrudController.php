@@ -7,9 +7,7 @@ namespace App\Controller\Admin;
 use App\EasyAdmin\Field\StatusField;
 use App\EasyAdmin\Filter\StatusFilter;
 use App\Entity\Video;
-use App\OAuth\Security\Token\OAuthToken;
-use App\OAuth\Security\Token\TokenStorageInterface;
-use App\SocialNetwork\SocialNetworkInterface;
+use App\OAuth\ClientInterface;
 use App\Video\VideoManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -30,7 +28,7 @@ use Symfony\Component\Validator\Constraints\NotNull;
 
 final class VideoCrudController extends AbstractCrudController
 {
-    public function __construct(private TokenStorageInterface $tokenStorage)
+    public function __construct(private ClientInterface $googleClient)
     {
     }
 
@@ -61,10 +59,7 @@ final class VideoCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-        /** @var OAuthToken $googleToken */
-        $googleToken = $this->tokenStorage['google'];
-
-        if (!$googleToken->isAuthenticated()) {
+        if (!$this->googleClient->isAccessTokenExpired()) {
             $actions->disable(Action::EDIT, 'synchronize', 'statistics');
         }
 
@@ -76,12 +71,7 @@ final class VideoCrudController extends AbstractCrudController
             ->createAsGlobalAction()
             ->linkToRoute('admin_video_synchronize');
 
-        $communicate = Action::new('communicate', 'Communiquer')
-            ->linkToRoute('admin_video_communicate', static fn (Video $video): array => ['id' => $video->getId()]);
-
         return $actions
-            ->add(Crud::PAGE_INDEX, $communicate)
-            ->add(Crud::PAGE_DETAIL, $communicate)
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
             ->add(Crud::PAGE_INDEX, $synchronize)
             ->add(Crud::PAGE_INDEX, $statistics);
@@ -139,30 +129,6 @@ final class VideoCrudController extends AbstractCrudController
             $adminUrlGenerator
                 ->setController(self::class)
                 ->setAction(Action::INDEX)
-                ->generateUrl()
-        );
-    }
-
-    #[Route('/admin/videos/{id}/communicate', name: 'admin_video_communicate')]
-    public function communicate(
-        Video $video,
-        AdminUrlGenerator $adminUrlGenerator,
-        SocialNetworkInterface $socialNetwork
-    ): RedirectResponse {
-        $socialNetwork->send(<<<EOF
-Nouvelle vidéo disponible sur la chaîne Youtube ! 
-
-{$video->getTitle()}
-
-https://www.youtube.com/watch?v={$video->getYoutubeId()}
-EOF
-        );
-
-        return new RedirectResponse(
-            $adminUrlGenerator
-                ->setController(self::class)
-                ->setAction(Action::DETAIL)
-                ->setEntityId($video->getId())
                 ->generateUrl()
         );
     }

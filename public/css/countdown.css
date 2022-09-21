@@ -1,0 +1,27 @@
+#countdown {
+    width: 100%;
+}
+
+#countdown ul {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 5rem;
+}
+
+#countdown li {
+    font-size: 1.5em;
+    list-style-type: none;
+    padding: 1em;
+    text-transform: uppercase;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#countdown li span {
+    font-size: 4.5rem;
+}

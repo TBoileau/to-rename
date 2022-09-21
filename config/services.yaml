@@ -11,6 +11,7 @@ parameters:
     fonts.monument: '%kernel.project_dir%/public/fonts/MonumentExtended-Regular.otf'
     intervention.driver: imagick
     container.dumper.inline_factories: true
+    timezone: '%env(APP_TIMEZONE)%'
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -28,9 +29,6 @@ services:
         App\OAuth\ClientInterface:
             tags: ['app.oauth.client']
 
-        App\OAuth\Security\Guard\AuthenticatorInterface:
-            tags: ['app.oauth.authenticator']
-
         App\Doctrine\Type\AbstractEnumType:
             tags:
                 - { name: 'app.doctrine_enum_type' }
@@ -46,13 +44,10 @@ services:
         factory: [App\ImageManager\ImageManagerFactory, 'create']
         arguments: ['%intervention.driver%']
 
-    App\OAuth\Security\Token\OAuthTokenStorage:
+    App\EventSubscriber\OAuthSubscriber:
         arguments: [!tagged_iterator { tag: 'app.oauth.client', default_index_method: 'getName' }]
 
-    App\OAuth\EventSubscriber\RequestListener:
-        arguments: [!tagged_iterator { tag: 'app.oauth.authenticator', default_index_method: 'getName' }]
-
-    App\OAuth\Api\Google\GoogleClient:
+    App\OAuth\GoogleClient:
         calls:
             - [setDeveloperKey, ['%env(GOOGLE_API_KEY)%']]
             - [setClientId, ['%env(GOOGLE_CLIENT_ID)%']]
@@ -61,15 +56,4 @@ services:
             - [setAccessType, ['offline']]
             - [setApprovalPrompt, ['force']]
             - [setIncludeGrantedScopes, [true]]
-
-    App\OAuth\Api\Twitter\TwitterClient:
-        calls:
-            - [setClientId, ['%env(TWITTER_CLIENT_ID)%']]
-            - [setClientSecret, ['%env(TWITTER_CLIENT_SECRET)%']]
-            - [setScopes, [['tweet.read', 'tweet.write', 'users.read', 'offline.access']]]
-
-    App\OAuth\Api\LinkedIn\LinkedInClient:
-        calls:
-            - [setClientId, ['%env(LINKEDIN_CLIENT_ID)%']]
-            - [setClientSecret, ['%env(LINKEDIN_CLIENT_SECRET)%']]
-            - [setScopes, [['r_liteprofile', 'r_emailaddress', 'w_member_social']]]
+            - [initRedirectUri, ['%env(APP_HOST)%', '@router']]

@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace App\OAuth;
 
-use App\OAuth\Security\Provider\ProviderInterface;
-use App\OAuth\Security\Token\TokenInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 interface ClientInterface
 {
     public static function getName(): string;
+
+    public static function getSessionKey(): string;
+
+    public function initRedirectUri(string $host, UrlGeneratorInterface $urlGenerator): void;
 
     /**
      * @param string $redirectUri
@@ -55,8 +58,4 @@ interface ClientInterface
      * @return array<string, mixed>
      */
     public function fetchAccessTokenWithRefreshToken($code);
-
-    public function getProvider(): ProviderInterface;
-
-    public function getToken(): TokenInterface;
 }

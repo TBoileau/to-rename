@@ -9,25 +9,7 @@
 
 {% block header_custom_menu %}
     <div class="d-flex align-items-stretch gap-3">
-        {% if oauth.linkedin.authenticated %}
-            <span class="border rounded px-1 d-flex align-items-center">
-                <i class="fas fa-circle text-success me-1"></i> LinkedIn
-            </span>
-        {% else %}
-            <a class="border rounded px-1 d-flex align-items-center" href="{{ path('linkedin_auth') }}">
-                <i class="fas fa-circle text-danger me-1"></i> LinkedIn
-            </a>
-        {% endif %}
-        {% if oauth.twitter.authenticated %}
-            <span class="border rounded px-1 d-flex align-items-center">
-                <i class="fas fa-circle text-success me-1"></i> Twitter
-            </span>
-        {% else %}
-            <a class="border rounded px-1 d-flex align-items-center" href="{{ path('twitter_auth') }}">
-                <i class="fas fa-circle text-danger me-1"></i> Twitter
-            </a>
-        {% endif %}
-        {% if oauth.google.authenticated %}
+        {% if not google.accessTokenExpired %}
             <span class="border rounded px-1 d-flex align-items-center">
                 <i class="fas fa-circle text-success me-1"></i> Google
             </span>

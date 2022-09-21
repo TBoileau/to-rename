@@ -15,10 +15,6 @@ final class TokenFixtures extends Fixture
         $googleToken = new Token();
         $googleToken->setName('google');
         $manager->persist($googleToken);
-
-        $twitterToken = new Token();
-        $twitterToken->setName('twitter');
-        $manager->persist($twitterToken);
         $manager->flush();
     }
 }

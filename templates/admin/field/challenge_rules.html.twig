@@ -1,0 +1,36 @@
+{% if ea.crud.currentAction == 'detail' %}
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Règle</th>
+                <th>Points</th>
+                <th>Nombre de coups</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rule in field.value %}
+                <tr>
+                    <td>{{ rule.rule.name }}</td>
+                    <td>
+                        {% if rule.rule.points > 0 %}
+                            <span class="badge bg-success text-light">{{ rule.rule.points }}</span>
+                        {% else %}
+                            <span class="badge bg-danger text-light">{{ rule.rule.points }}</span>
+                        {% endif %}
+                    </td>
+                    <td><span class="badge bg-primary text-light">{{ rule.hits }}</span></td>
+                    <td>
+                        {% if rule.total > 0 %}
+                            <span class="badge bg-success text-light">{{ rrule.total }}</span>
+                        {% else %}
+                            <span class="badge bg-danger text-light">{{ rule.total }}</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <span class="badge badge-light">{{ field.value|length }}</span>
+{% endif %}
