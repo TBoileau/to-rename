@@ -169,8 +169,12 @@ final class VideoManager implements VideoManagerInterface, VideoCollectInterface
             )
         );
 
+        $thumbnail = $videoSnippet->getThumbnails()->getMaxres() === null
+            ? $videoSnippet->getThumbnails()->getHigh()
+            : $videoSnippet->getThumbnails()->getStandard();
+
         copy(
-            $videoSnippet->getThumbnails()->getMaxres()->getUrl(),
+            $thumbnail->getUrl(),
             sprintf('%s/%s', $this->uploadDir, $video->getThumbnail())
         );
 
