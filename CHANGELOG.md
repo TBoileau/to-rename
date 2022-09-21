@@ -4,6 +4,9 @@ Le `changelog` liste toutes les nouveautés intégrées à chaque `release`.
 
 Ce projet respecte [Semantic Versioning](https://semver.org/) et les [recommandations](https://keepachangelog.com/en/1.0.0/).
 
+## [2022-09-21] 1.2.2
+* Ajout de la migration manquante
+
 ## [2022-09-21] 1.2.1
 * Ajout de Sentry [#122](https://github.com/TBoileau/twitch/issues/112)
 
