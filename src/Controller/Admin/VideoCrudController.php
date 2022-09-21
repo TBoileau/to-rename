@@ -59,7 +59,7 @@ final class VideoCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-        if (!$this->googleClient->isAccessTokenExpired()) {
+        if ($this->googleClient->isAccessTokenExpired()) {
             $actions->disable(Action::EDIT, 'synchronize', 'statistics');
         }
 
