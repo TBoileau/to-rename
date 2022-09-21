@@ -56,3 +56,4 @@ services:
             - [setAccessType, ['offline']]
             - [setApprovalPrompt, ['force']]
             - [setIncludeGrantedScopes, [true]]
+            - [initRedirectUri, ['%env(APP_HOST)%', '@router']]

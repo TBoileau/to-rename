@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace App\OAuth;
 
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 interface ClientInterface
 {
     public static function getName(): string;
 
     public static function getSessionKey(): string;
+
+    public function initRedirectUri(string $host, UrlGeneratorInterface $urlGenerator): void;
 
     /**
      * @param string $redirectUri

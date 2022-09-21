@@ -12,7 +12,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[Route('/google', name: 'google_')]
 final class GoogleController extends AbstractController
@@ -27,12 +26,10 @@ final class GoogleController extends AbstractController
         /** @var string $code */
         $code = $request->get('code');
 
-        $this->setRedirectUri($googleClient);
-
         /** @var array{access_token?: string, created?: int, expires_in?: int, refresh_token?: string} $accessToken */
         $accessToken = $googleClient->fetchAccessTokenWithAuthCode($code);
 
-        if (!isset($accessToken['access_token']) && !isset($accessToken['refresh_token'])) {
+        if (!isset($accessToken['access_token']) || !isset($accessToken['refresh_token'])) {
             $this->addFlash('danger', 'Error lors de la connexion OAuth2 avec Google.');
 
             return $this->redirectToRoute('admin');
@@ -63,19 +60,6 @@ final class GoogleController extends AbstractController
     {
         $request->getSession()->set('referer', $request->headers->get('referer'));
 
-        $this->setRedirectUri($googleClient);
-
         return new RedirectResponse($googleClient->createAuthUrl());
-    }
-
-    private function setRedirectUri(ClientInterface $client): void
-    {
-        $client->setRedirectUri(
-            $this->generateUrl(
-                'google_check',
-                [],
-                UrlGeneratorInterface::ABSOLUTE_URL
-            )
-        );
     }
 }
