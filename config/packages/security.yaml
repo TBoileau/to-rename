@@ -13,7 +13,7 @@ security:
         main:
             lazy: true
             stateless: false
-            pattern: ^/
+            pattern: ^/admin
             provider: user_provider
             remember_me:
                 secret: '%kernel.secret%'
@@ -30,7 +30,7 @@ security:
         - { path: ^/calendar, roles: PUBLIC_ACCESS }
         - { path: ^/cgu, roles: PUBLIC_ACCESS }
         - { path: ^/rgpd, roles: PUBLIC_ACCESS }
-        - { path: ^/, roles: ROLE_USER }
+        - { path: ^/admin, roles: ROLE_USER }
 
 when@test:
     security:
