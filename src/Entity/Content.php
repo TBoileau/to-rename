@@ -22,6 +22,7 @@ use Doctrine\ORM\Mapping\OneToMany;
 #[DiscriminatorColumn(name: 'discr', type: Types::STRING)]
 #[DiscriminatorMap([
     'challenge' => Challenge::class,
+    'getting_started' => GettingStarted::class,
 ])]
 abstract class Content
 {
