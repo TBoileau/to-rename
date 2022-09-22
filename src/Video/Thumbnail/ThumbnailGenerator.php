@@ -28,7 +28,15 @@ final class ThumbnailGenerator implements ThumbnailGeneratorInterface
         $thumbnail = $this->imageManager
             ->make($this->thumbnailImage)
             ->text(
-                u(sprintf('Episode %d', $video->getEpisode()))->upper()->toString(),
+                u(
+                    null !== $video->getLive()
+                        ? sprintf(
+                            'S%02dE%02d',
+                            $video->getLive()->getSeason(),
+                            $video->getLive()->getEpisode()
+                        )
+                        : 'Vidéo'
+                )->upper()->toString(),
                 1120,
                 440,
                 fn (AbstractFont $font) => $font
@@ -39,7 +47,11 @@ final class ThumbnailGenerator implements ThumbnailGeneratorInterface
                     ->valign('center')
             )
             ->text(
-                u($video->getTitle())->upper()->wordwrap(20, "\n", false)->toString(),
+                u(
+                    null !== $video->getLive()?->getContent()
+                        ? $video->getLive()->getContent()->getVideoTitle()
+                        : $video->getTitle()
+                )->upper()->wordwrap(20, "\n", false)->toString(),
                 918,
                 520,
                 fn (AbstractFont $font) => $font
@@ -50,25 +62,25 @@ final class ThumbnailGenerator implements ThumbnailGeneratorInterface
                     ->valign('top')
             );
 
-        if (null !== $video->getCategory()) {
-            $categoryImageFile = sprintf('%s/%s', $this->uploadDir, $video->getCategory()->getImage());
+        $categoryImageFile = null === $video->getLive()?->getContent()
+            ? sprintf('%s/%s', $this->uploadDir, $video->getLogo())
+            : sprintf('%s/%s', $this->uploadDir, $video->getLive()->getContent()::getLogo());
 
-            /** @var array<int, int> $imageInfo */
-            $imageInfo = getimagesize($categoryImageFile);
+        /** @var array<int, int> $imageInfo */
+        $imageInfo = getimagesize($categoryImageFile);
 
-            /**
-             * @var int $imageWidth
-             * @var int $imageHeight
-             */
-            [$imageWidth, $imageHeight] = $imageInfo;
+        /**
+         * @var int $imageWidth
+         * @var int $imageHeight
+         */
+        [$imageWidth, $imageHeight] = $imageInfo;
 
-            $categoryW = 490;
-            $categoryH = $imageHeight * $categoryW / $imageWidth;
+        $categoryW = 490;
+        $categoryH = $imageHeight * $categoryW / $imageWidth;
 
-            $category = $this->imageManager->make($categoryImageFile)->resize($categoryW, $categoryH);
+        $category = $this->imageManager->make($categoryImageFile)->resize($categoryW, $categoryH);
 
-            $thumbnail->insert($category, 'center-left', 270, intval(round(555 - ($categoryH / 2))));
-        }
+        $thumbnail->insert($category, 'center-left', 270, intval(round(555 - ($categoryH / 2))));
 
         $thumbnail->save(sprintf('%s/%s', $this->uploadDir, $video->getThumbnail()));
     }

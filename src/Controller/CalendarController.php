@@ -33,9 +33,9 @@ final class CalendarController extends AbstractController
                             new DateTime($live->getEndedAt(), true)
                         )
                     )
-                    ->setDescription($live->getDescription())
+                    ->setDescription($live->getVideoTitle())
                     ->setUrl(new Uri('https://twitch.tv/toham'))
-                    ->setSummary($live->getDescription()),
+                    ->setSummary($live->getVideoDescription()),
                 $lives
             )
         );

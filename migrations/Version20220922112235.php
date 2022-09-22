@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20220917213918 extends AbstractMigration
+final class Version20220922112235 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -19,13 +19,13 @@ final class Version20220917213918 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('ALTER TABLE logo RENAME category');
-        $this->addSql('ALTER TABLE video CHANGE logo_id category_id INT DEFAULT NULL');
+        // this up() migration is auto-generated, please modify it to your needs
+        $this->addSql('ALTER TABLE video CHANGE status status varchar(8) NOT NULL');
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql('ALTER TABLE category RENAME logo');
-        $this->addSql('ALTER TABLE video CHANGE category_id logo_id INT DEFAULT NULL');
+        // this down() migration is auto-generated, please modify it to your needs
+        $this->addSql('ALTER TABLE video CHANGE status status VARCHAR(8) NOT NULL');
     }
 }

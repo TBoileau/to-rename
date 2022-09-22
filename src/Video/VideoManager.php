@@ -7,7 +7,6 @@ namespace App\Video;
 use App\DataCollector\VideoCollectInterface;
 use App\Entity\Video;
 use App\OAuth\GoogleClient;
-use App\Repository\CategoryRepository;
 use App\Repository\VideoRepository;
 use App\Video\Youtube\VideoProviderInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,21 +15,18 @@ use Google_Http_MediaFileUpload;
 use Google_Service_YouTube;
 use GuzzleHttp\Psr7\Request;
 
-use function Symfony\Component\String\u;
-
 final class VideoManager implements VideoManagerInterface, VideoCollectInterface
 {
     private Google_Service_YouTube $youtube;
 
     /**
-     * @var array<array-key, VideoInterface>
+     * @var array<array-key, Video>
      */
     private array $videosUpdated = [];
 
     public function __construct(
         GoogleClient $googleClient,
         private VideoRepository $videoRepository,
-        private CategoryRepository $categoryRepository,
         private EntityManagerInterface $entityManager,
         private VideoProviderInterface $videoProvider,
         private string $uploadDir
@@ -56,25 +52,15 @@ final class VideoManager implements VideoManagerInterface, VideoCollectInterface
         $this->entityManager->flush();
     }
 
-    public function update(VideoInterface $video): void
+    public function update(Video $video): void
     {
         $youtubeVideo = $this->videoProvider->findOneById($video->getYoutubeId());
 
         $videoSnippet = $youtubeVideo->getSnippet();
         $videoSnippet->setDefaultAudioLanguage($video->getDefaultAudioLanguage());
         $videoSnippet->setDefaultLanguage($video->getDefaultLanguage());
-
-        /** @var CategoryInterface $category */
-        $category = $video->getCategory();
-
-        $videoSnippet->setTitle(sprintf(
-            'S%02dE%02d - %s - %s',
-            $video->getSeason(),
-            $video->getEpisode(),
-            u($category->getName())->trim(),
-            u($video->getTitle())->trim(),
-        ));
-        $videoSnippet->setDescription($video->getDescription());
+        $videoSnippet->setTitle($video->getVideoTitle());
+        $videoSnippet->setDescription($video->getVideoDescription());
         $videoSnippet->setTags(array_values($video->getTags()));
 
         $videoStatus = $youtubeVideo->getStatus();
@@ -123,7 +109,7 @@ final class VideoManager implements VideoManagerInterface, VideoCollectInterface
         $this->videosUpdated[] = $video;
     }
 
-    public function hydrate(VideoInterface $video, ?YoutubeVideo $youtubeVideo = null): void
+    public function hydrate(Video $video, ?YoutubeVideo $youtubeVideo = null): void
     {
         if (null === $youtubeVideo) {
             $youtubeVideo = $this->videoProvider->findOneById($video->getYoutubeId());
@@ -132,44 +118,15 @@ final class VideoManager implements VideoManagerInterface, VideoCollectInterface
         $videoSnippet = $youtubeVideo->getSnippet();
 
         $video->setYoutubeId($youtubeVideo->getId());
+        $video->setTitle($videoSnippet->getTitle());
         $video->setDescription($videoSnippet->getDescription());
         /* @phpstan-ignore-next-line */
         $video->setTags($videoSnippet->getTags() ?? []);
 
-        if (false !== preg_match('/(S(\d{2})E(\d{2})) - (.+) - (.+)/', $videoSnippet->getTitle(), $matches)) {
-            if (isset($matches[1])) {
-                /**
-                 * @var string $categoryName
-                 * @var string $title
-                 * @var string $episode
-                 * @var string $season
-                 */
-                [, , $season, $episode, $categoryName, $title] = $matches;
+        $video->setThumbnail(sprintf('%d.png', $video->getYoutubeId()));
 
-                /** @var CategoryInterface $category */
-                $category = $this->categoryRepository->findOneBy(['name' => u($categoryName)->trim()->toString()]);
-                $video->setTitle(u($title)->trim()->toString());
-                $video->setCategory($category);
-                $video->setSeason((int) $season);
-                $video->setEpisode((int) $episode);
-            }
-        } else {
-            $video->setTitle($videoSnippet->getTitle());
-            $video->setCategory(null);
-            $video->setSeason(0);
-            $video->setEpisode(0);
-        }
-
-        $video->setThumbnail(
-            sprintf(
-                'S%02dE%02d-%d.png',
-                $video->getSeason(),
-                $video->getEpisode(),
-                $video->getYoutubeId()
-            )
-        );
-
-        $thumbnail = $videoSnippet->getThumbnails()->getMaxres() === null
+        /** @phpstan-ignore-next-line */
+        $thumbnail = null === $videoSnippet->getThumbnails()->getMaxres()
             ? $videoSnippet->getThumbnails()->getHigh()
             : $videoSnippet->getThumbnails()->getStandard();
 

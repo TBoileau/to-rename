@@ -13,8 +13,6 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Embedded;
 use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
 use LogicException;
@@ -25,22 +23,13 @@ use Symfony\Component\Validator\Constraints\Url;
 use Symfony\Component\Validator\Constraints\Valid;
 
 #[Entity(repositoryClass: ChallengeRepository::class)]
-class Challenge
+class Challenge extends Content
 {
-    #[Id]
-    #[GeneratedValue]
-    #[Column(type: Types::INTEGER)]
-    private ?int $id = null;
-
     #[ManyToOne(targetEntity: Live::class)]
     private ?Live $live = null;
 
     #[ManyToOne(targetEntity: Video::class)]
     private ?Video $video = null;
-
-    #[NotBlank]
-    #[Column(type: Types::TEXT)]
-    private string $description;
 
     #[NotNull]
     #[Valid]
@@ -70,8 +59,19 @@ class Challenge
 
     public function __construct()
     {
+        parent::__construct();
         $this->rules = new ArrayCollection();
         $this->duration = new Duration();
+    }
+
+    public static function getName(): string
+    {
+        return 'challenge';
+    }
+
+    public static function getLogo(): string
+    {
+        return 'challenge.png';
     }
 
     public function getId(): ?int
@@ -216,5 +216,22 @@ class Challenge
         }
 
         return $this->endedAt->diff($this->startedAt);
+    }
+
+    public function getVideoDescription(): string
+    {
+        return <<<EOF
+Défi {$this->title}
+{$this->description}
+{$this->repository}
+EOF;
+    }
+
+    public function getVideoTitle(): string
+    {
+        return sprintf(
+            'Défi - %s',
+            $this->title
+        );
     }
 }
