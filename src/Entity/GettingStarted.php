@@ -20,6 +20,11 @@ class GettingStarted extends Content
         return 'getting_started';
     }
 
+    public static function getLogo(): string
+    {
+        return 'getting_started.png';
+    }
+
     public function getRepository(): string
     {
         return $this->repository;
@@ -28,5 +33,22 @@ class GettingStarted extends Content
     public function setRepository(string $repository): void
     {
         $this->repository = $repository;
+    }
+
+    public function getVideoDescription(): string
+    {
+        return <<<EOF
+Getting Started {$this->title}
+{$this->description}
+{$this->repository}
+EOF;
+    }
+
+    public function getVideoTitle(): string
+    {
+        return sprintf(
+            'Getting Started - %s',
+            $this->title
+        );
     }
 }

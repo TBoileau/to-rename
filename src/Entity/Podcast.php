@@ -23,6 +23,11 @@ class Podcast extends Content
         return 'podcast';
     }
 
+    public static function getLogo(): string
+    {
+        return 'podcast.png';
+    }
+
     /**
      * @return array<array-key, string>
      */
@@ -37,5 +42,29 @@ class Podcast extends Content
     public function setGuests(array $guests): void
     {
         $this->guests = $guests;
+    }
+
+    public function getVideoDescription(): string
+    {
+        $guests = count($this->guests) > 0
+            ? sprintf('Invité·es : %s', implode(', ', $this->guests))
+            : '';
+
+        return <<<EOF
+Podcast {$this->title}
+{$guests}
+{$this->description}
+EOF;
+    }
+
+    public function getVideoTitle(): string
+    {
+        $guests = count($this->guests) > 0 ? sprintf('avec %s', implode(', ', $this->guests)) : '';
+
+        return sprintf(
+            'Podcast - %s %s',
+            $this->title,
+            $guests
+        );
     }
 }

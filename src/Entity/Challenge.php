@@ -69,6 +69,11 @@ class Challenge extends Content
         return 'challenge';
     }
 
+    public static function getLogo(): string
+    {
+        return 'challenge.png';
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -211,5 +216,22 @@ class Challenge extends Content
         }
 
         return $this->endedAt->diff($this->startedAt);
+    }
+
+    public function getVideoDescription(): string
+    {
+        return <<<EOF
+Défi {$this->title}
+{$this->description}
+{$this->repository}
+EOF;
+    }
+
+    public function getVideoTitle(): string
+    {
+        return sprintf(
+            'Défi - %s',
+            $this->title
+        );
     }
 }

@@ -20,6 +20,11 @@ class Capsule extends Content
         return 'capsule';
     }
 
+    public static function getLogo(): string
+    {
+        return 'capsule.png';
+    }
+
     public function getRepository(): string
     {
         return $this->repository;
@@ -28,5 +33,22 @@ class Capsule extends Content
     public function setRepository(string $repository): void
     {
         $this->repository = $repository;
+    }
+
+    public function getVideoDescription(): string
+    {
+        return <<<EOF
+Capsule {$this->title}
+{$this->description}
+{$this->repository}
+EOF;
+    }
+
+    public function getVideoTitle(): string
+    {
+        return sprintf(
+            'Capsule - %s',
+            $this->title
+        );
     }
 }

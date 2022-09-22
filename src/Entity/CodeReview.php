@@ -20,6 +20,11 @@ class CodeReview extends Content
         return 'code_review';
     }
 
+    public static function getLogo(): string
+    {
+        return 'code_review.png';
+    }
+
     public function getRepository(): string
     {
         return $this->repository;
@@ -28,5 +33,22 @@ class CodeReview extends Content
     public function setRepository(string $repository): void
     {
         $this->repository = $repository;
+    }
+
+    public function getVideoDescription(): string
+    {
+        return <<<EOF
+Code Review {$this->title}
+{$this->description}
+{$this->repository}
+EOF;
+    }
+
+    public function getVideoTitle(): string
+    {
+        return sprintf(
+            'Code Review - %s',
+            $this->title
+        );
     }
 }

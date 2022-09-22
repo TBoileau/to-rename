@@ -55,9 +55,7 @@ final class VideoSubscriber implements EventSubscriberInterface
     {
         $video->setThumbnail(
             sprintf(
-                'S%02dE%02d-%d.png',
-                $video->getSeason(),
-                $video->getEpisode(),
+                '%d.png',
                 $video->getId()
             )
         );
