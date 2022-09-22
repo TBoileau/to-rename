@@ -20,7 +20,7 @@ class Podcast extends Content
 
     public static function getName(): string
     {
-        return 'code_review';
+        return 'podcast';
     }
 
     /**
