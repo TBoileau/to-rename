@@ -44,6 +44,7 @@ final class LiveCrudController extends AbstractCrudController
     {
         yield TextareaField::new('description', 'Description');
         yield AssociationField::new('planning', 'Planning');
+        yield AssociationField::new('content', 'Contenu')->setRequired(false);
         yield DateTimeField::new('livedAt', 'Date')
             ->setFormat('dd/MM/yyyy HH:mm');
         yield DurationField::new('duration', 'Durée')->setRequired(true);

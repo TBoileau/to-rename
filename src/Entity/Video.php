@@ -21,7 +21,7 @@ use function Symfony\Component\String\u;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[Entity(repositoryClass: VideoRepository::class)]
-class Video implements VideoInterface
+class Video
 {
     #[Id]
     #[GeneratedValue]
@@ -43,10 +43,6 @@ class Video implements VideoInterface
     #[NotBlank(groups: ['update'])]
     #[Column(type: Types::TEXT)]
     private string $description;
-
-    #[ManyToOne(targetEntity: Category::class)]
-    #[JoinColumn(onDelete: 'SET NULL')]
-    private ?CategoryInterface $category = null;
 
     #[Column(type: Types::STRING)]
     private string $thumbnail;
@@ -130,16 +126,6 @@ class Video implements VideoInterface
     public function setLive(?Live $live): void
     {
         $this->live = $live;
-    }
-
-    public function getCategory(): ?CategoryInterface
-    {
-        return $this->category;
-    }
-
-    public function setCategory(?CategoryInterface $category): void
-    {
-        $this->category = $category;
     }
 
     /**

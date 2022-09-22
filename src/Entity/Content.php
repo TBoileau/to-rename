@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\ContentRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -42,6 +43,9 @@ abstract class Content
     #[Column(type: Types::TEXT)]
     protected string $description;
 
+    #[Column(type: Types::DATETIME_IMMUTABLE)]
+    protected DateTimeImmutable $createdAt;
+
     /**
      * @var Collection<int, Live>
      */
@@ -53,11 +57,17 @@ abstract class Content
     public function __construct()
     {
         $this->lives = new ArrayCollection();
+        $this->createdAt = new DateTimeImmutable();
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getCreatedAt(): DateTimeImmutable
+    {
+        return $this->createdAt;
     }
 
     public function getTitle(): string
