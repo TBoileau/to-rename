@@ -20,6 +20,11 @@ class Kata extends Content
         return 'kata';
     }
 
+    public static function getLogo(): string
+    {
+        return 'kata.png';
+    }
+
     public function getRepository(): string
     {
         return $this->repository;
@@ -28,5 +33,22 @@ class Kata extends Content
     public function setRepository(string $repository): void
     {
         $this->repository = $repository;
+    }
+
+    public function getVideoDescription(): string
+    {
+        return <<<EOF
+Kata {$this->title}
+{$this->description}
+{$this->repository}
+EOF;
+    }
+
+    public function getVideoTitle(): string
+    {
+        return sprintf(
+            'Kata - %s',
+            $this->title
+        );
     }
 }

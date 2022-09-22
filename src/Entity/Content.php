@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\ContentRepository;
+use App\Video\VideoContentInterface;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -17,6 +18,7 @@ use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\InheritanceType;
 use Doctrine\ORM\Mapping\OneToMany;
+use Stringable;
 
 #[Entity(repositoryClass: ContentRepository::class)]
 #[InheritanceType('SINGLE_TABLE')]
@@ -30,7 +32,7 @@ use Doctrine\ORM\Mapping\OneToMany;
     'podcast' => Podcast::class,
     'kata' => Kata::class,
 ])]
-abstract class Content
+abstract class Content implements VideoContentInterface, Stringable
 {
     #[Id]
     #[GeneratedValue]
@@ -53,6 +55,8 @@ abstract class Content
     protected Collection $lives;
 
     abstract public static function getName(): string;
+
+    abstract public static function getLogo(): string;
 
     public function __construct()
     {
@@ -96,5 +100,10 @@ abstract class Content
     public function getLives(): Collection
     {
         return $this->lives;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getVideoTitle();
     }
 }

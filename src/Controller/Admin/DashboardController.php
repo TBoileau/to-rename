@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Entity\Capsule;
-use App\Entity\Category;
 use App\Entity\Challenge;
 use App\Entity\CodeReview;
 use App\Entity\GettingStarted;

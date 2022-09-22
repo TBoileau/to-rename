@@ -25,7 +25,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints\NotNull;
 
 final class VideoCrudController extends AbstractCrudController
 {
@@ -41,8 +40,7 @@ final class VideoCrudController extends AbstractCrudController
     public function configureFilters(Filters $filters): Filters
     {
         return $filters
-            ->add('season')
-            ->add('episode')
+            ->add('live')
             ->add(StatusFilter::new('status', 'Statut'));
     }
 
@@ -51,7 +49,7 @@ final class VideoCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('Vidéo')
             ->setEntityLabelInPlural('Vidéos')
-            ->setDefaultSort(['season' => 'DESC', 'episode' => 'DESC'])
+            ->setDefaultSort(['id' => 'DESC'])
             ->setFormOptions(
                 ['validation_groups' => ['Default', 'create']],
                 ['validation_groups' => ['Default', 'update']]
@@ -89,17 +87,20 @@ final class VideoCrudController extends AbstractCrudController
         yield ImageField::new('thumbnail', 'Thumbnail')
             ->setBasePath('uploads/')
             ->hideOnForm();
-        yield IntegerField::new('season', 'Saison N°')->hideWhenCreating();
-        yield IntegerField::new('episode', 'Episode N°')->hideWhenCreating();
         yield StatusField::new('status', 'Statut')
             ->hideWhenCreating();
-        yield AssociationField::new('category', 'Catégorie')
-            ->setFormTypeOption('constraints', [new NotNull()])
+        yield TextField::new('videoTitle', 'Titre')
+            ->hideOnForm();
+        yield TextField::new('videoDescription', 'Description')
+            ->hideOnIndex()
+            ->hideOnForm();
+        yield TextField::new('title', 'Titre')
+            ->setRequired(false)
+            ->onlyWhenUpdating()
             ->hideWhenCreating();
-        yield TextField::new('title', 'Titre')->hideWhenCreating();
         yield TextareaField::new('description', 'Description')
-            ->hideWhenCreating()
-            ->hideOnIndex();
+            ->setRequired(false)
+            ->onlyWhenUpdating();
         yield IntegerField::new('views', 'Vues')->hideOnForm();
         yield IntegerField::new('likes', 'Likes')->hideOnForm();
         yield IntegerField::new('comments', 'Commentaires')->hideOnForm();
@@ -108,6 +109,11 @@ final class VideoCrudController extends AbstractCrudController
             ->setTemplatePath('admin/field/video_tags.html.twig')
             ->hideWhenCreating();
         yield AssociationField::new('live', 'Live')->hideWhenCreating();
+        yield ImageField::new('logo', 'Logo')
+            ->setBasePath('uploads/')
+            ->setUploadDir('/public/uploads/')
+            ->setRequired(false)
+            ->hideWhenCreating();
         yield TextField::new('youtubeId', 'Video')
             ->setTemplatePath('admin/field/video_youtube_id.html.twig')
             ->hideOnForm();

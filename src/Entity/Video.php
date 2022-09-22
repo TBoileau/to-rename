@@ -6,8 +6,7 @@ namespace App\Entity;
 
 use App\Doctrine\Type\StatusType;
 use App\Repository\VideoRepository;
-use App\Video\CategoryInterface;
-use App\Video\VideoInterface;
+use App\Video\VideoContentInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
@@ -15,13 +14,10 @@ use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
-
-use function Symfony\Component\String\u;
-
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[Entity(repositoryClass: VideoRepository::class)]
-class Video
+class Video implements VideoContentInterface
 {
     #[Id]
     #[GeneratedValue]
@@ -31,14 +27,6 @@ class Video
     #[NotBlank(groups: ['update'])]
     #[Column(type: Types::STRING)]
     private string $title;
-
-    #[NotBlank(groups: ['update'])]
-    #[Column(type: Types::INTEGER)]
-    private int $season = 0;
-
-    #[NotBlank(groups: ['update'])]
-    #[Column(type: Types::INTEGER)]
-    private int $episode = 0;
 
     #[NotBlank(groups: ['update'])]
     #[Column(type: Types::TEXT)]
@@ -72,6 +60,9 @@ class Video
 
     #[Column(type: Types::INTEGER)]
     private int $comments = 0;
+
+    #[Column(type: Types::STRING, nullable: true)]
+    private ?string $logo = null;
 
     public function getId(): ?int
     {
@@ -144,26 +135,6 @@ class Video
         $this->tags = $tags;
     }
 
-    public function getSeason(): int
-    {
-        return $this->season;
-    }
-
-    public function setSeason(int $season): void
-    {
-        $this->season = $season;
-    }
-
-    public function getEpisode(): int
-    {
-        return $this->episode;
-    }
-
-    public function setEpisode(int $episode): void
-    {
-        $this->episode = $episode;
-    }
-
     public function getStatus(): Status
     {
         return $this->status;
@@ -226,14 +197,48 @@ class Video
 
     public function __toString(): string
     {
-        $category = $this->getCategory()?->getName();
+        return $this->title;
+    }
 
-        return sprintf(
-            'S%02dE%02d - %s - %s',
-            $this->getSeason(),
-            $this->getEpisode(),
-            u($this->getTitle())->trim(),
-            u($category ?? '')->trim(),
-        );
+    public function getVideoDescription(): string
+    {
+        if (null !== $this->live) {
+            return <<<EOF
+{$this->live->getVideoDescription()}
+
+Twitter : https://twitter.com/boileau_thomas
+Youtube : https://youtube.com/ThomasBoileau
+Discord : https://discord.gg/toham
+Github : https://github.com/TBoileau
+EOF;
+        }
+
+        return <<<EOF
+{$this->description}
+
+Twitter : https://twitter.com/boileau_thomas
+Youtube : https://youtube.com/ThomasBoileau
+Discord : https://discord.gg/toham
+Github : https://github.com/TBoileau
+EOF;
+    }
+
+    public function getVideoTitle(): string
+    {
+        if (null !== $this->live) {
+            return $this->live->getVideoTitle();
+        }
+
+        return $this->title;
+    }
+
+    public function getLogo(): ?string
+    {
+        return $this->logo;
+    }
+
+    public function setLogo(?string $logo): void
+    {
+        $this->logo = $logo;
     }
 }

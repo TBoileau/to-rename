@@ -20,6 +20,11 @@ class Project extends Content
         return 'project';
     }
 
+    public static function getLogo(): string
+    {
+        return 'project.png';
+    }
+
     public function getRepository(): string
     {
         return $this->repository;
@@ -28,5 +33,22 @@ class Project extends Content
     public function setRepository(string $repository): void
     {
         $this->repository = $repository;
+    }
+
+    public function getVideoDescription(): string
+    {
+        return <<<EOF
+Projet {$this->title}
+{$this->description}
+{$this->repository}
+EOF;
+    }
+
+    public function getVideoTitle(): string
+    {
+        return sprintf(
+            'Projet - %s',
+            $this->title
+        );
     }
 }

@@ -79,42 +79,49 @@ classDiagram
     class VideoContent {
         <<Interface>>
         + string getVideoDescription()
+        + string getVideoTitle()
     }
 
     class Kata {
         - string repository
         + string getName()$
         + string getVideoDescription()
+        + string getVideoTitle()
     }
 
     class GettingStarted {
         - string repository
         + string getName()$
         + string getVideoDescription()
+        + string getVideoTitle()
     }
 
     class Capsule {
         - string repository
         + string getName()$
         + string getVideoDescription()
+        + string getVideoTitle()
     }
 
     class Project {
         - string repository
         + string getName()$
         + string getVideoDescription()
+        + string getVideoTitle()
     }
 
     class Podcast {
         - array~string~ guests
         + string getName()$
         + string getVideoDescription()
+        + string getVideoTitle()
     }
 
     class CodeReview {
         - string repository
         + string getName()$
         + string getVideoDescription()
+        + string getVideoTitle()
     }
 
     class Challenge {
@@ -131,6 +138,7 @@ classDiagram
         + DateInterval getDiff()
         + string getName()$
         + string getVideoDescription()
+        + string getVideoTitle()
     }
 
     class ChallengeRule {

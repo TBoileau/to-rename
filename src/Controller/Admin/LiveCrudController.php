@@ -13,6 +13,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 
 final class LiveCrudController extends AbstractCrudController
@@ -24,7 +25,12 @@ final class LiveCrudController extends AbstractCrudController
 
     public function configureFilters(Filters $filters): Filters
     {
-        return $filters->add('planning')->add('livedAt');
+        return $filters
+            ->add('season')
+            ->add('episode')
+            ->add('planning')
+            ->add('content')
+            ->add('livedAt');
     }
 
     public function configureCrud(Crud $crud): Crud
@@ -32,7 +38,7 @@ final class LiveCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('Live')
             ->setEntityLabelInPlural('Lives')
-            ->setDefaultSort(['livedAt' => 'DESC']);
+            ->setDefaultSort(['season' => 'DESC', 'episode' => 'DESC']);
     }
 
     public function configureActions(Actions $actions): Actions
@@ -42,6 +48,8 @@ final class LiveCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+        yield IntegerField::new('season', 'Saison N°');
+        yield IntegerField::new('episode', 'Episode N°');
         yield TextareaField::new('description', 'Description');
         yield AssociationField::new('planning', 'Planning');
         yield AssociationField::new('content', 'Contenu')->setRequired(false);
