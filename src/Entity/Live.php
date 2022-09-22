@@ -48,6 +48,10 @@ class Live implements Stringable
     #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private Planning $planning;
 
+    #[ManyToOne(targetEntity: Content::class, inversedBy: 'lives')]
+    #[JoinColumn(onDelete: 'SET NULL')]
+    private ?Content $content;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -125,5 +129,15 @@ class Live implements Stringable
     public function getEndedAt(): DateTimeImmutable
     {
         return $this->duration->addTo($this->livedAt);
+    }
+
+    public function getContent(): ?Content
+    {
+        return $this->content;
+    }
+
+    public function setContent(?Content $content): void
+    {
+        $this->content = $content;
     }
 }

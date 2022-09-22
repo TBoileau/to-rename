@@ -169,7 +169,8 @@ final class VideoManager implements VideoManagerInterface, VideoCollectInterface
             )
         );
 
-        $thumbnail = $videoSnippet->getThumbnails()->getMaxres() === null
+        /** @phpstan-ignore-next-line */
+        $thumbnail = null === $videoSnippet->getThumbnails()->getMaxres()
             ? $videoSnippet->getThumbnails()->getHigh()
             : $videoSnippet->getThumbnails()->getStandard();
 
