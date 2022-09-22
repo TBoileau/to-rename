@@ -4,6 +4,23 @@ Le `changelog` liste toutes les nouveautés intégrées à chaque `release`.
 
 Ce projet respecte [Semantic Versioning](https://semver.org/) et les [recommandations](https://keepachangelog.com/en/1.0.0/).
 
+## [2022-09-22] 1.3.0
+* CRUD postcast [#94](https://github.com/TBoileau/twitch/issues/94)
+* CRUD capsules [#85](https://github.com/TBoileau/twitch/issues/85)
+* CRUD Getting Started [#83](https://github.com/TBoileau/twitch/issues/83)
+* CRUD projets [#89](https://github.com/TBoileau/twitch/issues/89)
+* CRUD code reviews [#87](https://github.com/TBoileau/twitch/issues/87)
+* Modifier live et vidéo en fonction du contenu [#97](https://github.com/TBoileau/twitch/issues/97)
+* CRUD kata [#96](https://github.com/TBoileau/twitch/issues/96)
+* Revoir la génération du planning [#67](https://github.com/TBoileau/twitch/issues/67)
+* Modéliser kata [#95](https://github.com/TBoileau/twitch/issues/95)
+* Modéliser podcast [#93](https://github.com/TBoileau/twitch/issues/93)
+* Modéliser projets [#88](https://github.com/TBoileau/twitch/issues/88)
+* Modélisation des code reviews [#86](https://github.com/TBoileau/twitch/issues/86)
+* Modélisation des capsules [#84](https://github.com/TBoileau/twitch/issues/84)
+* Modéliser le contenu [#90](https://github.com/TBoileau/twitch/issues/90)
+* Modélisation des Getting Started [#80](https://github.com/TBoileau/twitch/issues/80)
+
 ## [2022-09-21] 1.2.4
 * Synchroniser une vidéo [#114](https://github.com/TBoileau/twitch/issues/114)
 
