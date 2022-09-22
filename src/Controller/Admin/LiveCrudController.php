@@ -14,7 +14,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 final class LiveCrudController extends AbstractCrudController
 {
@@ -50,9 +50,13 @@ final class LiveCrudController extends AbstractCrudController
     {
         yield IntegerField::new('season', 'Saison N°');
         yield IntegerField::new('episode', 'Episode N°');
-        yield TextareaField::new('description', 'Description');
+        yield TextField::new('videoTitle', 'Titre')
+            ->hideOnForm();
+        yield TextField::new('videoDescription', 'Description')
+            ->hideOnIndex()
+            ->hideOnForm();
         yield AssociationField::new('planning', 'Planning');
-        yield AssociationField::new('content', 'Contenu')->setRequired(false);
+        yield AssociationField::new('content', 'Contenu');
         yield DateTimeField::new('livedAt', 'Date')
             ->setFormat('dd/MM/yyyy HH:mm');
         yield DurationField::new('duration', 'Durée')->setRequired(true);

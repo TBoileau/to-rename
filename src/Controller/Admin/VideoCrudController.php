@@ -113,6 +113,7 @@ final class VideoCrudController extends AbstractCrudController
             ->setBasePath('uploads/')
             ->setUploadDir('/public/uploads/')
             ->setRequired(false)
+            ->hideOnIndex()
             ->hideWhenCreating();
         yield TextField::new('youtubeId', 'Video')
             ->setTemplatePath('admin/field/video_youtube_id.html.twig')

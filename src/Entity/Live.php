@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Planning\PlanningContentInterface;
 use App\Repository\LiveRepository;
 use App\Video\VideoContentInterface;
 use DateTimeImmutable;
@@ -28,7 +29,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[Entity(repositoryClass: LiveRepository::class)]
 #[UniqueEntity(fields: 'livedAt', message: 'Ce live existe déjà.')]
-class Live implements Stringable, VideoContentInterface
+class Live implements Stringable, VideoContentInterface, PlanningContentInterface
 {
     #[Id]
     #[GeneratedValue]
@@ -43,16 +44,13 @@ class Live implements Stringable, VideoContentInterface
     #[Embedded(class: Duration::class)]
     private Duration $duration;
 
-    #[Column(type: Types::TEXT)]
-    private string $description;
-
     #[ManyToOne(targetEntity: Planning::class, inversedBy: 'lives')]
     #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private Planning $planning;
 
     #[ManyToOne(targetEntity: Content::class, inversedBy: 'lives')]
-    #[JoinColumn(onDelete: 'SET NULL')]
-    private ?Content $content;
+    #[JoinColumn(nullable: false)]
+    private Content $content;
 
     #[NotBlank(groups: ['update'])]
     #[Column(type: Types::INTEGER)]
@@ -61,6 +59,12 @@ class Live implements Stringable, VideoContentInterface
     #[NotBlank(groups: ['update'])]
     #[Column(type: Types::INTEGER)]
     private int $episode = 0;
+
+    public function __construct()
+    {
+        $this->duration = new Duration();
+        $this->duration->setHours(2);
+    }
 
     public function getId(): ?int
     {
@@ -75,16 +79,6 @@ class Live implements Stringable, VideoContentInterface
     public function setLivedAt(DateTimeImmutable $livedAt): void
     {
         $this->livedAt = $livedAt;
-    }
-
-    public function getDescription(): string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): void
-    {
-        $this->description = $description;
     }
 
     public function __toString(): string
@@ -104,16 +98,6 @@ class Live implements Stringable, VideoContentInterface
     {
         $this->planning = $planning;
         $this->planning->getLives()->add($this);
-    }
-
-    #[Callback]
-    public function checkDescription(ExecutionContextInterface $context): void
-    {
-        if (u(u($this->description)->wordwrap(15, "\n", false)->toString())->width() > 15) {
-            $context->buildViolation('Chaque ligne doit faire 15 caractères maximum')
-                ->atPath('description')
-                ->addViolation();
-        }
     }
 
     #[Callback]
@@ -141,12 +125,12 @@ class Live implements Stringable, VideoContentInterface
         return $this->duration->addTo($this->livedAt);
     }
 
-    public function getContent(): ?Content
+    public function getContent(): Content
     {
         return $this->content;
     }
 
-    public function setContent(?Content $content): void
+    public function setContent(Content $content): void
     {
         $this->content = $content;
     }
@@ -158,14 +142,6 @@ class Live implements Stringable, VideoContentInterface
         $season = sprintf('%02d', $this->season);
         $episode = sprintf('%02d', $this->episode);
 
-        if (null === $this->content) {
-            return <<<EOF
-Saison {$season} Episode {$episode}
-Rediffusion du live Twitch du {$date}.
-{$this->description}
-EOF;
-        }
-
         return <<<EOF
 Saison {$season} Episode {$episode}
 Rediffusion du live Twitch du {$date}.
@@ -175,12 +151,6 @@ EOF;
 
     public function getVideoTitle(): string
     {
-        $date = $this->livedAt->format('d/m/Y');
-
-        if (null === $this->content) {
-            return sprintf('S%02dE%02d - Rediffusion du live Twitch du %s', $this->season, $this->episode, $date);
-        }
-
         return sprintf('S%02dE%02d - %s', $this->season, $this->episode, $this->content->getVideoTitle());
     }
 
@@ -202,5 +172,10 @@ EOF;
     public function setEpisode(int $episode): void
     {
         $this->episode = $episode;
+    }
+
+    public function getLiveTitle(): string
+    {
+        return u($this->content->getVideoTitle())->replace(' - ', ' ')->toString();
     }
 }
