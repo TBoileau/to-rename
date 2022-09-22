@@ -26,6 +26,7 @@ use Doctrine\ORM\Mapping\OneToMany;
     'capsule' => Capsule::class,
     'code_review' => CodeReview::class,
     'project' => Project::class,
+    'podcast' => Podcast::class,
 ])]
 abstract class Content
 {
