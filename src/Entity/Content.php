@@ -24,6 +24,7 @@ use Doctrine\ORM\Mapping\OneToMany;
     'challenge' => Challenge::class,
     'getting_started' => GettingStarted::class,
     'capsule' => Capsule::class,
+    'code_review' => CodeReview::class,
 ])]
 abstract class Content
 {

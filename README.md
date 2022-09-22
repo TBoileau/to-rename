@@ -113,7 +113,6 @@ classDiagram
 
     class CodeReview {
         - string repository
-        - string description
         + string getName()$
         + string getVideoDescription()
     }
