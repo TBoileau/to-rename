@@ -20,11 +20,6 @@ class CodeReview extends Content
         return 'code_review';
     }
 
-    public static function getLogo(): string
-    {
-        return 'code_review.png';
-    }
-
     public function getRepository(): string
     {
         return $this->repository;

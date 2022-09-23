@@ -69,11 +69,6 @@ class Challenge extends Content
         return 'challenge';
     }
 
-    public static function getLogo(): string
-    {
-        return 'challenge.png';
-    }
-
     public function getId(): ?int
     {
         return $this->id;

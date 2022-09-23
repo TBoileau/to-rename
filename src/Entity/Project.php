@@ -20,11 +20,6 @@ class Project extends Content
         return 'project';
     }
 
-    public static function getLogo(): string
-    {
-        return 'project.png';
-    }
-
     public function getRepository(): string
     {
         return $this->repository;

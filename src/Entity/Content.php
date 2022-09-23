@@ -56,8 +56,6 @@ abstract class Content implements VideoContentInterface, Stringable
 
     abstract public static function getName(): string;
 
-    abstract public static function getLogo(): string;
-
     public function __construct()
     {
         $this->lives = new ArrayCollection();

@@ -20,11 +20,6 @@ class GettingStarted extends Content
         return 'getting_started';
     }
 
-    public static function getLogo(): string
-    {
-        return 'getting_started.png';
-    }
-
     public function getRepository(): string
     {
         return $this->repository;

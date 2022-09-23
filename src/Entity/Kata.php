@@ -20,11 +20,6 @@ class Kata extends Content
         return 'kata';
     }
 
-    public static function getLogo(): string
-    {
-        return 'kata.png';
-    }
-
     public function getRepository(): string
     {
         return $this->repository;

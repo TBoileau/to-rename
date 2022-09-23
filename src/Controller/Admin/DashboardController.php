@@ -7,6 +7,7 @@ namespace App\Controller\Admin;
 use App\Entity\Capsule;
 use App\Entity\Challenge;
 use App\Entity\CodeReview;
+use App\Entity\ContentImage;
 use App\Entity\GettingStarted;
 use App\Entity\Kata;
 use App\Entity\Live;
@@ -64,6 +65,7 @@ final class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Lives', 'fab fa-twitch', Live::class),
         ]);
         yield MenuItem::subMenu('Gestion du contenu', 'fa fa-folder-tree')->setSubItems([
+            MenuItem::linkToCrud('Images', 'fa fa-image', ContentImage::class),
             MenuItem::linkToCrud('Capsules', 'fa fa-capsules', Capsule::class),
             MenuItem::linkToCrud('Code reviews', 'fa fa-magnifying-glass', CodeReview::class),
             MenuItem::linkToCrud('Défis', 'fa fa-chess', Challenge::class),
