@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Video\Thumbnail;
 
+use App\Entity\ContentImage;
 use App\Entity\Video;
+use App\Repository\ContentImageRepository;
 use Intervention\Image\AbstractFont;
 use Intervention\Image\ImageManager;
 
@@ -17,6 +19,7 @@ final class ThumbnailGenerator implements ThumbnailGeneratorInterface
      */
     public function __construct(
         private ImageManager $imageManager,
+        private ContentImageRepository $contentImageRepository,
         private string $thumbnailImage,
         private array $fonts,
         private string $uploadDir
@@ -62,9 +65,15 @@ final class ThumbnailGenerator implements ThumbnailGeneratorInterface
                     ->valign('top')
             );
 
-        $categoryImageFile = null === $video->getLive()?->getContent()
-            ? sprintf('%s/%s', $this->uploadDir, $video->getLogo())
-            : sprintf('%s/%s', $this->uploadDir, $video->getLive()->getContent()::getLogo());
+        if (null !== $video->getLive()?->getContent()) {
+            /** @var ContentImage $contentImage */
+            $contentImage = $this->contentImageRepository->findOneBy([
+                'name' => $video->getLive()->getContent()::getName(),
+            ]);
+            $categoryImageFile = sprintf('%s/%s', $this->uploadDir, $contentImage->getImage());
+        } else {
+            $categoryImageFile = sprintf('%s/%s', $this->uploadDir, $video->getLogo());
+        }
 
         /** @var array<int, int> $imageInfo */
         $imageInfo = getimagesize($categoryImageFile);

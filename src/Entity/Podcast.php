@@ -23,11 +23,6 @@ class Podcast extends Content
         return 'podcast';
     }
 
-    public static function getLogo(): string
-    {
-        return 'podcast.png';
-    }
-
     /**
      * @return array<array-key, string>
      */

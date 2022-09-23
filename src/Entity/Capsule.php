@@ -20,11 +20,6 @@ class Capsule extends Content
         return 'capsule';
     }
 
-    public static function getLogo(): string
-    {
-        return 'capsule.png';
-    }
-
     public function getRepository(): string
     {
         return $this->repository;
