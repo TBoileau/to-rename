@@ -39,6 +39,8 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+            - '../src/Video/'
+            - '../src/DataCollector/'
 
     Intervention\Image\ImageManager:
         factory: [App\ImageManager\ImageManagerFactory, 'create']

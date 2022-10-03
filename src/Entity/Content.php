@@ -5,56 +5,56 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\ContentRepository;
-use App\Video\VideoContentInterface;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\DiscriminatorColumn;
-use Doctrine\ORM\Mapping\DiscriminatorMap;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
-use Doctrine\ORM\Mapping\InheritanceType;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
-use Stringable;
 
 #[Entity(repositoryClass: ContentRepository::class)]
-#[InheritanceType('SINGLE_TABLE')]
-#[DiscriminatorColumn(name: 'discr', type: Types::STRING)]
-#[DiscriminatorMap([
-    'challenge' => Challenge::class,
-    'getting_started' => GettingStarted::class,
-    'capsule' => Capsule::class,
-    'code_review' => CodeReview::class,
-    'project' => Project::class,
-    'podcast' => Podcast::class,
-    'kata' => Kata::class,
-])]
-abstract class Content implements VideoContentInterface, Stringable
+class Content
 {
     #[Id]
     #[GeneratedValue]
     #[Column(type: Types::INTEGER)]
-    protected ?int $id = null;
+    private ?int $id = null;
 
     #[Column(type: Types::STRING)]
-    protected string $title;
+    private string $title;
 
     #[Column(type: Types::TEXT)]
-    protected string $description;
+    private string $description;
 
     #[Column(type: Types::DATETIME_IMMUTABLE)]
-    protected DateTimeImmutable $createdAt;
+    private DateTimeImmutable $createdAt;
+
+    #[ManyToOne(targetEntity: Category::class)]
+    #[JoinColumn(nullable: false)]
+    private Category $category;
+
+    /**
+     * @var array<string, mixed>
+     */
+    #[Column(type: Types::JSON)]
+    private array $parameters = [];
+
+    /**
+     * @var array<array-key, string>
+     */
+    #[Column(type: Types::JSON)]
+    private array $videos = [];
 
     /**
      * @var Collection<int, Live>
      */
     #[OneToMany(mappedBy: 'content', targetEntity: Live::class)]
-    protected Collection $lives;
-
-    abstract public static function getName(): string;
+    private Collection $lives;
 
     public function __construct()
     {
@@ -92,6 +92,16 @@ abstract class Content implements VideoContentInterface, Stringable
         $this->description = $description;
     }
 
+    public function getCategory(): Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(Category $category): void
+    {
+        $this->category = $category;
+    }
+
     /**
      * @return Collection<int, Live>
      */
@@ -100,8 +110,35 @@ abstract class Content implements VideoContentInterface, Stringable
         return $this->lives;
     }
 
-    public function __toString(): string
+    /**
+     * @return array<string, mixed>
+     */
+    public function getParameters(): array
     {
-        return $this->getVideoTitle();
+        return $this->parameters;
+    }
+
+    /**
+     * @param array<string, mixed> $parameters
+     */
+    public function setParameters(array $parameters): void
+    {
+        $this->parameters = $parameters;
+    }
+
+    /**
+     * @return array<array-key, string>
+     */
+    public function getVideos(): array
+    {
+        return $this->videos;
+    }
+
+    /**
+     * @param array<array-key, string> $videos
+     */
+    public function setVideos(array $videos): void
+    {
+        $this->videos = $videos;
     }
 }

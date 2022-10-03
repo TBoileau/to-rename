@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Entity\Podcast;
+use App\Entity\Category;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @template-extends ServiceEntityRepository<Podcast>
+ * @template-extends ServiceEntityRepository<Category>
  */
-final class PodcastRepository extends ServiceEntityRepository
+final class CategoryRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Podcast::class);
+        parent::__construct($registry, Category::class);
     }
 }

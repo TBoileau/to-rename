@@ -29,7 +29,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[Entity(repositoryClass: LiveRepository::class)]
 #[UniqueEntity(fields: 'livedAt', message: 'Ce live existe déjà.')]
-class Live implements Stringable, VideoContentInterface, PlanningContentInterface
+class Live implements Stringable, PlanningContentInterface
 {
     #[Id]
     #[GeneratedValue]
@@ -135,25 +135,6 @@ class Live implements Stringable, VideoContentInterface, PlanningContentInterfac
         $this->content = $content;
     }
 
-    public function getVideoDescription(): string
-    {
-        $date = $this->livedAt->format('d/m/Y');
-
-        $season = sprintf('%02d', $this->season);
-        $episode = sprintf('%02d', $this->episode);
-
-        return <<<EOF
-Saison {$season} Episode {$episode}
-Rediffusion du live Twitch du {$date}.
-{$this->content->getVideoDescription()}
-EOF;
-    }
-
-    public function getVideoTitle(): string
-    {
-        return sprintf('S%02dE%02d - %s', $this->season, $this->episode, $this->content->getVideoTitle());
-    }
-
     public function getSeason(): int
     {
         return $this->season;
@@ -176,6 +157,6 @@ EOF;
 
     public function getLiveTitle(): string
     {
-        return u($this->content->getVideoTitle())->replace(' - ', ' ')->toString();
+        return '';
     }
 }

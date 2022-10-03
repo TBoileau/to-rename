@@ -13,23 +13,28 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Embedded;
 use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\OneToMany;
 use LogicException;
 use Symfony\Component\Validator\Constraints\GreaterThan;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
-use Symfony\Component\Validator\Constraints\Url;
 use Symfony\Component\Validator\Constraints\Valid;
 
 #[Entity(repositoryClass: ChallengeRepository::class)]
-class Challenge extends Content
+class Challenge
 {
-    #[ManyToOne(targetEntity: Live::class)]
-    private ?Live $live = null;
+    #[Id]
+    #[GeneratedValue]
+    #[Column(type: Types::INTEGER)]
+    private ?int $id = null;
 
-    #[ManyToOne(targetEntity: Video::class)]
-    private ?Video $video = null;
+    #[Column(type: Types::STRING)]
+    private string $name;
+
+    #[Column(type: Types::TEXT)]
+    private string $description;
 
     #[NotNull]
     #[Valid]
@@ -53,20 +58,10 @@ class Challenge extends Content
     #[OneToMany(mappedBy: 'challenge', targetEntity: ChallengeRule::class, cascade: ['persist'], orphanRemoval: true)]
     private Collection $rules;
 
-    #[Url]
-    #[Column(type: Types::STRING, nullable: true)]
-    private ?string $repository = null;
-
     public function __construct()
     {
-        parent::__construct();
         $this->rules = new ArrayCollection();
         $this->duration = new Duration();
-    }
-
-    public static function getName(): string
-    {
-        return 'challenge';
     }
 
     public function getId(): ?int
@@ -74,24 +69,14 @@ class Challenge extends Content
         return $this->id;
     }
 
-    public function getLive(): ?Live
+    public function getName(): string
     {
-        return $this->live;
+        return $this->name;
     }
 
-    public function setLive(?Live $live): void
+    public function setName(string $name): void
     {
-        $this->live = $live;
-    }
-
-    public function getVideo(): ?Video
-    {
-        return $this->video;
-    }
-
-    public function setVideo(?Video $video): void
-    {
-        $this->video = $video;
+        $this->name = $name;
     }
 
     public function getDescription(): string
@@ -134,6 +119,16 @@ class Challenge extends Content
         $this->endedAt = $endedAt;
     }
 
+    public function getBasePoints(): int
+    {
+        return $this->basePoints;
+    }
+
+    public function setBasePoints(int $basePoints): void
+    {
+        $this->basePoints = $basePoints;
+    }
+
     /**
      * @return Collection<int, ChallengeRule>
      */
@@ -154,29 +149,9 @@ class Challenge extends Content
         $this->rules->removeElement($rule);
     }
 
-    public function getBasePoints(): int
-    {
-        return $this->basePoints;
-    }
-
-    public function setBasePoints(int $basePoints): void
-    {
-        $this->basePoints = $basePoints;
-    }
-
     public function isSucceed(): bool
     {
         return null !== $this->endedAt && $this->getFinalPoints() >= 0;
-    }
-
-    public function getRepository(): ?string
-    {
-        return $this->repository;
-    }
-
-    public function setRepository(?string $repository): void
-    {
-        $this->repository = $repository;
     }
 
     public function getTotalPoints(): int
@@ -211,22 +186,5 @@ class Challenge extends Content
         }
 
         return $this->endedAt->diff($this->startedAt);
-    }
-
-    public function getVideoDescription(): string
-    {
-        return <<<EOF
-Défi {$this->title}
-{$this->description}
-{$this->repository}
-EOF;
-    }
-
-    public function getVideoTitle(): string
-    {
-        return sprintf(
-            'Défi - %s',
-            $this->title
-        );
     }
 }
