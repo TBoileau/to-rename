@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
-use App\Entity\Category;
+use App\Doctrine\Entity\Category;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -13,10 +13,12 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 final class CategoryCrudController extends AbstractCrudController
 {
-    public function __construct(private string $uploadDir)
+    public function __construct(private readonly AdminUrlGenerator $adminUrlGenerator)
     {
     }
 
@@ -35,7 +37,21 @@ final class CategoryCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-        return $actions->add(Crud::PAGE_INDEX, Action::DETAIL);
+        return $actions
+            ->add(
+                Crud::PAGE_INDEX,
+                Action::new(
+                    'content',
+                    'Ajouter un contenu'
+                )->linkToUrl(
+                    fn (Category $category): string => $this->adminUrlGenerator
+                        ->setController(ContentCrudController::class)
+                        ->setAction(Action::NEW)
+                        ->set('category', $category->getId())
+                        ->generateUrl()
+                )
+            )
+            ->add(Crud::PAGE_INDEX, Action::DETAIL);
     }
 
     public function configureFields(string $pageName): iterable
@@ -46,6 +62,8 @@ final class CategoryCrudController extends AbstractCrudController
             ->setUploadDir('public/uploads')
             ->setBasePath('/uploads');
         yield TextareaField::new('template', 'Template')->hideOnIndex();
-        yield CollectionField::new('parameters', 'Paramètres')->hideOnIndex();
+        yield CollectionField::new('parameters', 'Paramètres')
+            ->setEntryType(TextType::class)
+            ->hideOnIndex();
     }
 }
