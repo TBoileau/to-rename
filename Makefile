@@ -128,11 +128,11 @@ qa-phpcpd: ## Analyse du code avec PHPCPD
 .PHONY: qa-phpcpd
 
 qa-eslint: ## Analyse du code avec ESLint
-	yarn eslint assets
+	yarn eslint assets/* --ignore-path .eslintignore
 .PHONY: qa-eslint
 
 qa-stylelint: ## Analyse du code avec StyleLint
-	yarn stylelint assets/**/*.scss
+	yarn stylelint assets/**/*.css
 .PHONY: qa-stylelint
 
 qa: ## Analyse du code
@@ -155,11 +155,11 @@ fix-cs-fixer: ## Correction automatique des erreurs de code avec PHP-CS-Fixer
 .PHONY: fix-cs-fixer
 
 fix-eslint: ## Correction automatique des erreurs de code avec ESLint
-	yarn eslint assets --fix
+	yarn eslint assets/* --ignore-path .eslintignore --fix
 .PHONY: fix-cs-fixer
 
 fix-stylelint: ## Correction automatique des erreurs de code avec StyleLint
-	yarn stylelint assets/**/*.scss --fix
+	yarn stylelint assets/**/*.css --fix
 .PHONY: fix-stylelint
 
 fix: ## Correction automatique des erreurs de code
