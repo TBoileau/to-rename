@@ -40,7 +40,7 @@ class Content implements Stringable
     private Category $category;
 
     /**
-     * @var array{name: string, value: string}
+     * @var array<array-key, array{name: string, value: string}>
      */
     #[Column(type: Types::JSON)]
     private array $parameters = [];
@@ -111,7 +111,7 @@ class Content implements Stringable
     }
 
     /**
-     * @return array{name: string, value: string}
+     * @return array<array-key, array{name: string, value: string}>
      */
     public function getParameters(): array
     {
@@ -119,7 +119,7 @@ class Content implements Stringable
     }
 
     /**
-     * @param array{name: string, value: string} $parameters
+     * @param array<array-key, array{name: string, value: string}> $parameters
      */
     public function setParameters(array $parameters): void
     {

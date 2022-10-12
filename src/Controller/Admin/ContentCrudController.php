@@ -8,6 +8,8 @@ use App\Doctrine\Entity\Category;
 use App\Doctrine\Entity\Content;
 use App\Doctrine\Repository\CategoryRepository;
 use App\Form\ParameterType;
+use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -15,6 +17,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\CrudDto;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterCrudActionEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityPersistedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeCrudActionEvent;
@@ -27,6 +30,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Security\Permission;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 final class ContentCrudController extends AbstractCrudController
@@ -88,31 +92,59 @@ final class ContentCrudController extends AbstractCrudController
             throw new InsufficientEntityPermissionException($context);
         }
 
-        /** @var Content $content */
+        /** @var Content $entity */
         $entity = $this->createEntity($context->getEntity()->getFqcn());
         $entity->setCategory($category);
 
         $context->getEntity()->setInstance($entity);
         $this->container->get(EntityFactory::class)->processFields($context->getEntity(), FieldCollection::new($this->configureFields(Crud::PAGE_NEW)));
-        $context->getCrud()->setFieldAssets($this->getFieldAssets($context->getEntity()->getFields()));
-        $this->container->get(EntityFactory::class)->processActions($context->getEntity(), $context->getCrud()->getActionsConfig());
 
-        $newForm = $this->createNewForm($context->getEntity(), $context->getCrud()->getNewFormOptions(), $context);
+        /** @var CrudDto $crudDto */
+        $crudDto = $context->getCrud();
+
+        /** @var FieldCollection $fieldCollection */
+        $fieldCollection = $context->getEntity()->getFields();
+
+        $assetsDto = $this->getFieldAssets($fieldCollection);
+
+        $crudDto->setFieldAssets($assetsDto);
+
+        /** @var EntityFactory $entityFactory */
+        $entityFactory = $this->container->get(EntityFactory::class);
+
+        $entityFactory->processActions($context->getEntity(), $crudDto->getActionsConfig());
+
+        $newForm = $this->createNewForm($context->getEntity(), $crudDto->getNewFormOptions(), $context);
         $newForm->handleRequest($context->getRequest());
 
+        /** @var Content $entityInstance */
         $entityInstance = $newForm->getData();
+
         $context->getEntity()->setInstance($entityInstance);
 
         if ($newForm->isSubmitted() && $newForm->isValid()) {
             $this->processUploadedFiles($newForm);
 
             $event = new BeforeEntityPersistedEvent($entityInstance);
-            $this->container->get('event_dispatcher')->dispatch($event);
+
+            /** @var EventDispatcherInterface $eventDispatcher */
+            $eventDispatcher = $this->container->get('event_dispatcher');
+
+            $eventDispatcher->dispatch($event);
             $entityInstance = $event->getEntityInstance();
 
-            $this->persistEntity($this->container->get('doctrine')->getManagerForClass($context->getEntity()->getFqcn()), $entityInstance);
+            /** @var Registry $doctrine */
+            $doctrine = $this->container->get('doctrine');
 
-            $this->container->get('event_dispatcher')->dispatch(new AfterEntityPersistedEvent($entityInstance));
+            /** @var class-string $fqcn */
+            $fqcn = $context->getEntity()->getFqcn();
+
+            /** @var EntityManagerInterface $entityManager */
+            $entityManager = $doctrine->getManagerForClass($fqcn);
+
+            $this->persistEntity($entityManager, $entityInstance);
+
+            $eventDispatcher->dispatch(new AfterEntityPersistedEvent($entityInstance));
             $context->getEntity()->setInstance($entityInstance);
 
             return $this->getRedirectResponseAfterSave($context, Action::NEW);

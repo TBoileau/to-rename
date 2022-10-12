@@ -15,6 +15,9 @@ use Intervention\Image\Imagick\Font;
 
 use function Symfony\Component\String\u;
 
+/**
+ * @SuppressWarnings(PHPMD.ShortVariable)
+ */
 final class PlanningGenerator implements PlanningGeneratorInterface
 {
     /**

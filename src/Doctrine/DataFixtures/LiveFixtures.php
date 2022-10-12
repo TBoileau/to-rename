@@ -32,7 +32,7 @@ final class LiveFixtures extends Fixture implements DependentFixtureInterface
         /** @var array<int<0, 35>, Content> $contents */
         $contents = $manager->getRepository(Content::class)->findAll();
 
-        $i = 0;
+        $index = 0;
 
         $season = 1;
 
@@ -49,13 +49,13 @@ final class LiveFixtures extends Fixture implements DependentFixtureInterface
             foreach ($datePeriod as $date) {
                 $live = new Live();
                 $live->setLivedAt($date->setTime(17, 0));
-                $live->setContent($contents[$i]);
+                $live->setContent($contents[$index]);
                 $live->setPlanning($planning);
                 $live->setSeason($season);
                 $live->setEpisode($episode);
                 $manager->persist($live);
                 ++$episode;
-                ++$i;
+                ++$index;
 
                 if (14 === $episode) {
                     $episode = 1;

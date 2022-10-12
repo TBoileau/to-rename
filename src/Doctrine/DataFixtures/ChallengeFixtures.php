@@ -21,18 +21,18 @@ final class ChallengeFixtures extends Fixture implements DependentFixtureInterfa
 
     public function load(ObjectManager $manager): void
     {
-        for ($i = 1; $i <= 5; ++$i) {
-            $manager->persist(self::createChallenge($i));
+        for ($index = 1; $index <= 5; ++$index) {
+            $manager->persist(self::createChallenge($index));
         }
 
         $manager->flush();
     }
 
-    private static function createChallenge(int $i): Challenge
+    private static function createChallenge(int $index): Challenge
     {
         $challenge = new Challenge();
-        $challenge->setName(sprintf('Challenge %d', $i));
-        $challenge->setDescription(sprintf('Description %d', $i));
+        $challenge->setName(sprintf('Challenge %d', $index));
+        $challenge->setDescription(sprintf('Description %d', $index));
 
         return $challenge;
     }

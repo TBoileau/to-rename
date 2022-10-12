@@ -8,6 +8,7 @@
         This ruleset contains a collection of rules.
     </description>
     <exclude-pattern>src/Kernel.php</exclude-pattern>
+    <exclude-pattern>src/Doctrine/Entity/Status.php</exclude-pattern>
     <rule ref="rulesets/controversial.xml" />
     <rule ref="rulesets/naming.xml">
         <exclude name="LongVariable" />
