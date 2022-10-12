@@ -48,6 +48,8 @@ services:
     App\EventSubscriber\OAuthSubscriber:
         arguments: [!tagged_iterator { tag: 'app.oauth.client', default_index_method: 'getName' }]
 
+    Twig\Extension\StringLoaderExtension: ~
+
     App\OAuth\GoogleClient:
         calls:
             - [setDeveloperKey, ['%env(GOOGLE_API_KEY)%']]

@@ -178,6 +178,10 @@ final class ContentFixtures extends Fixture implements DependentFixtureInterface
                     'value' => 'https://github.com/TBoileau',
                 ],
                 [
+                    'name' => 'stack',
+                    'value' => 'Symfony, PHP',
+                ],
+                [
                     'name' => 'professional',
                     'value' => 0 === $index % 2 ? 'Oui' : 'Non',
                 ],
