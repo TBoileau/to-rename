@@ -6,6 +6,7 @@ namespace App\Controller\Admin;
 
 use App\Doctrine\Entity\Category;
 use App\Doctrine\Entity\Challenge;
+use App\Doctrine\Entity\Command;
 use App\Doctrine\Entity\Content;
 use App\Doctrine\Entity\Live;
 use App\Doctrine\Entity\Planning;
@@ -56,6 +57,7 @@ final class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Utilisateurs', 'fa fa-user', User::class);
         yield MenuItem::linkToCrud('Planning', 'fa fa-calendar', Planning::class);
         yield MenuItem::linkToCrud('Lives', 'fab fa-twitch', Live::class);
+        yield MenuItem::linkToCrud('Commandes', 'fas fa-terminal', Command::class);
         yield MenuItem::linkToCrud('Catégories', 'fa fa-tags', Category::class);
         yield MenuItem::linkToCrud('Contenu', 'fa fa-pen-to-square', Content::class);
         yield MenuItem::linkToCrud('Défis', 'fa fa-chess', Challenge::class);

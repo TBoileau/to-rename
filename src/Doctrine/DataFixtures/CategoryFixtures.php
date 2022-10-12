@@ -17,7 +17,12 @@ final class CategoryFixtures extends Fixture
                 name: 'Challenge',
                 description: 'Concevoir un projet en un temps donné tout en respectant certaines règles.',
                 image: 'challenge.png',
-                template: 'categories/challenge.txt.twig',
+                template: <<<EOF
+Rediffusion du live de {{ live.livedAt|date('d/m/Y H:i') }}
+Format : {{ live.content.category.name }}
+Description : {{ live.content.description }}
+Repository : {{ live.content.getParameter('repository') }}
+EOF,
                 parameters: ['repository', 'tags'],
             )
         );
@@ -29,7 +34,14 @@ final class CategoryFixtures extends Fixture
                 name: 'Getting Started',
                 description: 'Découverte d\'une nouvelle technologie, telle qu\'une librairie, un framework ou un langage de programmation.',
                 image: 'getting_started.png',
-                template: 'categories/getting_started.txt.twig',
+                template: <<<EOF
+Rediffusion du live de {{ live.livedAt|date('d/m/Y H:i') }}
+Format : {{ live.content.category.name }}
+Description : {{ live.content.description }}
+Type : {{ live.content.getParameter('type') }}
+Technologies : {{ live.content.getParameter('technology') }}
+Repository : {{ live.content.getParameter('repository') }}
+EOF,
                 parameters: ['repository', 'technology', 'type', 'tags'],
             )
         );
@@ -41,7 +53,12 @@ final class CategoryFixtures extends Fixture
                 name: 'Capsule',
                 description: 'Une capsule est un format court qui permet de présenter un sujet précis dans le détail.',
                 image: 'capsule.png',
-                template: 'categories/capsule.txt.twig',
+                template: <<<EOF
+Rediffusion du live de {{ live.livedAt|date('d/m/Y H:i') }}
+Format : {{ live.content.category.name }}
+Description : {{ live.content.description }}
+Repository : {{ live.content.getParameter('repository') }}
+EOF,
                 parameters: ['repository', 'tags'],
             )
         );
@@ -53,7 +70,13 @@ final class CategoryFixtures extends Fixture
                 name: 'Code review',
                 description: 'La revue de code est une pratique qui permet d\'identifier les éléments que l\'on peut améliorer dans un projet.',
                 image: 'code_review.png',
-                template: 'categories/code_review.txt.twig',
+                template: <<<EOF
+Rediffusion du live de {{ live.livedAt|date('d/m/Y H:i') }}
+Format : {{ live.content.category.name }}
+Description : {{ live.content.description }}
+Auteur : {{ live.content.getParameter('author') }}
+Repository : {{ live.content.getParameter('repository') }}
+EOF,
                 parameters: ['repository', 'author', 'tags']
             )
         );
@@ -65,8 +88,14 @@ final class CategoryFixtures extends Fixture
                 name: 'Projet',
                 description: 'Conception d\'un projet, qu\'il soit personnel ou professionel.',
                 image: 'project.png',
-                template: 'categories/project.txt.twig',
-                parameters: ['repository', 'professional', 'tags']
+                template: <<<EOF
+Rediffusion du live de {{ live.livedAt|date('d/m/Y H:i') }}
+Format : {{ live.content.category.name }}
+Description : {{ live.content.description }}
+Projet professionel : {{ live.content.getParameter('professional') }}
+Repository : {{ live.content.getParameter('repository') }}
+EOF,
+                parameters: ['repository', 'professional', 'stack', 'tags']
             )
         );
 
@@ -77,7 +106,12 @@ final class CategoryFixtures extends Fixture
                 name: 'Podcast',
                 description: 'Avec ou sans invité⋅es, parlons d\'un thème dans le monde de la tech.',
                 image: 'podcast.png',
-                template: 'categories/podcast.txt.twig',
+                template: <<<EOF
+Rediffusion du live de {{ live.livedAt|date('d/m/Y H:i') }}
+Format : {{ live.content.category.name }}
+Description : {{ live.content.description }}
+Invité⋅es : {{ live.content.getParameter('guests') }}
+EOF,
                 parameters: ['guests', 'tags']
             )
         );

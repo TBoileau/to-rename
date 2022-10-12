@@ -72,10 +72,9 @@ final class VideoProvider implements VideoProviderInterface
         $videoSnippet->setTags($video->getVideoTags());
 
         $videoSnippet->setDescription(
-            $this->twig->render(
-                $video->getVideoDescription(),
-                ['live' => $video]
-            )
+            $this->twig
+                ->createTemplate($video->getVideoDescription())
+                ->render(['live' => $video])
         );
 
         $videoStatus = $youtubeVideo->getStatus();
