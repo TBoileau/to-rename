@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
-use App\Entity\Category;
-use App\Entity\Challenge;
-use App\Entity\Live;
-use App\Entity\Planning;
-use App\Entity\Rule;
-use App\Entity\User;
+use App\Doctrine\Entity\Category;
+use App\Doctrine\Entity\Challenge;
+use App\Doctrine\Entity\Content;
+use App\Doctrine\Entity\Live;
+use App\Doctrine\Entity\Planning;
+use App\Doctrine\Entity\Rule;
+use App\Doctrine\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -53,14 +54,11 @@ final class DashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Utilisateurs', 'fa fa-user', User::class);
-        yield MenuItem::subMenu('Créateur de contenu', 'fa fa-video')->setSubItems([
-            MenuItem::linkToCrud('Planning', 'fa fa-calendar', Planning::class),
-            MenuItem::linkToCrud('Lives', 'fab fa-twitch', Live::class),
-        ]);
+        yield MenuItem::linkToCrud('Planning', 'fa fa-calendar', Planning::class);
+        yield MenuItem::linkToCrud('Lives', 'fab fa-twitch', Live::class);
         yield MenuItem::linkToCrud('Catégories', 'fa fa-tags', Category::class);
-        yield MenuItem::subMenu('Gestion du contenu', 'fa fa-folder-tree')->setSubItems([
-            MenuItem::linkToCrud('Défis', 'fa fa-chess', Challenge::class),
-            MenuItem::linkToCrud('Règles', 'fa fa-scroll', Rule::class),
-        ]);
+        yield MenuItem::linkToCrud('Contenu', 'fa fa-pen-to-square', Content::class);
+        yield MenuItem::linkToCrud('Défis', 'fa fa-chess', Challenge::class);
+        yield MenuItem::linkToCrud('Règles', 'fa fa-scroll', Rule::class);
     }
 }

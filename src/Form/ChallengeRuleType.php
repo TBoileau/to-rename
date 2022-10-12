@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Entity\ChallengeRule;
-use App\Entity\Rule;
+use App\Doctrine\Entity\ChallengeRule;
+use App\Doctrine\Entity\Rule;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;

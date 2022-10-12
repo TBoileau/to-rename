@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Live;
-use App\Repository\LiveRepository;
+use App\Doctrine\Entity\Live;
+use App\Doctrine\Repository\LiveRepository;
 use Eluceo\iCal\Domain\Entity\Calendar;
 use Eluceo\iCal\Domain\Entity\Event;
 use Eluceo\iCal\Domain\ValueObject\DateTime;

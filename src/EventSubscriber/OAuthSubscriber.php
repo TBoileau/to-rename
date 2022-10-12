@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\EventSubscriber;
 
-use App\Entity\Token;
+use App\Doctrine\Entity\Token;
+use App\Doctrine\Repository\TokenRepository;
 use App\OAuth\ClientInterface;
-use App\Repository\TokenRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;

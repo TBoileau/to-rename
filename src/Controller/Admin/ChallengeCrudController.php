@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
+use App\Doctrine\Entity\Challenge;
+use App\Doctrine\Entity\ChallengeRule;
 use App\EasyAdmin\Field\DurationField;
-use App\Entity\Challenge;
-use App\Entity\ChallengeRule;
 use App\Form\ChallengeRuleType;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;

@@ -1,7 +1,9 @@
-{% if field.value.value == 'private' %}
+{% if field.value is null %}
+    <span class="badge bg-secondary">Aucun</span>
+{% elseif field.value.value == 'private' %}
     <span class="badge bg-danger text-white">{{ field.value.name }}</span>
 {% elseif field.value.value == 'unlisted' %}
     <span class="badge bg-warning text-white">{{ field.value.name }}</span>
-{% else %}
+{% elseif field.value.value == 'public' %}
     <span class="badge bg-success text-white">{{ field.value.name }}</span>
 {% endif %}

@@ -1,9 +1,0 @@
-{% if ea.crud.currentAction == 'detail' %}
-    <div class="d-flex gap-1 flex-wrap">
-        {% for tag in field.value %}
-            <span class="badge bg-light">{{ tag }}</span>
-        {% endfor %}
-    </div>
-{% else %}
-    <span class="badge badge-light">{{ field.value|length }}</span>
-{% endif %}
