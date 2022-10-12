@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\EasyAdmin\Field;
 
-use App\Entity\Status;
+use App\Doctrine\Entity\Status;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FieldTrait;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;

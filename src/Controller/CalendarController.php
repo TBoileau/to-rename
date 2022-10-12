@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Live;
-use App\Repository\LiveRepository;
+use App\Doctrine\Entity\Live;
+use App\Doctrine\Repository\LiveRepository;
 use Eluceo\iCal\Domain\Entity\Calendar;
 use Eluceo\iCal\Domain\Entity\Event;
 use Eluceo\iCal\Domain\ValueObject\DateTime;
@@ -33,9 +33,9 @@ final class CalendarController extends AbstractController
                             new DateTime($live->getEndedAt(), true)
                         )
                     )
-                    ->setDescription($live->getVideoTitle())
+                    ->setDescription('')
                     ->setUrl(new Uri('https://twitch.tv/toham'))
-                    ->setSummary($live->getVideoDescription()),
+                    ->setSummary(''),
                 $lives
             )
         );

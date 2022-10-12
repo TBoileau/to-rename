@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\EventSubscriber;
 
-use App\Entity\Challenge;
-use App\Entity\ChallengeRule;
-use App\Repository\RuleRepository;
+use App\Doctrine\Entity\Challenge;
+use App\Doctrine\Entity\ChallengeRule;
+use App\Doctrine\Repository\RuleRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityPersistedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 

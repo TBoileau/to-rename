@@ -26,10 +26,6 @@ when@dev:
 when@test:
     monolog:
         handlers:
-            sentry:
-                type: sentry
-                level: !php/const Monolog\Logger::ERROR
-                hub_id: Sentry\State\HubInterface
             main:
                 type: fingers_crossed
                 action_level: error
@@ -44,6 +40,10 @@ when@test:
 when@prod:
     monolog:
         handlers:
+            sentry:
+                type: sentry
+                level: !php/const Monolog\Logger::ERROR
+                hub_id: Sentry\State\HubInterface
             main:
                 type: fingers_crossed
                 action_level: error

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Doctrine\Type;
 
-use App\Entity\Status;
+use App\Doctrine\Entity\Status;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 
 final class StatusType extends AbstractEnumType

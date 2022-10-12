@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Token;
+use App\Doctrine\Entity\Token;
+use App\Doctrine\Repository\TokenRepository;
 use App\OAuth\ClientInterface;
-use App\Repository\TokenRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;

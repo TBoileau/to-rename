@@ -1,17 +1,21 @@
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-{{ field.value }}">
-    Vidéo
-</button>
+{% if field.value is not null %}
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-{{ field.value }}">
+        Vidéo
+    </button>
 
-<!-- Modal -->
-<div class="modal fade" id="modal-{{ field.value }}" tabindex="-1" aria-labelledby="modal-{{ field.value }}" aria-hidden="true">
-    <div class="modal-dialog modal-fullscreen">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="btn-close text-light" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body d-flex align-items-center">
-                <iframe src="https://www.youtube.com/embed/{{ field.value }}" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <!-- Modal -->
+    <div class="modal fade" id="modal-{{ field.value }}" tabindex="-1" aria-labelledby="modal-{{ field.value }}" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close text-light" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex align-items-center">
+                    <iframe src="https://www.youtube.com/embed/{{ field.value }}" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
             </div>
         </div>
     </div>
-</div>
+{% else %}
+    <span class="badge bg-secondary">Aucun</span>
+{% endif %}
