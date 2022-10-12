@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
+use App\Entity\Category;
 use App\Entity\Challenge;
 use App\Entity\Live;
 use App\Entity\Planning;
@@ -56,6 +57,7 @@ final class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Planning', 'fa fa-calendar', Planning::class),
             MenuItem::linkToCrud('Lives', 'fab fa-twitch', Live::class),
         ]);
+        yield MenuItem::linkToCrud('Catégories', 'fa fa-tags', Category::class);
         yield MenuItem::subMenu('Gestion du contenu', 'fa fa-folder-tree')->setSubItems([
             MenuItem::linkToCrud('Défis', 'fa fa-chess', Challenge::class),
             MenuItem::linkToCrud('Règles', 'fa fa-scroll', Rule::class),

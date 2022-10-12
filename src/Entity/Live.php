@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Planning\PlanningContentInterface;
 use App\Repository\LiveRepository;
-use App\Video\VideoContentInterface;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
@@ -18,9 +16,6 @@ use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-
-use function Symfony\Component\String\u;
-
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
@@ -29,7 +24,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[Entity(repositoryClass: LiveRepository::class)]
 #[UniqueEntity(fields: 'livedAt', message: 'Ce live existe déjà.')]
-class Live implements Stringable, PlanningContentInterface
+class Live implements Stringable
 {
     #[Id]
     #[GeneratedValue]
@@ -59,6 +54,11 @@ class Live implements Stringable, PlanningContentInterface
     #[NotBlank(groups: ['update'])]
     #[Column(type: Types::INTEGER)]
     private int $episode = 0;
+
+    #[Column(type: Types::STRING)]
+    private ?string $youtubeId = null;
+
+    private ?Video $video = null;
 
     public function __construct()
     {
@@ -155,8 +155,23 @@ class Live implements Stringable, PlanningContentInterface
         $this->episode = $episode;
     }
 
-    public function getLiveTitle(): string
+    public function getYoutubeId(): ?string
     {
-        return '';
+        return $this->youtubeId;
+    }
+
+    public function setYoutubeId(?string $youtubeId): void
+    {
+        $this->youtubeId = $youtubeId;
+    }
+
+    public function getVideo(): ?Video
+    {
+        return $this->video;
+    }
+
+    public function setVideo(?Video $video): void
+    {
+        $this->video = $video;
     }
 }

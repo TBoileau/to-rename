@@ -50,11 +50,6 @@ final class LiveCrudController extends AbstractCrudController
     {
         yield IntegerField::new('season', 'Saison N°');
         yield IntegerField::new('episode', 'Episode N°');
-        yield TextField::new('videoTitle', 'Titre')
-            ->hideOnForm();
-        yield TextField::new('videoDescription', 'Description')
-            ->hideOnIndex()
-            ->hideOnForm();
         yield AssociationField::new('planning', 'Planning');
         yield AssociationField::new('content', 'Contenu');
         yield DateTimeField::new('livedAt', 'Date')

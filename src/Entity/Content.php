@@ -45,12 +45,6 @@ class Content
     private array $parameters = [];
 
     /**
-     * @var array<array-key, string>
-     */
-    #[Column(type: Types::JSON)]
-    private array $videos = [];
-
-    /**
      * @var Collection<int, Live>
      */
     #[OneToMany(mappedBy: 'content', targetEntity: Live::class)]
@@ -124,21 +118,5 @@ class Content
     public function setParameters(array $parameters): void
     {
         $this->parameters = $parameters;
-    }
-
-    /**
-     * @return array<array-key, string>
-     */
-    public function getVideos(): array
-    {
-        return $this->videos;
-    }
-
-    /**
-     * @param array<array-key, string> $videos
-     */
-    public function setVideos(array $videos): void
-    {
-        $this->videos = $videos;
     }
 }
