@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Entity;
+namespace App\Doctrine\Entity;
 
-use App\Repository\ContentRepository;
+use App\Doctrine\Repository\ContentRepository;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -16,9 +16,10 @@ use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
+use Stringable;
 
 #[Entity(repositoryClass: ContentRepository::class)]
-class Content
+class Content implements Stringable
 {
     #[Id]
     #[GeneratedValue]
@@ -39,7 +40,7 @@ class Content
     private Category $category;
 
     /**
-     * @var array<string, mixed>
+     * @var array{name: string, value: string}
      */
     #[Column(type: Types::JSON)]
     private array $parameters = [];
@@ -93,6 +94,11 @@ class Content
 
     public function setCategory(Category $category): void
     {
+        $this->parameters = array_map(
+            static fn (string $name): array => ['name' => $name, 'value' => ''],
+            $category->getParameters()
+        );
+
         $this->category = $category;
     }
 
@@ -105,7 +111,7 @@ class Content
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array{name: string, value: string}
      */
     public function getParameters(): array
     {
@@ -113,10 +119,20 @@ class Content
     }
 
     /**
-     * @param array<string, mixed> $parameters
+     * @param array{name: string, value: string} $parameters
      */
     public function setParameters(array $parameters): void
     {
         $this->parameters = $parameters;
+    }
+
+    public function getParameter(string $name): string
+    {
+        return $this->parameters[array_search($name, array_column($this->parameters, 'name'), true)]['value'];
+    }
+
+    public function __toString(): string
+    {
+        return sprintf('%s - %s', $this->category, $this->title);
     }
 }

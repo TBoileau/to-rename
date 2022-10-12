@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\DataFixtures;
+namespace App\Doctrine\DataFixtures;
 
-use App\Entity\Category;
-use App\Entity\Content;
+use App\Doctrine\Entity\Category;
+use App\Doctrine\Entity\Content;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -48,15 +48,20 @@ final class ContentFixtures extends Fixture implements DependentFixtureInterface
             $content = new Content();
             $content->setTitle(sprintf('Challenge %d', $index));
             $content->setDescription(sprintf('Description %d', $index));
-            $content->setParameters([
-                'repository' => 'https://github.com/TBoileau',
-                'challenge' => $index,
-            ]);
-
             /** @var Category $category */
             $category = $this->getReference('category.challenge');
-
             $content->setCategory($category);
+
+            $content->setParameters([
+                [
+                    'name' => 'repository',
+                    'value' => 'https://github.com/TBoileau',
+                ],
+                [
+                    'name' => 'tags',
+                    'value' => 'php, symfony',
+                ],
+            ]);
 
             yield $content;
         }
@@ -71,14 +76,19 @@ final class ContentFixtures extends Fixture implements DependentFixtureInterface
             $content = new Content();
             $content->setTitle(sprintf('Capsule %d', $index));
             $content->setDescription(sprintf('Description %d', $index));
-            $content->setParameters([
-                'repository' => 'https://github.com/TBoileau',
-            ]);
-
             /** @var Category $category */
             $category = $this->getReference('category.capsule');
-
             $content->setCategory($category);
+            $content->setParameters([
+                [
+                    'name' => 'repository',
+                    'value' => 'https://github.com/TBoileau',
+                ],
+                [
+                    'name' => 'tags',
+                    'value' => 'php, symfony',
+                ],
+            ]);
 
             yield $content;
         }
@@ -93,16 +103,27 @@ final class ContentFixtures extends Fixture implements DependentFixtureInterface
             $content = new Content();
             $content->setTitle(sprintf('Getting started %d', $index));
             $content->setDescription(sprintf('Description %d', $index));
-            $content->setParameters([
-                'repository' => 'https://github.com/TBoileau',
-                'type' => 'framework',
-                'technology' => 'https://symfony.com/',
-            ]);
-
             /** @var Category $category */
             $category = $this->getReference('category.getting_started');
-
             $content->setCategory($category);
+            $content->setParameters([
+                [
+                    'name' => 'repository',
+                    'value' => 'https://github.com/TBoileau',
+                ],
+                [
+                    'name' => 'type',
+                    'value' => 'framework',
+                ],
+                [
+                    'name' => 'technology',
+                    'value' => 'https://symfony.com/',
+                ],
+                [
+                    'name' => 'tags',
+                    'value' => 'php, symfony',
+                ],
+            ]);
 
             yield $content;
         }
@@ -117,15 +138,23 @@ final class ContentFixtures extends Fixture implements DependentFixtureInterface
             $content = new Content();
             $content->setTitle(sprintf('Code review %d', $index));
             $content->setDescription(sprintf('Description %d', $index));
-            $content->setParameters([
-                'repository' => 'https://github.com/TBoileau',
-                'author' => 'Jane Doe',
-            ]);
-
             /** @var Category $category */
             $category = $this->getReference('category.code_review');
-
             $content->setCategory($category);
+            $content->setParameters([
+                [
+                    'name' => 'repository',
+                    'value' => 'https://github.com/TBoileau',
+                ],
+                [
+                    'name' => 'author',
+                    'value' => 'Jane Doe',
+                ],
+                [
+                    'name' => 'tags',
+                    'value' => 'php, symfony',
+                ],
+            ]);
 
             yield $content;
         }
@@ -140,15 +169,23 @@ final class ContentFixtures extends Fixture implements DependentFixtureInterface
             $content = new Content();
             $content->setTitle(sprintf('Projet %d', $index));
             $content->setDescription(sprintf('Description %d', $index));
-            $content->setParameters([
-                'repository' => 'https://github.com/TBoileau',
-                'professional' => 0 === $index % 2,
-            ]);
-
             /** @var Category $category */
             $category = $this->getReference('category.project');
-
             $content->setCategory($category);
+            $content->setParameters([
+                [
+                    'name' => 'repository',
+                    'value' => 'https://github.com/TBoileau',
+                ],
+                [
+                    'name' => 'professional',
+                    'value' => 0 === $index % 2 ? 'Oui' : 'Non',
+                ],
+                [
+                    'name' => 'tags',
+                    'value' => 'php, symfony',
+                ],
+            ]);
 
             yield $content;
         }
@@ -163,15 +200,23 @@ final class ContentFixtures extends Fixture implements DependentFixtureInterface
             $content = new Content();
             $content->setTitle(sprintf('Kata %d', $index));
             $content->setDescription(sprintf('Description %d', $index));
-            $content->setParameters([
-                'repository' => 'https://github.com/TBoileau',
-                'type' => 'Algorithmie',
-            ]);
-
             /** @var Category $category */
             $category = $this->getReference('category.kata');
-
             $content->setCategory($category);
+            $content->setParameters([
+                [
+                    'name' => 'repository',
+                    'value' => 'https://github.com/TBoileau',
+                ],
+                [
+                    'name' => 'type',
+                    'value' => 'Algorithmie',
+                ],
+                [
+                    'name' => 'tags',
+                    'value' => 'php, symfony',
+                ],
+            ]);
 
             yield $content;
         }
@@ -186,14 +231,19 @@ final class ContentFixtures extends Fixture implements DependentFixtureInterface
             $content = new Content();
             $content->setTitle(sprintf('Podcast %d', $index));
             $content->setDescription(sprintf('Description %d', $index));
-            $content->setParameters([
-                'guests' => ['John Doe', 'Jane Doe'],
-            ]);
-
             /** @var Category $category */
             $category = $this->getReference('category.podcast');
-
             $content->setCategory($category);
+            $content->setParameters([
+                [
+                    'name' => 'guests',
+                    'value' => 'John Doe, Jane Doe',
+                ],
+                [
+                    'name' => 'tags',
+                    'value' => 'php, symfony',
+                ],
+            ]);
 
             yield $content;
         }
