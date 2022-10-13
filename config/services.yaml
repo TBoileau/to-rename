@@ -46,8 +46,6 @@ services:
         factory: [App\ImageManager\ImageManagerFactory, 'create']
         arguments: ['%intervention.driver%']
 
-    Twig\Extension\StringLoaderExtension: ~
-
     App\OAuth\GoogleClient:
         calls:
             - [setDeveloperKey, ['%env(GOOGLE_API_KEY)%']]
