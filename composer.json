@@ -27,6 +27,7 @@
         "sentry/sentry-symfony": "^4.3",
         "symfony/apache-pack": "^1.0",
         "symfony/asset": "6.1.*",
+        "symfony/cache": "6.1.*",
         "symfony/console": "6.1.*",
         "symfony/dotenv": "6.1.*",
         "symfony/expression-language": "6.1.*",
@@ -46,6 +47,7 @@
         "symfony/validator": "6.1.*",
         "symfony/webpack-encore-bundle": "^1.15",
         "symfony/yaml": "6.1.*",
+        "textalk/websocket": "^1.5",
         "twig/extra-bundle": "^3.4",
         "twig/intl-extra": "^3.4"
     },

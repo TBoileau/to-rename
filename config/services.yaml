@@ -24,6 +24,7 @@ services:
                 thunder: '%fonts.thunder%'
                 monument: '%fonts.monument%'
             string $uploadDir: '%upload_dir%'
+            iterable $clients: !tagged_iterator { tag: 'app.oauth.client', default_index_method: 'getName' }
 
     _instanceof:
         App\OAuth\ClientInterface:
@@ -45,11 +46,6 @@ services:
         factory: [App\ImageManager\ImageManagerFactory, 'create']
         arguments: ['%intervention.driver%']
 
-    App\EventSubscriber\OAuthSubscriber:
-        arguments: [!tagged_iterator { tag: 'app.oauth.client', default_index_method: 'getName' }]
-
-    Twig\Extension\StringLoaderExtension: ~
-
     App\OAuth\GoogleClient:
         calls:
             - [setDeveloperKey, ['%env(GOOGLE_API_KEY)%']]
@@ -59,4 +55,11 @@ services:
             - [setAccessType, ['offline']]
             - [setApprovalPrompt, ['force']]
             - [setIncludeGrantedScopes, [true]]
+            - [initRedirectUri, ['%env(APP_HOST)%', '@router']]
+
+    App\OAuth\TwitchClient:
+        calls:
+            - [setClientId, ['%env(TWITCH_CLIENT_ID)%']]
+            - [setClientSecret, ['%env(TWITCH_CLIENT_SECRET)%']]
+            - [setScopes, [['chat:read', 'chat:edit']]]
             - [initRedirectUri, ['%env(APP_HOST)%', '@router']]

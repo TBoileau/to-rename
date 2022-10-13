@@ -37,6 +37,6 @@ final class CommandCrudController extends AbstractCrudController
     {
         yield TextField::new('name', 'Nom');
         yield TextareaField::new('template', 'Description')->hideOnIndex();
-        yield AssociationField::new('category', 'Catégorie');
+        yield AssociationField::new('category', 'Catégorie')->setRequired(false);
     }
 }

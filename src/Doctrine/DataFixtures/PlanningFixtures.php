@@ -16,9 +16,9 @@ final class PlanningFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $datePeriod = new DatePeriod(
-            new DateTimeImmutable('2022-01-03'),
+            new DateTimeImmutable('2022-10-03'),
             new DateInterval('P7D'),
-            new DateTimeImmutable('2022-02-20')
+            new DateTimeImmutable('2022-10-20')
         );
 
         foreach ($datePeriod as $date) {
