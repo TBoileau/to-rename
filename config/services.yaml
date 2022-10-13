@@ -24,6 +24,7 @@ services:
                 thunder: '%fonts.thunder%'
                 monument: '%fonts.monument%'
             string $uploadDir: '%upload_dir%'
+            iterable $clients: !tagged_iterator { tag: 'app.oauth.client', default_index_method: 'getName' }
 
     _instanceof:
         App\OAuth\ClientInterface:
@@ -44,9 +45,6 @@ services:
     Intervention\Image\ImageManager:
         factory: [App\ImageManager\ImageManagerFactory, 'create']
         arguments: ['%intervention.driver%']
-
-    App\EventSubscriber\OAuthSubscriber:
-        arguments: [!tagged_iterator { tag: 'app.oauth.client', default_index_method: 'getName' }]
 
     Twig\Extension\StringLoaderExtension: ~
 

@@ -14,13 +14,16 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
-    name: 'app:google',
-    description: 'Reload refresh token',
+    name: 'app:oauth',
+    description: 'Reload refresh tokens',
 )]
 final class GoogleCommand extends Command
 {
+    /**
+     * @param iterable<string, ClientInterface> $clients
+     */
     public function __construct(
-        private ClientInterface $googleClient,
+        private iterable $clients,
         private TokenRepository $tokenRepository,
         private EntityManagerInterface $entityManager
     ) {
@@ -29,27 +32,29 @@ final class GoogleCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        /** @var Token $googleToken */
-        $googleToken = $this->tokenRepository->findOneBy(['name' => 'google']);
+        foreach ($this->clients as $client) {
+            /** @var Token $token */
+            $token = $this->tokenRepository->findOneBy(['name' => $client::getName()]);
 
-        if (null === $googleToken->getRefreshToken()) {
-            $output->writeln('No refresh token found.');
+            if (null === $token->getRefreshToken()) {
+                $output->writeln(sprintf('No refresh token found for %s.', $client::getName()));
 
-            return Command::FAILURE;
+                continue;
+            }
+
+            /** @var array{access_token?: string, created?: int, expires_in?: int, refresh_token?: string} $accessToken */
+            $accessToken = $client->fetchAccessTokenWithRefreshToken($token->getRefreshToken());
+
+            if (!isset($accessToken['refresh_token'])) {
+                $output->writeln('Error during OAuth2 connection with Google.');
+
+                return Command::FAILURE;
+            }
+
+            $token->setRefreshToken($accessToken['refresh_token']);
+
+            $this->entityManager->flush();
         }
-
-        /** @var array{access_token?: string, created?: int, expires_in?: int, refresh_token?: string} $accessToken */
-        $accessToken = $this->googleClient->fetchAccessTokenWithRefreshToken($googleToken->getRefreshToken());
-
-        if (!isset($accessToken['refresh_token'])) {
-            $output->writeln('Error during OAuth2 connection with Google.');
-
-            return Command::FAILURE;
-        }
-
-        $googleToken->setRefreshToken($accessToken['refresh_token']);
-
-        $this->entityManager->flush();
 
         return Command::SUCCESS;
     }
