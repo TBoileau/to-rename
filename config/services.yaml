@@ -60,3 +60,10 @@ services:
             - [setApprovalPrompt, ['force']]
             - [setIncludeGrantedScopes, [true]]
             - [initRedirectUri, ['%env(APP_HOST)%', '@router']]
+
+    App\OAuth\TwitchClient:
+        calls:
+            - [setClientId, ['%env(TWITCH_CLIENT_ID)%']]
+            - [setClientSecret, ['%env(TWITCH_CLIENT_SECRET)%']]
+            - [setScopes, [['chat:read', 'chat:edit']]]
+            - [initRedirectUri, ['%env(APP_HOST)%', '@router']]

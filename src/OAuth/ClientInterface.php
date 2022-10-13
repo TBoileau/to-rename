@@ -22,7 +22,7 @@ interface ClientInterface
     public function setRedirectUri($redirectUri);
 
     /**
-     * @param string|array<array-key, string> $scopes
+     * @param array<array-key, string> $scopes
      *
      * @return void
      */
@@ -34,7 +34,7 @@ interface ClientInterface
     public function createAuthUrl();
 
     /**
-     * @param string|array<string, mixed> $accessToken
+     * @param array{created: int, access_token: string, expires_in: int, refresh_token: string} $accessToken
      *
      * @return void
      */

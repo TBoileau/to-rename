@@ -42,15 +42,15 @@ final class OAuthSubscriber implements EventSubscriberInterface
 
                 $client->setAccessToken($accessToken);
 
-                /** @var Token $googleToken */
-                $googleToken = $this->tokenRepository->findOneBy(['name' => 'google']);
+                /** @var Token $token */
+                $token = $this->tokenRepository->findOneBy(['name' => $client::getName()]);
 
-                if ($client->isAccessTokenExpired() && null !== $googleToken->getRefreshToken()) {
-                    /** @var array{access_token?: string, created?: int, expires_in?: int, refresh_token?: string} $accessToken */
-                    $accessToken = $client->fetchAccessTokenWithRefreshToken($googleToken->getRefreshToken());
+                if ($client->isAccessTokenExpired() && null !== $token->getRefreshToken()) {
+                    /** @var array{access_token?: string, created: int, expires_in: int, refresh_token?: string} $accessToken */
+                    $accessToken = $client->fetchAccessTokenWithRefreshToken($token->getRefreshToken());
 
                     if (isset($accessToken['access_token']) && isset($accessToken['refresh_token'])) {
-                        $googleToken->setRefreshToken($accessToken['refresh_token']);
+                        $token->setRefreshToken($accessToken['refresh_token']);
                         $this->entityManager->flush();
                         $client->setAccessToken($accessToken);
                         $request->getSession()->set($client::getSessionKey(), $accessToken['access_token']);

@@ -2,6 +2,7 @@ twig:
     default_path: '%kernel.project_dir%/templates'
     globals:
         google: '@App\OAuth\GoogleClient'
+        twitch: '@App\OAuth\TwitchClient'
 when@test:
     twig:
         strict_variables: true
