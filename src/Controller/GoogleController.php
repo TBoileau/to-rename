@@ -12,6 +12,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 
 #[Route('/google', name: 'google_')]
 final class GoogleController extends AbstractController
@@ -21,7 +23,8 @@ final class GoogleController extends AbstractController
         Request $request,
         ClientInterface $googleClient,
         TokenRepository $tokenRepository,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        CacheInterface $cache
     ): RedirectResponse {
         /** @var string $code */
         $code = $request->get('code');
@@ -42,7 +45,13 @@ final class GoogleController extends AbstractController
 
         $entityManager->flush();
 
-        $request->getSession()->set($googleClient::getSessionKey(), $accessToken);
+        $cache->delete($googleClient::getSessionKey());
+
+        $cache->get($googleClient::getSessionKey(), function (ItemInterface $item) use ($accessToken) {
+            $item->expiresAfter(3);
+
+            return $accessToken;
+        });
 
         if ($request->getSession()->has('referer')) {
             /** @var string $redirectUri */

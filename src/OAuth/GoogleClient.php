@@ -9,6 +9,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class GoogleClient extends Client implements ClientInterface
 {
+    use ClientRefreshTokenTrait;
+
     public function initRedirectUri(string $host, UrlGeneratorInterface $urlGenerator): void
     {
         $this->setRedirectUri(

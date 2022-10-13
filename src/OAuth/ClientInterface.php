@@ -58,4 +58,11 @@ interface ClientInterface
      * @return array<string, mixed>
      */
     public function fetchAccessTokenWithRefreshToken($code);
+
+    public function refresh(): void;
+
+    /**
+     * @return array{created: int, access_token: string, expires_in: int, refresh_token: string}|null
+     */
+    public function getAccessToken();
 }

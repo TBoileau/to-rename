@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
-use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -30,8 +29,7 @@ class Command
     private string $name;
 
     #[ManyToOne]
-    #[JoinColumn(nullable: false)]
-    private Category $category;
+    private ?Category $category = null;
 
     #[Column]
     #[NotBlank]
@@ -52,12 +50,12 @@ class Command
         $this->name = $name;
     }
 
-    public function getCategory(): Category
+    public function getCategory(): ?Category
     {
         return $this->category;
     }
 
-    public function setCategory(Category $category): void
+    public function setCategory(?Category $category): void
     {
         $this->category = $category;
     }

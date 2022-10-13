@@ -12,6 +12,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 
 #[Route('/twitch', name: 'twitch_')]
 final class TwitchController extends AbstractController
@@ -21,7 +23,8 @@ final class TwitchController extends AbstractController
         Request $request,
         ClientInterface $twitchClient,
         TokenRepository $tokenRepository,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        CacheInterface $cache
     ): RedirectResponse {
         /** @var string $code */
         $code = $request->get('code');
@@ -44,7 +47,13 @@ final class TwitchController extends AbstractController
 
         $entityManager->flush();
 
-        $request->getSession()->set($twitchClient::getSessionKey(), $accessToken);
+        $cache->delete($twitchClient::getSessionKey());
+
+        $cache->get($twitchClient::getSessionKey(), function (ItemInterface $item) use ($accessToken) {
+            $item->expiresAfter(3);
+
+            return $accessToken;
+        });
 
         if ($request->getSession()->has('referer')) {
             /** @var string $redirectUri */

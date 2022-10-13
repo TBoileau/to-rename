@@ -22,6 +22,10 @@ sf-cc: ## Vider le cache Symfony
 	$(DISABLE_XDEBUG) symfony console cache:clear
 .PHONY: sf-cc
 
+twitch-bot: ## Vider le cache Symfony
+	$(DISABLE_XDEBUG) symfony console app:twitch:bot
+.PHONY: twitch-bot
+
 composer: ## Installation des dépendances de composer.json
 	composer install
 .PHONY: composer

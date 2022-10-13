@@ -9,6 +9,8 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class TwitchClient implements ClientInterface
 {
+    use ClientRefreshTokenTrait;
+
     private string $redirectUri;
     /**
      * @var array<array-key, string>
@@ -126,5 +128,10 @@ final class TwitchClient implements ClientInterface
         ]);
 
         return $response->toArray();
+    }
+
+    public function getAccessToken()
+    {
+        return $this->token;
     }
 }

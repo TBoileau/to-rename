@@ -25,6 +25,11 @@ final class CommandFixtures extends Fixture implements DependentFixtureInterface
         /** @var array<array-key, Category> $categories */
         $categories = $manager->getRepository(Category::class)->findAll();
 
+        $command = new Command();
+        $command->setName('!hello');
+        $command->setTemplate('Salut {{ nickname }}');
+        $manager->persist($command);
+
         foreach ($categories as $category) {
             $command = new Command();
             $command->setName('!test');
