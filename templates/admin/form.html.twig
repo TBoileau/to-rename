@@ -1,0 +1,20 @@
+{% block _Post_markdown_widget %}
+    <div class="row">
+        <div class="col-12">
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <button class="nav-link active" id="nav-edit-tab" data-bs-toggle="tab" data-bs-target="#nav-edit" type="button" role="tab" aria-controls="nav-edit" aria-selected="true">Markdown</button>
+                    <button class="nav-link" id="nav-preview-tab" data-bs-toggle="tab" data-bs-target="#nav-preview" type="button" role="tab" aria-controls="nav-preview" aria-selected="false">Preview</button>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active py-3" id="nav-edit" role="tabpanel" aria-labelledby="nav-edit-tab" tabindex="0">
+                    {{ form_widget(form) }}
+                </div>
+                <div class="tab-pane fade py-3" id="nav-preview" role="tabpanel" aria-labelledby="nav-preview-tab" tabindex="0">
+                    <div class="markdown-viewer border rounded p-2" style="height: 420px; overflow-y: auto;" data-target="#{{ form.vars.id }}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

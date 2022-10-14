@@ -10,6 +10,7 @@ use App\Doctrine\Entity\Command;
 use App\Doctrine\Entity\Content;
 use App\Doctrine\Entity\Live;
 use App\Doctrine\Entity\Planning;
+use App\Doctrine\Entity\Post;
 use App\Doctrine\Entity\Rule;
 use App\Doctrine\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
@@ -55,6 +56,7 @@ final class DashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Utilisateurs', 'fa fa-user', User::class);
+        yield MenuItem::linkToCrud('Articles', 'fa fa-pen', Post::class);
         yield MenuItem::linkToCrud('Planning', 'fa fa-calendar', Planning::class);
         yield MenuItem::linkToCrud('Lives', 'fab fa-twitch', Live::class);
         yield MenuItem::linkToCrud('Commandes', 'fas fa-terminal', Command::class);
