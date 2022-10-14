@@ -5,22 +5,26 @@ if (!Encore.isRuntimeEnvironmentConfigured()) {
 }
 
 Encore
-  .setOutputPath('public/build/')
-  .setPublicPath('/build')
-  .addEntry('app', './assets/app.tsx')
-  .splitEntryChunks()
-  .enableSingleRuntimeChunk()
-  .cleanupOutputBeforeBuild()
-  .enableBuildNotifications()
-  .enableSourceMaps(!Encore.isProduction())
-  .enableVersioning(Encore.isProduction())
-  .configureBabelPresetEnv((config) => {
-    config.useBuiltIns = 'usage';
-    config.corejs = '3.23';
-  })
-  .enableReactPreset()
-  .enableTypeScriptLoader()
-  .enableForkedTypeScriptTypesChecking()
+    .setOutputPath('public/build/')
+    .setPublicPath('/build')
+    .addEntry('app', './assets/app.js')
+    .enableStimulusBridge('./assets/controllers.json')
+    .splitEntryChunks()
+    .enableSingleRuntimeChunk()
+    .cleanupOutputBeforeBuild()
+    .enableBuildNotifications()
+    .enableSourceMaps(!Encore.isProduction())
+    .enableVersioning(Encore.isProduction())
+    .configureBabelPresetEnv((config) => {
+      config.useBuiltIns = 'usage';
+      config.corejs = '3.23';
+    })
+    .enableSassLoader()
+    .enablePostCssLoader()
+    .copyFiles({
+      from: './assets/images',
+      to: 'images/[path][name].[ext]',
+    })
 ;
 
 module.exports = Encore.getWebpackConfig();
