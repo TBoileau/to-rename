@@ -10,7 +10,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CodeEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 final class CommandCrudController extends AbstractCrudController
@@ -36,7 +36,9 @@ final class CommandCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         yield TextField::new('name', 'Nom');
-        yield TextareaField::new('template', 'Description')->hideOnIndex();
+        yield CodeEditorField::new('template', 'Description')
+            ->setLanguage('twig')
+            ->hideOnIndex();
         yield AssociationField::new('category', 'Catégorie')->setRequired(false);
     }
 }
