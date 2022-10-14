@@ -30,6 +30,10 @@ composer: ## Installation des dépendances de composer.json
 	composer install
 .PHONY: composer
 
+composer-update: ## Installation des dépendances de composer.json
+	composer update
+.PHONY: composer
+
 yarn: ## Installation des dépendances de package.json
 	yarn install
 .PHONY: yarn

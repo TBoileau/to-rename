@@ -1,0 +1,46 @@
+framework:
+    workflows:
+        post:
+            type: 'state_machine'
+            marking_store:
+                type: 'method'
+                property: 'state'
+            supports:
+                - App\Doctrine\Entity\Post
+            initial_marking: draft
+            places:
+                draft:
+                    metadata:
+                        color: 'info'
+                        label: 'Brouillon'
+                reviewed:
+                    metadata:
+                        color: 'warning'
+                        label: 'En attente de validation'
+                rejected:
+                    metadata:
+                        color: 'danger'
+                        label: 'Rejeté'
+                published:
+                    metadata:
+                        color: 'success'
+                        label: 'Publié'
+            transitions:
+                to_review:
+                    from: draft
+                    to:   reviewed
+                    metadata:
+                        color: 'warning'
+                        label: 'Envoyer en validation'
+                publish:
+                    from: reviewed
+                    to:   published
+                    metadata:
+                        color: 'success'
+                        label: 'Publier'
+                reject:
+                    from: reviewed
+                    to:   rejected
+                    metadata:
+                        color: 'danger'
+                        label: 'Rejeter'
