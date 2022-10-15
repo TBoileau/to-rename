@@ -23,6 +23,7 @@
         "nelmio/cors-bundle": "^2.2",
         "phpdocumentor/reflection-docblock": "^5.3",
         "phpstan/phpdoc-parser": "^1.6",
+        "sendinblue/api-v3-sdk": "8.x.x",
         "sensio/framework-extra-bundle": "^6.2",
         "sentry/sentry-symfony": "^4.3",
         "symfony/apache-pack": "^1.0",
