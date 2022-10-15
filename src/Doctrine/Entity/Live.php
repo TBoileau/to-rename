@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Doctrine\Entity;
 
 use App\Doctrine\Repository\LiveRepository;
+use App\SendinBlue\SendinBlueItemInterface;
 use App\Youtube\YoutubeVideoInterface;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
@@ -25,7 +26,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[Entity(repositoryClass: LiveRepository::class)]
 #[UniqueEntity(fields: 'livedAt', message: 'Ce live existe déjà.')]
-class Live implements Stringable, YoutubeVideoInterface
+class Live implements Stringable, YoutubeVideoInterface, SendinBlueItemInterface
 {
     #[Id]
     #[GeneratedValue]
@@ -247,5 +248,29 @@ class Live implements Stringable, YoutubeVideoInterface
         $this->video->setViews($views);
         $this->video->setLikes($likes);
         $this->video->setComments($comments);
+    }
+
+    public function getItemTitle(): string
+    {
+        return $this->getVideoTitle();
+    }
+
+    public function getItemDescription(): string
+    {
+        return sprintf(
+            'Rediffusion du %s. %s',
+            $this->livedAt->format('d/m/Y'),
+            $this->getContent()->getDescription()
+        );
+    }
+
+    public function getItemImage(): string
+    {
+        return $this->thumbnail;
+    }
+
+    public function getItemUrl(): string
+    {
+        return sprintf('/live/%d', $this->id);
     }
 }

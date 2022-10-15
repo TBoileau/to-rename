@@ -31,4 +31,19 @@ final class LiveRepository extends ServiceEntityRepository
 
         return $live;
     }
+
+    /**
+     * @return Live[]
+     */
+    public function getLivesFrom(DateTimeImmutable $date): array
+    {
+        /** @var array<Live> $lives */
+        $lives = $this->createQueryBuilder('l')
+            ->andWhere('l.livedAt >= :date')
+            ->setParameter('date', $date)
+            ->getQuery()
+            ->getResult();
+
+        return $lives;
+    }
 }

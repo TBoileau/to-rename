@@ -5,17 +5,19 @@ declare(strict_types=1);
 namespace App\Doctrine\Entity;
 
 use App\Doctrine\Repository\PostRepository;
+use App\SendinBlue\SendinBlueItemInterface;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
+use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[Entity(repositoryClass: PostRepository::class)]
 #[UniqueEntity('slug')]
-class Post
+class Post implements Stringable, SendinBlueItemInterface
 {
     #[Id]
     #[GeneratedValue]
@@ -33,6 +35,9 @@ class Post
 
     #[Column(type: Types::TEXT)]
     private string $content;
+
+    #[Column(type: Types::TEXT)]
+    private string $excerpt;
 
     #[Column]
     private string $cover;
@@ -93,6 +98,16 @@ class Post
         $this->content = $content;
     }
 
+    public function getExcerpt(): string
+    {
+        return $this->excerpt;
+    }
+
+    public function setExcerpt(string $excerpt): void
+    {
+        $this->excerpt = $excerpt;
+    }
+
     public function getCover(): string
     {
         return $this->cover;
@@ -121,5 +136,30 @@ class Post
     public function setPublishedAt(?DateTimeImmutable $publishedAt): void
     {
         $this->publishedAt = $publishedAt;
+    }
+
+    public function __toString(): string
+    {
+        return $this->title;
+    }
+
+    public function getItemTitle(): string
+    {
+        return $this->title;
+    }
+
+    public function getItemDescription(): string
+    {
+        return $this->excerpt;
+    }
+
+    public function getItemImage(): string
+    {
+        return $this->cover;
+    }
+
+    public function getItemUrl(): string
+    {
+        return sprintf('/blog/%s', $this->slug);
     }
 }
