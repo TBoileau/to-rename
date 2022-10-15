@@ -24,6 +24,7 @@ services:
                 thunder: '%fonts.thunder%'
                 monument: '%fonts.monument%'
             string $uploadDir: '%upload_dir%'
+            int $sendinBlueListId: '%env(SENDINBLUE_LIST_ID)%'
             iterable $clients: !tagged_iterator { tag: 'app.oauth.client', default_index_method: 'getName' }
 
     _instanceof:
@@ -41,6 +42,16 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
             - '../src/DataCollector/'
+
+    App\SendinBlue\SendinBlueFactory:
+        arguments:
+            - '%env(SENDINBLUE_API_KEY)%'
+
+    SendinBlue\Client\Api\EmailCampaignsApi:
+        factory: ['@App\SendinBlue\SendinBlueFactory', 'createEmailCampaignsApi']
+
+    SendinBlue\Client\Api\ContactsApi:
+        factory: ['@App\SendinBlue\SendinBlueFactory', 'createContactsApi']
 
     Intervention\Image\ImageManager:
         factory: [App\ImageManager\ImageManagerFactory, 'create']
