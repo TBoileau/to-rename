@@ -11,11 +11,12 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
+use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[Entity(repositoryClass: PostRepository::class)]
 #[UniqueEntity('slug')]
-class Post
+class Post implements Stringable
 {
     #[Id]
     #[GeneratedValue]
@@ -121,5 +122,10 @@ class Post
     public function setPublishedAt(?DateTimeImmutable $publishedAt): void
     {
         $this->publishedAt = $publishedAt;
+    }
+
+    public function __toString(): string
+    {
+        return $this->title;
     }
 }

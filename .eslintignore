@@ -1,2 +1,8 @@
-*.css
+*.scss
+*.json
+*.png
+*.jpg
+*.gif
 *.svg
+*.ico
+*.gitignore
