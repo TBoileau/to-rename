@@ -24,7 +24,9 @@ services:
                 thunder: '%fonts.thunder%'
                 monument: '%fonts.monument%'
             string $uploadDir: '%upload_dir%'
+            string $appHost: '%env(APP_HOST)%'
             int $sendinBlueListId: '%env(SENDINBLUE_LIST_ID)%'
+            int $sendinBlueTemplateId: '%env(SENDINBLUE_TEMPLATE_ID)%'
             iterable $clients: !tagged_iterator { tag: 'app.oauth.client', default_index_method: 'getName' }
 
     _instanceof:

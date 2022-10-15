@@ -27,6 +27,11 @@ final class PostFixtures extends Fixture
             $post->setTitle($this->faker()->sentence());
             $post->setContent(self::randomMarkdown());
 
+            /** @var string $excerpt */
+            $excerpt = $this->faker()->paragraphs(3, true);
+
+            $post->setExcerpt($excerpt);
+
             $filename = sprintf('%s.png', Uuid::v4());
             copy(
                 sprintf('%s/image.png', $this->uploadDir),

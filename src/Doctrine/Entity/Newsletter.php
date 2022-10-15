@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Doctrine\Entity;
 
+use App\SendinBlue\SendinBlueItemInterface;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -74,5 +75,14 @@ class Newsletter
     public function getLives(): Collection
     {
         return $this->lives;
+    }
+
+    /**
+     * @return Collection<int, SendinBlueItemInterface>
+     */
+    public function getItems(): Collection
+    {
+        /* @phpstan-ignore-next-line */
+        return new ArrayCollection(array_merge($this->posts->toArray(), $this->lives->toArray()));
     }
 }
