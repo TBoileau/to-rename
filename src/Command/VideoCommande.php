@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use FFMpeg\Coordinate\TimeCode;
 use FFMpeg\FFMpeg;
 use FFMpeg\Format\Video\X264;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -30,6 +31,12 @@ class VideoCommande extends Command
 
         $ffmpeg = FFMpeg::create();
 
+        $video = $ffmpeg->open(sprintf('%s/v1.mp4', $this->uploadDir));
+
+        $video->clip(TimeCode::fromSeconds(0), TimeCode::fromSeconds(5))
+            ->save(new X264(), sprintf('%s/v1-1.mp4', $this->uploadDir));
+
+
         $video = $ffmpeg->open(sprintf('%s/v2.mp4', $this->uploadDir));
 
         $video
@@ -46,6 +53,7 @@ class VideoCommande extends Command
 
         $video
             ->concat([
+                sprintf('%s/v1-1.mp4', $this->uploadDir),
                 sprintf('%s/v2-1.mp4', $this->uploadDir),
                 sprintf('%s/v3.mp4', $this->uploadDir),
             ])
