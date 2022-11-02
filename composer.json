@@ -21,6 +21,7 @@
         "google/apiclient": "^2.12.1",
         "intervention/image": "^2.7",
         "nelmio/cors-bundle": "^2.2",
+        "php-ffmpeg/php-ffmpeg": "^1.0",
         "phpdocumentor/reflection-docblock": "^5.3",
         "phpstan/phpdoc-parser": "^1.6",
         "sendinblue/api-v3-sdk": "8.x.x",
