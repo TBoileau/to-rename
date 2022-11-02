@@ -81,8 +81,6 @@ final class ContentSubscriber implements EventSubscriberInterface
                     $this->videoProvider->update($entity);
                 }
             }
-
-            $this->videoProvider->update($entity);
         }
     }
 
